@@ -2,18 +2,33 @@
   <div class="wrapper">
     <parallax class="page-header header-filter" :style="headerStyle">
       <div class="md-layout">
-        <div class="md-layout-item">
-          <div class="image-wrapper">
-            <img :src="logo" alt="shinhan_logo" class="shinhan_logo"/>
-            <div class="brand">
-              <h1>Daviz</h1>
+        <div class="md-layout-item" >
+          <!-- <div class="image-wrapper" style="display:flex;"> -->
+
+            <div class="brand" style="display:flex;">
+            <img :src="logo" alt="shinhan_logo" class="shinhan_logo" style="width:25%;height:25%">
+            <h1 style="margin:auto">Daviz</h1>
             </div>
-          </div>
+          <!-- </div> -->
         </div>
       </div>
     </parallax>
     <div class="main main-raised">
       
+
+
+<br>
+    <!-- Inputs --> 
+        <div
+          class="md-layout-item " style="margin:auto; width:60%"
+        >
+          <md-field>
+            <label>찾고자 하는 데이터를 찾으세요 - 김예찬 배상- </label>
+            <md-input v-model="floatingLabel" type="text" style="text-align:center;"></md-input>
+          </md-field>
+        </div>
+    <!-- end inputs -->
+
 
       <!-- 여러분... 회원 로그인 양식 쓰고싶으시면 밑에꺼 풀고 쓰세요...! -김예찬 배상-   -->
       <!-- <div class="md-layout">
