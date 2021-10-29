@@ -1,3 +1,4 @@
+
 """
 Django settings for DaViz project.
 
@@ -11,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -34,7 +36,8 @@ INSTALLED_APPS = [
     'boards',
     'datasets',
 
-    'rest_framework'
+    'storages',
+    'rest_framework',
     
     'django.contrib.admin',
     'django.contrib.auth',
@@ -108,9 +111,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -128,3 +131,20 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#S3 관련 설정
+#ACCESS
+AWS_ACCESS_KEY_ID = 'AKIAVY6XFH44CQRHCX4P'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_REGION = 'ap-northeast-2'
+
+
+# #Storage
+AWS_STORAGE_BUCKET_NAME = 'daviz-bucket'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME,AWS_REGION)
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'path/to/store/my/files/')
