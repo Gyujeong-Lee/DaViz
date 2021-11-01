@@ -8,4 +8,4 @@ class Info_Dataset(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     file = models.FileField()
     columns = models.CharField(max_length=500, blank=True)
-
+    # row_cnt = models.IntegerField(blank=True)
