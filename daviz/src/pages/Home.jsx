@@ -1,13 +1,14 @@
 // 컴포넌트 관련
-import { React } from 'react';
+import { React, useState } from 'react';
 import { useHistory } from 'react-router';
 import Stack from '@mui/material/Stack';
 import ButtonUnstyled, {
   buttonUnstyledClasses
 } from '@mui/core/ButtonUnstyled';
-import { styled } from '@mui/system';
+import styled from 'styled-components';
 import logo from '../images/shinhan_logo.png';
 import SearchBar from '../components/SearchBar';
+import FileAddForm from '../components/FileAddForm';
 import '../App.css';
 
 const CustomButtonRoot = styled('button')`
@@ -15,9 +16,10 @@ const CustomButtonRoot = styled('button')`
   padding: 15px 20px;
   border-radius: 10px;
   color: #fff;
-  font-weight: 600;
+  font-weight: 545;
   font-family: Helvetica, Arial, sans-serif;
-  font-size: 14px;
+  font-size: 18px;
+  text-transform: upperCase;
   transition: all 200ms ease;
   cursor: pointer;
   box-shadow: 0 4px 20px 0 rgba(61, 71, 82, 0.1), 0 0 0 0 rgba(0, 127, 255, 0);
@@ -58,6 +60,8 @@ function CustomButton(props) {
 
 export default function Home() {
   const history = useHistory();
+  const [uploadModal, setUploadModal] = useState(false);
+
   return (
     <>
       <header className="App-header">
@@ -67,7 +71,7 @@ export default function Home() {
       <div>
         <SearchBar />
         <Midbutton>
-          <Stack spacing={15} direction="row">
+          <Stack spacing={25} direction="row">
             <CustomButton
               onClick={() => {
                 history.push('/datalist/');
@@ -75,8 +79,20 @@ export default function Home() {
             >
               Data List
             </CustomButton>
-            <CustomButton>Data Regist</CustomButton>
+            <CustomButton
+              onClick={() => {
+                setUploadModal(true);
+              }}
+            >
+              Data Regist
+            </CustomButton>
           </Stack>
+          {uploadModal && (
+            <FileAddForm
+              uploadModal={uploadModal}
+              setUploadModal={setUploadModal}
+            />
+          )}
         </Midbutton>
       </div>
     </>
