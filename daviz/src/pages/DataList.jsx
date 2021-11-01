@@ -1,10 +1,27 @@
 import React from 'react';
+import styled from 'styled-components';
+import DataPreview from '../components/DataPreview';
+
+const Title = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  color: #0076be;
+`;
 
 function DataList() {
   return (
-    <div>
-      <div>DataList</div>
-    </div>
+    <>
+      <Title>
+        <h1>DataList</h1>
+      </Title>
+      <>
+        <DataPreview />
+        <DataPreview />
+        <DataPreview />
+        <DataPreview />
+      </>
+    </>
   );
 }
 

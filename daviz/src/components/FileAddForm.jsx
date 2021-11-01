@@ -34,10 +34,12 @@ export default function FileAddForm(props) {
 
   const handleClickOpen = () => {
     setOpen(true);
+    setButtonActive(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setButtonActive(false);
     props.setUploadModal(false);
   };
 
@@ -91,10 +93,14 @@ export default function FileAddForm(props) {
           </UploadFormMargin>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} disabled={buttonActive}>
-            Create
-          </Button>
+          <>
+            <Button onClick={handleClose} color="error">
+              Cancel
+            </Button>
+            <Button onClick={handleClose} disabled={buttonActive}>
+              Create
+            </Button>
+          </>
         </DialogActions>
       </Dialog>
     </div>
