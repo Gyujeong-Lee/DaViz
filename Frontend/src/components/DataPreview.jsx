@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
+import AlbumIcon from '@mui/icons-material/Album';
 import { useHistory } from 'react-router';
 
 const PreviewBox = styled(Box)`
@@ -8,27 +9,23 @@ const PreviewBox = styled(Box)`
   justify-content: center;
   margin-bottom: 3rem;
   color: #0076be;
-  border-radius: 5px;
 `;
 
 const Title = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  min-height: 3.25rem;
-  margin: auto;
   padding-left: 1rem;
   padding-right: 1rem;
   color: #ffffff;
   background-color: #0076be;
-  border-top-right-radius: 5px;
-  border-top-left-radius: 5px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  margin-bottom: 0.1rem;
   p {
-    font-size: 0.9rem;
-    letter-spacing: '1px';
-  }
-  h3 {
-    left: 0;
+    margin-left: 0.5rem;
+    align-self: center;
+    font-size: 1.25rem;
   }
 `;
 
@@ -66,7 +63,7 @@ const Updated = styled.div`
   font-size: 0.7rem;
   color: #000000;
   background-color: #ffffff;
-  min-height: 43px;
+  min-height: 15px;
 `;
 
 export default function DataPreview() {
@@ -79,22 +76,23 @@ export default function DataPreview() {
           component="div"
           sx={{
             minWidth: 750,
-            minHeight: 200,
-            border: '1px solid #d3d3d3',
+            minHeight: 185,
+            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
+            borderBottom: '3px solid #d3d3d3',
             borderRadius: 1,
             backgroundColor: '#d3d3d3',
             '&:hover': {
               cursor: 'pointer',
-              opacity: [0.95]
+              opacity: [0.9]
             }
           }}
           onClick={() => {
-            history.push('/'); // 데이터 detail로 변경하기
+            history.push('/1/detail');
           }}
         >
           <Title>
-            <h3>Data Title</h3>
-            <p>SAAS-0000</p>
+            <AlbumIcon />
+            <p>Data Title</p>
           </Title>
           <Information>
             <div>Data Info : ~~~</div>
