@@ -47,7 +47,6 @@ const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
-  margin-right: 5rem;
 `;
 
 // Overall - Column 전환 버튼

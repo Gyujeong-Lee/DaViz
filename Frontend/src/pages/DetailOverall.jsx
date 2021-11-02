@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
+import DataTable from '../components/DataTable';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -47,7 +48,6 @@ const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
-  margin-right: 5rem;
 `;
 
 // Overall - Column 전환 버튼
@@ -90,6 +90,7 @@ function DetailOverall() {
         <Container maxWidth="xl">
           <SelectButton />
           <h2>#Data Name</h2>
+          <DataTable />
         </Container>
       </Wrapper>
     </>
