@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import { useHistory } from 'react-router';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -13,17 +15,31 @@ const Title = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 2rem;
   color: #ffffff;
   background-color: #0076be;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
-  margin-bottom: 0.1rem;
   p {
-    margin-left: 0.5rem;
-    align-self: center;
-    font-size: 1.25rem;
+    margin-left: 0.8rem;
+    font-size: 1.4rem;
+  }
+`;
+
+const Between = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  background-color: #0076be;
+  .home {
+    color: #ffffff;
+    background-color: transparent;
+    font-size: 1.4rem;
+    margin-right: 2.5rem;
+    cursor: pointer;
+  }
+  .home:hover {
+    opacity: 0.5;
   }
 `;
 
@@ -34,36 +50,47 @@ const Buttons = styled.div`
   margin-right: 5rem;
 `;
 
+// Overall - Column 전환 버튼
+function SelectButton() {
+  const history = useHistory();
+
+  return (
+    <Buttons>
+      <Stack spacing={2} direction="row">
+        <Button variant="contained">Overall</Button>
+        <Button
+          variant="outlined"
+          onClick={() => history.push('/1/detail/column')}
+        >
+          Column
+        </Button>
+      </Stack>
+    </Buttons>
+  );
+}
+
 function DetailOverall() {
-  const [selectedBtn, setSelectedBtn] = useState(0);
-
-  const overallClick = () => {
-    setSelectedBtn(0);
-    console.log(selectedBtn);
-  };
-
-  const columnClick = () => {
-    setSelectedBtn(1);
-    console.log(selectedBtn);
+  const history = useHistory();
+  const goHome = () => {
+    history.push('/');
   };
 
   return (
     <>
       <Wrapper>
-        <Title>
-          <AlbumIcon />
-          <p>Data Title</p>
-        </Title>
-        <Buttons>
-          <Stack spacing={2} direction="row">
-            <Button variant="outlined" onClick={overallClick}>
-              Overall
-            </Button>
-            <Button variant="outlined" onClick={columnClick}>
-              Column
-            </Button>
-          </Stack>
-        </Buttons>
+        <Between>
+          <Title>
+            <AlbumIcon />
+            <p>Data Title</p>
+          </Title>
+          <Button className="home" onClick={goHome}>
+            Home
+          </Button>
+        </Between>
+        <Container maxWidth="xl">
+          <SelectButton />
+          <h2>#Data Name</h2>
+        </Container>
       </Wrapper>
     </>
   );

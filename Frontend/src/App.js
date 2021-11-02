@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import DataList from './pages/DataList';
 import DetailOverall from './pages/DetailOverall';
 import DetailColumn from './pages/DetailColumn';
+import Footer from './layout/Footer';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/1/detail/" component={DetailOverall} />
         <Route exact path="/1/detail/column" component={DetailColumn} />
       </Switch>
+      <Footer />
     </BrowserRouter>
   );
 }
