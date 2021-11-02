@@ -12,7 +12,7 @@ import pandas as pd
 import io
 from sqlalchemy import create_engine
 import pymysql
-
+import time
 
 
 
@@ -22,29 +22,40 @@ import pymysql
 @api_view(['POST'])
 def upload(request, format=None):
     csv_file = request.FILES['file']
-    print(type(csv_file))
-    print(csv_file.size)
+    file_name = csv_file.name
 
     # print(csv_file)
     serializers = DataInfoSerializer(data=request.data)
+    s = time.time()
 
-    df = pd.read_csv(io.StringIO(csv_file.read().decode('cp949')))
-    print(1)
+    if file_name.endswith('.csv'):
+        df = pd.read_csv(io.StringIO(csv_file.read().decode('cp949')), thousands=',')
+        row_cnt = df.shape[0]
+        cols = df.columns.values
+        columns = ''
+        for c in cols:
+            columns = columns + c + '|'
+    else:
+        #다른 확장자의 경우... 고민 해볼 것
+        print('잘못된 형식입니다.')
 
-    #dataframe DB에 저장
+    print(time.time() -s)
+
+    #dataframe(원본 데이터)을 DB에 저장
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
-    df.to_sql(name='{}'.format(csv_file.name), con=db_connection, if_exists='replace', index=True)
+    df.to_sql(name='{}'.format(file_name), con=db_connection, if_exists='replace', index=True)
+    print(time.time() -s)
 
     #유효성 검사
     if serializers.is_valid():
-        #S3 저장
-        serializers.save()
-        #기초 통계 내용 분석 후 저장 
+        #원본 데이터 S3 저장
+        serializers.save(row_cnt=row_cnt, columns=columns)
+        #기초 통계 내용 분석 후 DB 저장
 
         return Response(serializers.data, status=status.HTTP_201_CREATED)
 
-#S3에서 원본 데이터 다운받기
+#S3에서 원본 데이터 다운받기 -> url 보내줌
 @api_view(['GET'])
 def download(request, data_title):
     data = {
@@ -58,7 +69,7 @@ def download(request, data_title):
 def overall(request, dataset_id):
     pass
 
-#기본 디테일
+#기본 디테일, 이상치 제거 이전
 @api_view(['GET'])
 def detail(request, dataset_id):
     pass
