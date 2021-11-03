@@ -60,6 +60,30 @@ def upload(request, format=None):
         #기초 통계 내용 분석 후 DB 저장
         info = get_object_or_404(Info_Dataset, file=file_name + '|{}'.format(td_by_day))
         dataset_id = info.id
+        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'dataset_id'])
+
+        cols = df.columns
+        for col in cols:
+            now_col = df[col]
+            stat_df.loc[col] = pd.Series()
+            # col_name 저장
+            stat_df.loc[col, 'col_name'] = col
+            # dtype 저장
+            stat_df.loc[col, 'dtype'] = now_col.dtype
+
+            # 데이터 타입이 object인 경우 (string)
+            if stat_df.loc[col, 'dtype'] == 'object':
+                unique = now_col.value_counts()
+                stat_df.loc[col, 'unique_cnt'] = len(unique)
+                stat_df.loc[col, 'x_axis'] = '|'.join(unique.index[:5])
+                stat_df.loc[col, 'y_axis'] = '|'.join(unique.index[:5])
+                stat_df.loc[col, 'null_cnt'] = len(unique)
+            # 데이터 타입이 수치형인 경우 (int, float)
+            else:
+                stat_df.loc[col, ['mean', 'std', 'min_val', 'q1', 'q2', 'q3', 'max_val']] = df[col].describe().values[1:]
+
+
+        # stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
         return Response(serializers.data, status=status.HTTP_201_CREATED)
 
