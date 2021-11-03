@@ -14,8 +14,6 @@ from sqlalchemy import create_engine
 import pymysql
 import time
 
-
-
 # Create your views here.
 
 #데이터 셋 업로드, 원본 데이터 S3 저장 후 데이터 분석 결과 DB 저장
@@ -50,6 +48,8 @@ def upload(request, format=None):
     #유효성 검사
     if serializers.is_valid():
         #원본 데이터 S3 저장
+        title = serializers.data['title']
+        
         serializers.save(row_cnt=row_cnt, columns=columns)
         #기초 통계 내용 분석 후 DB 저장
 
