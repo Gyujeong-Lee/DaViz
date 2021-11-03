@@ -8,6 +8,6 @@ urlpatterns = [
     path('download/<str:dataset_name>/', views.download),
     path('<int:dataset_id>/overall/', views.overall),
     path('<int:dataset_id>/detail/', views.detail),
-    path('<int:dataset_id>/filter/<str:condition>', views.filter),
+    path('<int:dataset_id>/filter/<str:condition>/', views.filter),
 
 ]

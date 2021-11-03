@@ -1,6 +1,6 @@
 from os import name, path, sep
-from django.http.response import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.http.response import HttpResponse, JsonResponse
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
@@ -79,9 +79,9 @@ def download(request, dataset_name):
 @api_view(['GET'])
 def overall(request, dataset_id):
     dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
-    basic_result = get_object_or_404(Basic_Result, id=dataset_id)
+    basic_result = get_list_or_404(Basic_Result.objects.filter(id=dataset_id))
 
-    # result_serializers = BasicResultSerializer(basic_result)
+    # result_serializers = BasicResultSerializer(basic_result, many=True)
     info_serializers = DataInfoSerializer(dataset_info)
     overall = {
         'result': serializers.data,
@@ -92,10 +92,42 @@ def overall(request, dataset_id):
 #기본 디테일, 이상치 제거 이전
 @api_view(['GET'])
 def detail(request, dataset_id):
-    pass
+    #해당 dataset의 basic result 가져오기 5개 
+    basic_result = get_list_or_404(Basic_Result.objects.filter(id=dataset_id)[:5])
+    #serializing
+    # serializers = BasicResultSerializer(basic_result, many=True)
+
+    return Response(serializers.data, status=status.HTTP_200_OK)
 
 
 ##컬럼내용 url로 입력받음, 해당 컬럼 분기 처리하여 재분석
 @api_view(['GET'])
 def filter(request, dataset_id, condition):
-    pass
+    #column 뽑아내기
+    #val = 1 -> filter o // val = 0 -> filter x 
+    conditions = condition.split('&')
+
+    #read_sql에 인자로 보내주기 위해
+    columns = []
+
+    #column 별 필터 체크
+    conditions_dict = {}
+    for f in conditions:
+        temp = f.split('=')
+        conditions_dict[temp[0]] = int(temp[1])
+        columns.append(temp[0])
+
+    #DB에서 테이블 가져오기
+    dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
+    table_name = dataset_info.file
+    db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
+    db_connection = create_engine(db_connection_str)
+    
+    #위에서 정의한 컬럼만 읽어온다.
+    df = pd.read_sql(table_name, con=db_connection, columns=columns)
+    print(df)
+    data = {
+        'message' : 'good'
+    }
+    
+    return Response(data, status=status.HTTP_200_OK)
