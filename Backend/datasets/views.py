@@ -17,6 +17,9 @@ import pymysql
 import time
 import datetime
 
+from scipy.stats import shapiro
+import matplotlib.pyplot as plt
+
 # Create your views here.
 
 #데이터 셋 업로드, 원본 데이터 S3 저장 후 데이터 분석 결과 DB 저장
@@ -60,6 +63,63 @@ def upload(request, format=None):
         #기초 통계 내용 분석 후 DB 저장
         info = get_object_or_404(Info_Dataset, file=file_name + '|{}'.format(td_by_day))
         dataset_id = info.id
+        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'dataset_id'])
+
+        cols = df.columns
+        for col in cols:
+            now_col = df[col]
+            stat_df.loc[col] = pd.Series()
+            # col_name 저장
+            stat_df.loc[col, 'col_name'] = col
+            # dtype 저장
+            stat_df.loc[col, 'dtype'] = now_col.dtype
+            # null_cnt 저장
+            stat_df.loc[col, 'null_cnt'] = now_col.isna().sum()
+            # unique_cnt 저장
+            unique = now_col.value_counts()
+            stat_df.loc[col, 'unique_cnt'] = len(unique)
+
+            # 데이터 타입이 object인 경우 (string)
+            if stat_df.loc[col, 'dtype'] == 'object':
+                # 도넛 차트 데이터 저장
+                stat_df.loc[col, 'x_axis'] = '|'.join(unique.index[:5])
+                stat_df.loc[col, 'y_axis'] = '|'.join(list(map(str, unique.values[:5])))
+                
+            # 데이터 타입이 수치형인 경우 (int, float)
+            else:
+                stat_df.loc[col, ['mean', 'std', 'min_val', 'q1', 'q2', 'q3', 'max_val']] = df[col].describe().values[1:]
+
+                # 히스토그램 데이터 저장
+                unique_cnt = len(unique)
+                if unique_cnt >= 500:
+                    bin_cnt = 50
+                elif unique_cnt >= 100:
+                    bin_cnt = max(30, unique_cnt//100)
+                elif unique_cnt >= 5:
+                    bin_cnt = max(5, unique_cnt//5)
+                else:
+                    bin_cnt = unique_cnt
+                # print('bins 값', bin_cnt)
+
+                if bin_cnt:
+                    histo = plt.hist(now_col, bins=bin_cnt)
+                    stat_df.loc[col, 'x_axis'] = '|'.join(list(map(str, map(int, histo[0]))))
+                    stat_df.loc[col, 'y_axis'] = '|'.join(list(map(str, histo[1].round(1))))
+                
+                # mode(최빈값) 저장
+                if not unique.empty:
+                    stat_df.loc[col, 'mode'] = unique.values[0]
+                # 정규성검정 p-value & skewness 저장
+                if len(now_col.dropna()) >= 3:
+                    stat, p  = shapiro(now_col.dropna().values)
+                    stat_df.loc[col, 'p_value'] = p
+                stat_df.loc[col, 'skewness'] = now_col.skew()
+
+        # dataset_id 저장
+        stat_df['dataset_id'] = dataset_id
+
+        # DB에 저장 (table append)
+        stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
         return Response(serializers.data, status=status.HTTP_201_CREATED)
 
@@ -129,5 +189,5 @@ def filter(request, dataset_id, condition):
     data = {
         'message' : 'good'
     }
-    
+
     return Response(data, status=status.HTTP_200_OK)
