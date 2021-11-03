@@ -1,4 +1,3 @@
-// 컴포넌트 관련
 import { React, useState } from 'react';
 import { useHistory } from 'react-router';
 import Stack from '@mui/material/Stack';
