@@ -13,9 +13,8 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/datalist" component={DataList} />
-        {/* dataset id 추가하기 */}
-        <Route exact path="/1/detail/" component={DetailOverall} />
-        <Route exact path="/1/detail/column" component={DetailColumn} />
+        <Route exact path="/:id/detail/" component={DetailOverall} />
+        <Route exact path="/:id/detail/column" component={DetailColumn} />
       </Switch>
       <Footer />
     </BrowserRouter>

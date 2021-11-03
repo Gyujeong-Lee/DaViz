@@ -65,8 +65,12 @@ function SelectButton() {
   );
 }
 
-function DetailColumn() {
+function DetailColumn({ match }) {
   const history = useHistory();
+  const {
+    params: { id }
+  } = match;
+
   const goHome = () => {
     history.push('/');
   };
@@ -77,7 +81,7 @@ function DetailColumn() {
         <Between>
           <Title>
             <AlbumIcon />
-            <p>Data Title</p>
+            <p>{id} Data Title</p>
           </Title>
           <Button className="home" onClick={goHome}>
             Home

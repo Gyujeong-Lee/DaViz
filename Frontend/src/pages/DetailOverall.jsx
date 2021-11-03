@@ -69,31 +69,33 @@ function SelectButton() {
   );
 }
 
-function DetailOverall() {
+function DetailOverall({ match }) {
   const history = useHistory();
+  const {
+    params: { id }
+  } = match;
+
   const goHome = () => {
     history.push('/');
   };
 
   return (
-    <>
-      <Wrapper>
-        <Between>
-          <Title>
-            <AlbumIcon />
-            <p>Data Title</p>
-          </Title>
-          <Button className="home" onClick={goHome}>
-            Home
-          </Button>
-        </Between>
-        <Container maxWidth="xl">
-          <SelectButton />
-          <h2>#Data Name</h2>
-          <DataTable />
-        </Container>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Between>
+        <Title>
+          <AlbumIcon />
+          <p>{id} Data Title</p>
+        </Title>
+        <Button className="home" onClick={goHome}>
+          Home
+        </Button>
+      </Between>
+      <Container maxWidth="xl">
+        <SelectButton />
+        <h2>#Data Name</h2>
+        <DataTable />
+      </Container>
+    </Wrapper>
   );
 }
 
