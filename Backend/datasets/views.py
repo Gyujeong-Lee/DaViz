@@ -140,7 +140,6 @@ def download(request, dataset_name):
 def overall(request, dataset_id):
     dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
     basic_result = get_list_or_404(Basic_Result.objects.filter(id=dataset_id))
-
     # result_serializers = BasicResultSerializer(basic_result, many=True)
     info_serializers = DataInfoSerializer(dataset_info)
     overall = {
