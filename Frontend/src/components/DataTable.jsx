@@ -7,6 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+// import Histogram from './charts/Histogram';
+import DoughnutChart from './charts/DoughnutChart';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -57,7 +59,8 @@ const rows = [
   createData('Brazil', 'BR', 210147125, 8515767)
 ];
 
-export default function DataTable() {
+export default function DataTable(props) {
+  const { key } = props;
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(100);
 
@@ -87,7 +90,18 @@ export default function DataTable() {
               ))}
             </TableRow>
           </TableHead>
-          {/* 여기에 Overall 그래프 */}
+          {/* Overall 그래프 */}
+          <TableHead>
+            {columns.map((column) => (
+              <TableCell
+                key={column.id + key}
+                align={column.align}
+                style={{ minWidth: column.minWidth }}
+              >
+                <DoughnutChart />
+              </TableCell>
+            ))}
+          </TableHead>
           <TableBody>
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

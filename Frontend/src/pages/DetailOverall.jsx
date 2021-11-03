@@ -93,7 +93,7 @@ function DetailOverall({ match }) {
       <Container maxWidth="xl">
         <SelectButton />
         <h2>#Data Name</h2>
-        <DataTable />
+        <DataTable key={id} />
       </Container>
     </Wrapper>
   );
