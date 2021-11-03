@@ -1,0 +1,9 @@
+/build
+/docs
+/dist
+/coverage
+/.gitignore
+/.prettierignore
+/yarn.lock
+/.vscode
+*.png

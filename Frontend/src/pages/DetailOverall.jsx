@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
 import DataTable from '../components/DataTable';
+import BoxPlotChart from '../components/charts/BoxPlotChart';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -25,7 +26,7 @@ const Title = styled.div`
   }
 `;
 
-const Between = styled.div`
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -50,6 +51,10 @@ const Buttons = styled.div`
   margin-top: 1rem;
 `;
 
+const BoxPlotWrapper = styled.div`
+  max-width: 30%;
+`;
+
 // Overall - Column 전환 버튼
 function SelectButton() {
   const history = useHistory();
@@ -69,31 +74,36 @@ function SelectButton() {
   );
 }
 
-function DetailOverall() {
+function DetailOverall({ match }) {
   const history = useHistory();
+  const {
+    params: { id }
+  } = match;
+
   const goHome = () => {
     history.push('/');
   };
 
   return (
-    <>
-      <Wrapper>
-        <Between>
-          <Title>
-            <AlbumIcon />
-            <p>Data Title</p>
-          </Title>
-          <Button className="home" onClick={goHome}>
-            Home
-          </Button>
-        </Between>
-        <Container maxWidth="xl">
-          <SelectButton />
-          <h2>#Data Name</h2>
-          <DataTable />
-        </Container>
-      </Wrapper>
-    </>
+    <Wrapper>
+      <Header>
+        <Title>
+          <AlbumIcon />
+          <p>{id} Data Title</p>
+        </Title>
+        <Button className="home" onClick={goHome}>
+          Home
+        </Button>
+      </Header>
+      <BoxPlotWrapper>
+        <BoxPlotChart />
+      </BoxPlotWrapper>
+      <Container maxWidth="xl">
+        <SelectButton />
+        <h2>#Data Name</h2>
+        <DataTable key={id} />
+      </Container>
+    </Wrapper>
   );
 }
 
