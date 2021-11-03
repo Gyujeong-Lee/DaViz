@@ -7,8 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-// import Histogram from './charts/Histogram';
-import DoughnutChart from './charts/DoughnutChart';
+import Histogram from './charts/Histogram';
+// import BoxPlotChart from './charts/BoxPlotChart';
+// import DoughnutChart from './charts/DoughnutChart';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
@@ -98,7 +99,7 @@ export default function DataTable(props) {
                 align={column.align}
                 style={{ minWidth: column.minWidth }}
               >
-                <DoughnutChart />
+                <Histogram />
               </TableCell>
             ))}
           </TableHead>

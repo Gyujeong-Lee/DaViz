@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
 import DataTable from '../components/DataTable';
+import BoxPlotChart from '../components/charts/BoxPlotChart';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -25,7 +26,7 @@ const Title = styled.div`
   }
 `;
 
-const Between = styled.div`
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -48,6 +49,10 @@ const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-top: 1rem;
+`;
+
+const BoxPlotWrapper = styled.div`
+  max-width: 30%;
 `;
 
 // Overall - Column 전환 버튼
@@ -81,7 +86,7 @@ function DetailOverall({ match }) {
 
   return (
     <Wrapper>
-      <Between>
+      <Header>
         <Title>
           <AlbumIcon />
           <p>{id} Data Title</p>
@@ -89,7 +94,10 @@ function DetailOverall({ match }) {
         <Button className="home" onClick={goHome}>
           Home
         </Button>
-      </Between>
+      </Header>
+      <BoxPlotWrapper>
+        <BoxPlotChart />
+      </BoxPlotWrapper>
       <Container maxWidth="xl">
         <SelectButton />
         <h2>#Data Name</h2>
