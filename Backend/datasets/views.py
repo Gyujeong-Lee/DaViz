@@ -63,7 +63,7 @@ def upload(request, format=None):
         #기초 통계 내용 분석 후 DB 저장
         info = get_object_or_404(Info_Dataset, file=file_name + '|{}'.format(td_by_day))
         dataset_id = info.id
-        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'dataset_id'])
+        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'box_min', 'box_max', 'dataset_id'])
 
         cols = df.columns
         for col in cols:
@@ -99,7 +99,6 @@ def upload(request, format=None):
                     bin_cnt = max(5, unique_cnt//5)
                 else:
                     bin_cnt = unique_cnt
-                # print('bins 값', bin_cnt)
 
                 if bin_cnt:
                     histo = plt.hist(now_col, bins=bin_cnt)
@@ -114,6 +113,15 @@ def upload(request, format=None):
                     stat, p  = shapiro(now_col.dropna().values)
                     stat_df.loc[col, 'p_value'] = p
                 stat_df.loc[col, 'skewness'] = now_col.skew()
+
+                # box_min, box_max 저장
+                q1 = stat_df.loc[col, 'q1']
+                q3 = stat_df.loc[col, 'q3']
+                iqr = q3 - q1
+                lc = q1 - 1.5*iqr
+                uc = q3 + 1.5*iqr
+                box = now_col[(now_col>=lc)&(now_col<=uc)]
+                stat_df.loc[col, ['box_min', 'box_max']] = box.min(), box.max()
 
         # dataset_id 저장
         stat_df['dataset_id'] = dataset_id
