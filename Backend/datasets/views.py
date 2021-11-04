@@ -20,8 +20,6 @@ import datetime
 from scipy.stats import shapiro
 import matplotlib.pyplot as plt
 
-# Create your views here.
-
 #데이터 셋 업로드, 원본 데이터 S3 저장 후 데이터 분석 결과 DB 저장
 @api_view(['POST'])
 def upload(request, format=None):
@@ -186,7 +184,8 @@ def filter(request, dataset_id, condition):
     df = pd.read_sql(table_name, con=db_connection, columns=columns)
     print(df)
     data = {
-        'message' : 'good'
+        'message' : 'good',
     }
+
 
     return Response(data, status=status.HTTP_200_OK)
