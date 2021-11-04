@@ -17,10 +17,7 @@ const BoxPlotChart = () => {
   const chartContainer = useRef(null);
 
   const label = ['title'];
-  const columnData = [
-    [-3, 1, 2, 3, 4, 3],
-    [-10, -4, -5, 3, 4, 10]
-  ];
+  const columnData = [[-5, -3, -1, 5, 9]]; // [min, max, q1, q2, q3]
 
   const chartConfig = {
     type: 'boxplot',
@@ -33,8 +30,8 @@ const BoxPlotChart = () => {
           borderColor: 'red',
           borderWidth: 1,
           outlierColor: '#ffffff',
-          padding: 15,
-          itemRadius: 5,
+          padding: 25,
+          itemRadius: 0,
           data: columnData
         }
       ]

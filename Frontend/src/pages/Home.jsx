@@ -1,10 +1,12 @@
-import { React, useState } from 'react';
+import { React } from 'react';
 import { useHistory } from 'react-router';
 import Stack from '@mui/material/Stack';
 import ButtonUnstyled, {
   buttonUnstyledClasses
 } from '@mui/core/ButtonUnstyled';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { homestate } from '../state';
 import logo from '../images/shinhan_logo.png';
 import SearchBar from '../components/SearchBar';
 import FileAddForm from '../components/FileAddForm';
@@ -59,7 +61,7 @@ function CustomButton(props) {
 
 export default function Home() {
   const history = useHistory();
-  const [uploadModal, setUploadModal] = useState(false);
+  const [uploadModal, setUploadModal] = useRecoilState(homestate);
 
   return (
     <>
