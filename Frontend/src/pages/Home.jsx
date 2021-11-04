@@ -6,7 +6,7 @@ import ButtonUnstyled, {
 } from '@mui/core/ButtonUnstyled';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { homestate } from '../state';
+import { homestate } from '../utils/state';
 import logo from '../images/shinhan_logo.png';
 import SearchBar from '../components/SearchBar';
 import FileAddForm from '../components/FileAddForm';
@@ -61,7 +61,7 @@ function CustomButton(props) {
 
 export default function Home() {
   const history = useHistory();
-  const [uploadModal, setUploadModal] = useRecoilState(homestate);
+  const [openModal, setOpenModal] = useRecoilState(homestate);
 
   return (
     <>
@@ -82,18 +82,13 @@ export default function Home() {
             </CustomButton>
             <CustomButton
               onClick={() => {
-                setUploadModal(true);
+                setOpenModal(true);
               }}
             >
               Data Regist
             </CustomButton>
           </Stack>
-          {uploadModal && (
-            <FileAddForm
-              uploadModal={uploadModal}
-              setUploadModal={setUploadModal}
-            />
-          )}
+          {openModal && <FileAddForm />}
         </Midbutton>
       </div>
     </>

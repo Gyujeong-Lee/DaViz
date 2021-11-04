@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import AlbumIcon from '@mui/icons-material/Album';
@@ -66,8 +66,24 @@ const Updated = styled.div`
   min-height: 15px;
 `;
 
-export default function DataPreview() {
+export default function DataPreview({ data }) {
   const history = useHistory();
+  const [columns, setColumns] = useState([]);
+  const [columnList, setColumnList] = useState([]);
+
+  useEffect(() => {
+    // column 7개 출력
+    const column = data.columns.split('|');
+    setColumnList(column);
+    let columnNames = [];
+    if (column.length < 7) {
+      columnNames = column.slice(0, column.length - 1).join(', ');
+    } else {
+      columnNames = column.slice(0, 6).join(', ');
+      columnNames += ' ...';
+    }
+    setColumns(columnNames);
+  }, []);
 
   return (
     <div>
@@ -75,7 +91,7 @@ export default function DataPreview() {
         <Box
           component="div"
           sx={{
-            minWidth: 750,
+            width: '70%',
             minHeight: 185,
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
             borderBottom: '3px solid #d3d3d3',
@@ -92,23 +108,25 @@ export default function DataPreview() {
         >
           <Title>
             <AlbumIcon />
-            <p>Data Title</p>
+            <p>
+              {data.id}. {data.title}
+            </p>
           </Title>
           <Information>
-            <div>Data Info : ~~~</div>
-            <div>Information</div>
+            <div>Column: {columnList.length}개</div>
+            <div>{columns}</div>
           </Information>
           <Description>
             <div>
               <p>Data Classfication : ~~~~</p>
             </div>
             <div>
-              <p>Data Description: ~~~~</p>
+              <p>Data Description: {data.description}</p>
             </div>
           </Description>
           <Updated>
             <p>Last Updated</p>
-            <p>10/20/2021</p>
+            <p>{data.created_at.slice(0, 10)}</p>
           </Updated>
         </Box>
       </PreviewBox>

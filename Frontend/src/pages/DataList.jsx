@@ -1,4 +1,5 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DataPreview from '../components/DataPreview';
 
@@ -15,16 +16,32 @@ const Title = styled.div`
 `;
 
 function DataList() {
+  const [dataset, setDataset] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get('/boards/')
+      .then((res) => {
+        setDataset(res.data);
+        console.log(dataset);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => {
+      console.log('unmount');
+    };
+  }, []);
+
   return (
     <Wrapper>
       <Title>
         <h1>DataList</h1>
       </Title>
       <div>
-        <DataPreview />
-        <DataPreview />
-        <DataPreview />
-        <DataPreview />
+        {dataset.map((data) => (
+          <DataPreview key={data.id} data={data} />
+        ))}
       </div>
     </Wrapper>
   );

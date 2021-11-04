@@ -98,13 +98,13 @@ function DetailOverall({ match }) {
           Home
         </Button>
       </Header>
-      <BoxPlotWrapper>
-        <DoughnutChart />
-      </BoxPlotWrapper>
       <Container maxWidth="xl">
         <SelectButton />
         <h2>#Data Name</h2>
         <DataTable key={id} />
+        <BoxPlotWrapper>
+          <DoughnutChart />
+        </BoxPlotWrapper>
       </Container>
     </Wrapper>
   );
