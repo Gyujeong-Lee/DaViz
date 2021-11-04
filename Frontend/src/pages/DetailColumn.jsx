@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
 import DataStatistics from '../components/DataStatistics';
+import BoxPlotChart from '../components/charts/BoxPlotChart';
+import Histogram from '../components/charts/Histogram';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -50,6 +52,15 @@ const Buttons = styled.div`
   margin-top: 1rem;
 `;
 
+const BoxPlotWrapper = styled.div`
+  width: 25%;
+  max-width: 30%;
+`;
+const HistogramWrapper = styled.div`
+  width: 25%;
+  max-width: 30%;
+`;
+
 // Overall - Column 전환 버튼
 function SelectButton() {
   const history = useHistory();
@@ -77,25 +88,39 @@ function DetailColumn({ match }) {
   };
 
   return (
-    <>
-      <Wrapper>
-        <Between>
-          <Title>
-            <AlbumIcon />
-            <p>{id} Data Title</p>
-          </Title>
-          <Button className="home" onClick={goHome}>
-            Home
-          </Button>
-        </Between>
-        <Container maxWidth="xl">
-          <SelectButton />
-          <h2>세부 사항</h2>
+    <Wrapper>
+      <Between>
+        <Title>
+          <AlbumIcon />
+          <p>{id} Data Title</p>
+        </Title>
+        <Button className="home" onClick={goHome}>
+          Home
+        </Button>
+      </Between>
+      <Container maxWidth="xl">
+        <SelectButton />
+        <h2>세부 사항</h2>
+        <Stack spacing={10} direction="row">
           <DataStatistics />
-          <hr />
-        </Container>
-      </Wrapper>
-    </>
+          <DataStatistics />
+          <DataStatistics />
+          <DataStatistics />
+          {/* <DataStatistics /> */}
+        </Stack>
+        <hr />
+        <Stack spacing={5} direction="row">
+          <BoxPlotWrapper>
+            <BoxPlotChart />
+          </BoxPlotWrapper>
+          <HistogramWrapper>
+            <Histogram />
+          </HistogramWrapper>
+          <DataStatistics />
+          <DataStatistics />
+        </Stack>
+      </Container>
+    </Wrapper>
   );
 }
 

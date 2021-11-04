@@ -4,14 +4,21 @@ import styled from 'styled-components';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-const Cards = styled(Card)`
+const Cards = styled(CardContent)`
   background-color: #0076be;
+  color: white;
+  li {
+    color: white;
+  }
+  h2 {
+    color: white;
+  }
 `;
 
 export default function DataStatistics() {
   return (
-    <Cards sx={{ maxWidth: 300 }}>
-      <CardContent>
+    <Card>
+      <Cards>
         <Typography gutterBottom variant="h5" component="div">
           # 1 - # column name
         </Typography>
@@ -27,7 +34,7 @@ export default function DataStatistics() {
             <li>Null: 30</li>
           </ul>
         </Typography>
-      </CardContent>
-    </Cards>
+      </Cards>
+    </Card>
   );
 }
