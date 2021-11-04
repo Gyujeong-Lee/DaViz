@@ -14,3 +14,10 @@ class DataInfoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Info_Dataset
         fields = ('id', 'title', 'description', 'created_at', 'file', 'columns',)
+
+# basic result
+class BasicResultSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Basic_Result
+        exclude = ('dataset',)
