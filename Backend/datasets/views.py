@@ -1,4 +1,5 @@
 from os import name, path, sep
+from django.core.checks import messages
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ from sqlalchemy import create_engine
 import pymysql
 import time
 import datetime
+import chardet
 
 from scipy.stats import shapiro
 import matplotlib.pyplot as plt
@@ -31,18 +33,28 @@ def upload(request, format=None):
     td = datetime.date.today()
     td_by_day = td.strftime('%Y%m%d')
 
+
+    #같은 데이터셋의 중복
+    if Info_Dataset.objects.filter(file= file_name + '|{}'.format(td_by_day)).exists():
+        
+        return Response({'messages': '같은 이름의 파일(데이터 셋)이 존재합니다. 해당 분석 결과를 참조해주세요'}, status=status.HTTP_409_CONFLICT)
+
     #csv 확장자
     if file_name.endswith('.csv'):
         #file -> df
-        df = pd.read_csv(io.StringIO(csv_file.read().decode('cp949')), thousands=',')
-        row_cnt = df.shape[0]
-        cols = df.columns.values
-        columns = ''
-        for c in cols:
-            columns = columns + c + '|'
+        try:
+            df = pd.read_csv(io.StringIO(csv_file.read().decode('utf-8')), thousands=',')
+            row_cnt = df.shape[0]
+            cols = df.columns.values
+            columns = ''
+            for c in cols:
+                columns = columns + c + '|'
+        except:
+            return Response({'messages': 'encoding type은 utf-8만 지원합니다.'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
     else:
         #다른 확장자의 경우... 고민 해볼 것
         print('잘못된 형식입니다.')
+        return Response({'messages': 'csv 파일 형식만 지원합니다.'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     print(time.time() -s)
 

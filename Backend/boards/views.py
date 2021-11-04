@@ -20,7 +20,7 @@ def datalist(request):
     return Response(serializers.data)
 
 def search_db(keyword):
-    query_set = Info_Dataset.objects.filter(Q(title__icontains= keyword) | Q(description__icontains=keyword) | Q(file__icontains=keyword))
+    query_set = Info_Dataset.objects.filter(Q(title__icontains= keyword) | Q(description__icontains=keyword) | Q(file__icontains=keyword)).distinct()
 
     return query_set
 
