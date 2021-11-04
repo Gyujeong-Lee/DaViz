@@ -4,7 +4,7 @@ import Chart from 'chart.js/auto';
 
 const Wrapper = styled.div`
   width: 100%;
-  // height: 80%;
+  height: 100%;
 `;
 
 const Histogram = () => {
@@ -69,7 +69,7 @@ const Histogram = () => {
 
   return (
     <Wrapper>
-      <canvas ref={chartContainer} />
+      <canvas ref={chartContainer} width="100" height="100" />
     </Wrapper>
   );
 };

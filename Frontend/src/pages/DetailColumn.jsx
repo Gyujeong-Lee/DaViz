@@ -5,13 +5,18 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
+import ScrollHorizontal from 'react-scroll-horizontal';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
+import SelectColumn from '../components/SelectColumn';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+  .top {
+    margin-right: 3rem;
+  }
 `;
 
 const Title = styled.div`
@@ -41,7 +46,17 @@ const Between = styled.div`
     margin-right: 2.5rem;
     cursor: pointer;
   }
+  .back {
+    color: #ffffff;
+    background-color: transparent;
+    font-size: 1.5rem;
+    margin-right: 0.3rem;
+    cursor: pointer;
+  }
   .home:hover {
+    opacity: 0.5;
+  }
+  .back:hover {
     opacity: 0.5;
   }
 `;
@@ -59,6 +74,15 @@ const BoxPlotWrapper = styled.div`
 const HistogramWrapper = styled.div`
   width: 25%;
   max-width: 30%;
+`;
+
+const GraphWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const DSWrapper = styled.div`
+  margin-right: 3rem;
 `;
 
 // Overall - Column 전환 버튼
@@ -87,6 +111,10 @@ function DetailColumn({ match }) {
     history.push('/');
   };
 
+  const goDL = () => {
+    history.push('/datalist');
+  };
+
   return (
     <Wrapper>
       <Between>
@@ -94,22 +122,35 @@ function DetailColumn({ match }) {
           <AlbumIcon />
           <p>{id} Data Title</p>
         </Title>
-        <Button className="home" onClick={goHome}>
-          Home
-        </Button>
+        <Buttons>
+          <Button className="back" onClick={goDL}>
+            Back
+          </Button>
+          <Button className="home" onClick={goHome}>
+            Home
+          </Button>
+        </Buttons>
       </Between>
       <Container maxWidth="xl">
         <SelectButton />
-        <h2>세부 사항</h2>
-        <Stack spacing={10} direction="row">
-          <DataStatistics />
-          <DataStatistics />
-          <DataStatistics />
-          <DataStatistics />
-          {/* <DataStatistics /> */}
-        </Stack>
+        <h2>Column Detail</h2>
+        <SelectColumn />
+        <div id="scroll-horizontal" style={{ height: `18em` }}>
+          <ScrollHorizontal>
+            {/* for문으로 반복 */}
+            <DSWrapper>
+              <DataStatistics />
+            </DSWrapper>
+            <DataStatistics />
+            <DataStatistics />
+            <DataStatistics />
+            <DataStatistics />
+            <DataStatistics />
+            <DataStatistics />
+          </ScrollHorizontal>
+        </div>
         <hr />
-        <Stack spacing={5} direction="row">
+        <GraphWrapper>
           <BoxPlotWrapper>
             <BoxPlotChart />
           </BoxPlotWrapper>
@@ -118,7 +159,7 @@ function DetailColumn({ match }) {
           </HistogramWrapper>
           <DataStatistics />
           <DataStatistics />
-        </Stack>
+        </GraphWrapper>
       </Container>
     </Wrapper>
   );

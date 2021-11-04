@@ -75,7 +75,7 @@ export default function DataPreview() {
         <Box
           component="div"
           sx={{
-            minWidth: 750,
+            width: '70%',
             minHeight: 185,
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
             borderBottom: '3px solid #d3d3d3',

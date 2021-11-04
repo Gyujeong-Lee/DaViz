@@ -72,7 +72,7 @@ const BoxPlotChart = () => {
 
   return (
     <Wrapper>
-      <canvas ref={chartContainer} />
+      <canvas ref={chartContainer} width="100" height="100" />
     </Wrapper>
   );
 };
