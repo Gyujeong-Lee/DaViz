@@ -29,3 +29,5 @@ class Basic_Result(models.Model):
     q1 = models.FloatField(blank=True, null=True)
     q2 = models.FloatField(blank=True, null=True)
     q3 = models.FloatField(blank=True, null=True)
+    box_min = models.FloatField(blank=True, null=True)
+    box_max = models.FloatField(blank=True, null=True)
