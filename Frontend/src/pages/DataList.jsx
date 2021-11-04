@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import Button from '@mui/material/Button';
 import styled from 'styled-components';
+import axios from 'axios';
+
+import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import DataPreview from '../components/DataPreview';
 
@@ -28,9 +30,26 @@ const Title = styled.div`
 
 function DataList() {
   const history = useHistory();
+  const [dataset, setDataset] = useState([]);
+
   const goHome = () => {
     history.push('/');
   };
+
+  useEffect(() => {
+    axios
+      .get('/boards/')
+      .then((res) => {
+        setDataset(res.data);
+        console.log(dataset);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return () => {
+      console.log('unmount');
+    };
+  }, []);
 
   return (
     <Wrapper>
@@ -48,10 +67,9 @@ function DataList() {
         </Button>
       </ButtonWrapper>
       <div>
-        <DataPreview />
-        <DataPreview />
-        <DataPreview />
-        <DataPreview />
+        {dataset.map((data) => (
+          <DataPreview key={data.id} data={data} />
+        ))}
       </div>
     </Wrapper>
   );

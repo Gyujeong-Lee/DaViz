@@ -1,14 +1,17 @@
 import { React, useState, useEffect } from 'react';
+import styled from 'styled-components';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
+import { useHistory } from 'react-router';
+
 import { DropzoneAreaBase } from 'material-ui-dropzone';
-import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { homestate } from '../state';
+import { homestate } from '../utils/state';
 
 const MainTitle = styled(DialogTitle)`
   display: flex;
@@ -20,28 +23,38 @@ const UploadFormMargin = styled(DialogContent)`
 `;
 
 export default function FileAddForm() {
-  const [open, setOpen] = useState(false);
+  const history = useHistory();
   const [buttonActive, setButtonActive] = useState(true);
   const [uploadModal, setUploadModal] = useRecoilState(homestate);
-  const [files, setFiles] = useState([]);
+  const [requestData, setRequestData] = useState({
+    title: '',
+    description: '',
+    file: []
+  });
 
   const handleAdd = (newFiles) => {
-    setFiles(newFiles);
+    setRequestData({
+      ...requestData,
+      file: newFiles
+    });
     setButtonActive(false);
   };
 
   const handleDelete = () => {
-    setFiles([]);
+    setRequestData({
+      ...requestData,
+      file: []
+    });
     setButtonActive(true);
   };
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setUploadModal(true);
     setButtonActive(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setUploadModal(false);
     setButtonActive(false);
     setUploadModal(false);
   };
@@ -57,12 +70,41 @@ export default function FileAddForm() {
     };
   }, [uploadModal]);
 
+  const changeTitle = (e) => {
+    setRequestData({
+      ...requestData,
+      title: e.target.value
+    });
+  };
+
+  const changeDescription = (e) => {
+    setRequestData({
+      ...requestData,
+      description: e.target.value
+    });
+  };
+
+  const submitData = () => {
+    const formData = new FormData();
+    formData.append('title', requestData.title);
+    formData.append('description', requestData.description);
+    formData.append('file', requestData.file[0].file);
+
+    axios
+      .post('/datasets/upload/', formData)
+      .then((res) => {
+        handleClose();
+        history.push(`/${res.data.id}/detail`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
-      <Dialog open={open} onClose={handleClose} fullWidth>
-        <MainTitle>
-          <DialogTitle>Data Registration</DialogTitle>
-        </MainTitle>
+      <Dialog open={uploadModal} onClose={handleClose} fullWidth>
+        <MainTitle>Data Registration</MainTitle>
         <DialogContent>
           <TextField
             margin="dense"
@@ -71,6 +113,7 @@ export default function FileAddForm() {
             type="text"
             fullWidth
             variant="standard"
+            onChange={changeTitle}
           />
           <TextField
             margin="dense"
@@ -79,11 +122,15 @@ export default function FileAddForm() {
             type="text"
             fullWidth
             variant="standard"
+            onChange={changeDescription}
           />
           <UploadFormMargin>
             <DropzoneAreaBase
-              acceptedFiles={['.csv', '.xlsx', '.xls']}
-              fileObjects={files}
+              acceptedFiles={[
+                '.csv',
+                'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+              ]}
+              fileObjects={requestData.file}
               onAdd={handleAdd}
               onDelete={handleDelete}
               maxFileSize={Infinity}
@@ -92,6 +139,7 @@ export default function FileAddForm() {
               useChipsForPreview
               showFileNamesInPreview
               previewText="Selected files"
+              clearOnUnmount
             />
           </UploadFormMargin>
         </DialogContent>
@@ -100,7 +148,7 @@ export default function FileAddForm() {
             <Button onClick={handleClose} color="error">
               Cancel
             </Button>
-            <Button onClick={handleClose} disabled={buttonActive}>
+            <Button onClick={submitData} disabled={buttonActive}>
               Create
             </Button>
           </>

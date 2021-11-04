@@ -143,13 +143,7 @@ const top100Films = [
 export default function SearchBar() {
   return (
     <Searchbar>
-      <Stack class="" spacing={3} sx={{ width: 600 }}>
-        {/* <Autocomplete
-          id="free-solo-demo"
-          freeSolo
-          options={top100Films.map((option) => option.title)}
-          renderInput={(params) => <TextField {...params} label="freeSolo" />}
-        /> */}
+      <Stack spacing={3} sx={{ width: 600 }}>
         <Autocomplete
           freeSolo
           id="free-solo-2-demo"

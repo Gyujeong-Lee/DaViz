@@ -136,7 +136,7 @@ function DetailColumn({ match }) {
         <h2>Column Detail</h2>
         <SelectColumn />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
-          <ScrollHorizontal>
+          <ScrollHorizontal reverseScroll>
             {/* for문으로 반복 */}
             <DSWrapper>
               <DataStatistics />

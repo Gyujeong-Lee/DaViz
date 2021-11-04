@@ -5,7 +5,7 @@ import axios from 'axios';
 import { RecoilRoot } from 'recoil';
 import App from './App';
 
-axios.defaults.baseURL = 'http://localhost:8080/';
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -12,12 +12,13 @@ import Histogram from './charts/Histogram';
 // import DoughnutChart from './charts/DoughnutChart';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'name', label: 'Name', minWidth: 170, maxWidth: 170 },
+  { id: 'code', label: 'ISO\u00a0Code', minWidth: 170, maxWidth: 170 },
   {
     id: 'population',
     label: 'Population',
     minWidth: 170,
+    maxWidth: 170,
     align: 'right',
     format: (value) => value.toLocaleString('en-US')
   },
@@ -25,6 +26,7 @@ const columns = [
     id: 'size',
     label: 'Size\u00a0(km\u00b2)',
     minWidth: 170,
+    maxWidth: 170,
     align: 'right',
     format: (value) => value.toLocaleString('en-US')
   },
@@ -32,6 +34,7 @@ const columns = [
     id: 'density',
     label: 'Density',
     minWidth: 170,
+    maxWidth: 170,
     align: 'right',
     format: (value) => value.toFixed(2)
   }
@@ -97,7 +100,7 @@ export default function DataTable(props) {
               <TableCell
                 key={column.id + key}
                 align={column.align}
-                style={{ minWidth: column.minWidth }}
+                style={{ minWidth: column.minWidth, maxWidth: column.maxWidth }}
               >
                 <Histogram />
               </TableCell>
