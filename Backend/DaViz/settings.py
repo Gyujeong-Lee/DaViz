@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'storages',
     'rest_framework',
+    'drf_yasg',
     
     'django.contrib.admin',
     'django.contrib.auth',
