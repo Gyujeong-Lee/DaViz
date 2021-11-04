@@ -37,11 +37,21 @@ const Header = styled.div`
   .home {
     color: #ffffff;
     background-color: transparent;
-    font-size: 1.4rem;
-    margin-right: 2.5rem;
+    font-size: 1.5rem;
+    margin-right: 2rem;
+    cursor: pointer;
+  }
+  .back {
+    color: #ffffff;
+    background-color: transparent;
+    font-size: 1.5rem;
+    margin-right: 0.3rem;
     cursor: pointer;
   }
   .home:hover {
+    opacity: 0.5;
+  }
+  .back:hover {
     opacity: 0.5;
   }
 `;
@@ -87,6 +97,10 @@ function DetailOverall({ match }) {
     history.push('/');
   };
 
+  const goDL = () => {
+    history.push('/datalist');
+  };
+
   return (
     <Wrapper>
       <Header>
@@ -94,9 +108,14 @@ function DetailOverall({ match }) {
           <AlbumIcon />
           <p>{id} Data Title</p>
         </Title>
-        <Button className="home" onClick={goHome}>
-          Home
-        </Button>
+        <Buttons>
+          <Button className="back" onClick={goDL}>
+            Back
+          </Button>
+          <Button className="home" onClick={goHome}>
+            Home
+          </Button>
+        </Buttons>
       </Header>
       <BoxPlotWrapper>
         <DoughnutChart />
