@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
+import DataStatistics from '../components/DataStatistics';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -89,7 +90,9 @@ function DetailColumn({ match }) {
         </Between>
         <Container maxWidth="xl">
           <SelectButton />
-          <h2>#Cloumn</h2>
+          <h2>세부 사항</h2>
+          <DataStatistics />
+          <hr />
         </Container>
       </Wrapper>
     </>
