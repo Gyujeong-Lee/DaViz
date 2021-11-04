@@ -8,10 +8,10 @@ import App from './App';
 axios.defaults.baseURL = 'http://localhost:8080/';
 
 ReactDOM.render(
-  <RecoilRoot>
-    <React.StrictMode>
+  <React.StrictMode>
+    <RecoilRoot>
       <App />
-    </React.StrictMode>
-  </RecoilRoot>,
+    </RecoilRoot>
+  </React.StrictMode>,
   document.getElementById('root')
 );

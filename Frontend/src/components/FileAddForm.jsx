@@ -7,6 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import styled from 'styled-components';
+import { useRecoilState } from 'recoil';
+import { homestate } from '../state';
 
 const MainTitle = styled(DialogTitle)`
   display: flex;
@@ -17,10 +19,11 @@ const UploadFormMargin = styled(DialogContent)`
   margin-top: 3vh;
 `;
 
-export default function FileAddForm(props) {
+export default function FileAddForm() {
   const [open, setOpen] = useState(false);
-  const [files, setFiles] = useState([]);
   const [buttonActive, setButtonActive] = useState(true);
+  const [uploadModal, setUploadModal] = useRecoilState(homestate);
+  const [files, setFiles] = useState([]);
 
   const handleAdd = (newFiles) => {
     setFiles(newFiles);
@@ -40,11 +43,11 @@ export default function FileAddForm(props) {
   const handleClose = () => {
     setOpen(false);
     setButtonActive(false);
-    props.setUploadModal(false);
+    setUploadModal(false);
   };
 
   useEffect(() => {
-    if (props.uploadModal === true) {
+    if (uploadModal === true) {
       handleClickOpen();
     } else {
       handleClose();
@@ -52,7 +55,7 @@ export default function FileAddForm(props) {
     return () => {
       handleClose();
     };
-  }, [props]);
+  }, [uploadModal]);
 
   return (
     <div>

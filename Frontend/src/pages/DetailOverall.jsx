@@ -6,7 +6,8 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
 import DataTable from '../components/DataTable';
-import BoxPlotChart from '../components/charts/BoxPlotChart';
+// import BoxPlotChart from '../components/charts/BoxPlotChart';
+import DoughnutChart from '../components/charts/DoughnutChart';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -53,6 +54,8 @@ const Buttons = styled.div`
 
 const BoxPlotWrapper = styled.div`
   max-width: 30%;
+  display: flex;
+  justify-content: center;
 `;
 
 // Overall - Column 전환 버튼
@@ -96,7 +99,7 @@ function DetailOverall({ match }) {
         </Button>
       </Header>
       <BoxPlotWrapper>
-        <BoxPlotChart />
+        <DoughnutChart />
       </BoxPlotWrapper>
       <Container maxWidth="xl">
         <SelectButton />
