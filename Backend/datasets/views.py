@@ -1,4 +1,5 @@
 from os import name, path, sep
+from re import split
 from django.core.checks import messages
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_list_or_404, get_object_or_404, render
@@ -160,7 +161,16 @@ def upload(request, format=None):
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
         print(time.time() -s)
-        return Response(serializers.data, status=status.HTTP_201_CREATED)
+        df = df.drop([0, 100])
+        origin = df.to_json(orient="split")
+        result = stat_df.to_json(orient='split')
+
+        overall = {
+            'origin': origin,
+            'info': serializers.data,
+            'result': result
+        }
+        return JsonResponse(overall, status=status.HTTP_201_CREATED)
 
 
 
@@ -182,7 +192,19 @@ def overall(request, dataset_id):
     result_serializers = BasicResultSerializer(basic_result, many=True)
     info_serializers = DataInfoSerializer(dataset_info)
 
+    #DB에서 테이블 가져오기
+    dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
+    table_name = dataset_info.file
+    db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
+    db_connection = create_engine(db_connection_str)
+    
+    #위에서 정의한 컬럼만 읽어온다.
+    df = pd.read_sql(table_name, con=db_connection)
+    df = df.drop([0, 100])
+    origin = df.to_json(orient="split")
+
     overall = {
+        'origin': origin,
         'result': result_serializers.data,
         'info': info_serializers.data
     }
@@ -206,11 +228,12 @@ def filter(request, dataset_id, condition):
     #column 뽑아내기
     #val = 1 -> filter o // val = 0 -> filter x 
     conditions = condition.split('&')
-
+    # print(conditions)
     #column 별 필터 체크
     conditions_dict = {}
     for f in conditions:
         temp = f.split('=')
+        # print(temp)
         conditions_dict[temp[0]] = temp[1]
 
     #DB에서 테이블 가져오기
@@ -245,9 +268,9 @@ def filter(request, dataset_id, condition):
                 df = df[(modified_z_score>=-3.5)&(modified_z_score<=3.5)]
             # normal distribution이라는 가정 기각
             else:
-                q1 = now_col.quantile(p=0.25)
-                q2 = now_col.quantile(p=0.5)
-                q3 = now_col.quantile(p=0.75)
+                q1 = now_col.quantile(q=0.25)
+                q2 = now_col.quantile(q=0.5)
+                q3 = now_col.quantile(q=0.75)
                 # skewness가 높음 --> SIQR 사용
                 if abs(col_basic.skewness) > 2:
                     l_siqr = q2 - q1
@@ -306,6 +329,18 @@ def filter(request, dataset_id, condition):
                 'box_min' : box.min(),
                 'box_max' : box.max(),
             }
+        for key, val in result.items():
+            if type(val) == np.int64:
+                # print(type(val))
+                # print('dd')
+                result[key] = int(val)
+            
+            elif type(val) == np.float64:
+                result[key] = float(val)
+
+            elif type(val) != float and type(val) != int and type(val) != str:
+                result[key] = str(val)
+
         results.append(result)
 
     data = {
