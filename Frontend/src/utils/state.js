@@ -7,4 +7,9 @@ export const homestate = atom({
   }
 });
 
-export default homestate;
+export const loadingstate = atom({
+  key: 'loading',
+  default: {
+    loading: false
+  }
+});

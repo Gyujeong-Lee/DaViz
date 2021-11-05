@@ -42,8 +42,8 @@ const Between = styled.div`
   .home {
     color: #ffffff;
     background-color: transparent;
-    font-size: 1.4rem;
-    margin-right: 2.5rem;
+    font-size: 1.5rem;
+    margin-right: 2rem;
     cursor: pointer;
   }
   .back {
