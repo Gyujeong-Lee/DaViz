@@ -57,7 +57,6 @@ export default function FileAddForm() {
   const handleClose = () => {
     setUploadModal(false);
     setButtonActive(false);
-    setUploadModal(false);
   };
 
   useEffect(() => {
@@ -98,8 +97,8 @@ export default function FileAddForm() {
         setLoading(true);
         history.push(`/${res.data.id}/detail`);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        setLoading(true);
       });
   };
 
