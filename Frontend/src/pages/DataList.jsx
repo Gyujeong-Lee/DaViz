@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import axios from 'axios';
+import qs from 'qs'; // url 쿼리 값 읽기
 
 import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
 import DataPreview from '../components/DataPreview';
+import SearchBar from '../components/SearchBar';
 
 const Wrapper = styled.div`
   background-color: #ffffff;
@@ -28,34 +30,53 @@ const Title = styled.div`
   font-size: 1.3rem;
 `;
 
-function DataList() {
+function DataList({ location }) {
   const history = useHistory();
   const [dataset, setDataset] = useState([]);
+
+  const query = qs.parse(location.search, {
+    ignoreQueryPrefix: true
+  });
 
   const goHome = () => {
     history.push('/');
   };
 
   useEffect(() => {
-    axios
-      .get('/boards/')
-      .then((res) => {
-        setDataset(res.data);
-        console.log(dataset);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (query.q !== undefined && query.q !== '') {
+      axios
+        .get(`/boards/search/${query.q}`)
+        .then((res) => {
+          setDataset(res.data);
+        })
+        .catch(() => {
+          setDataset([]);
+        });
+    } else {
+      axios
+        .get('/boards/')
+        .then((res) => {
+          setDataset(res.data);
+        })
+        .catch(() => {
+          setDataset([]);
+        });
+    }
     return () => {
       console.log('unmount');
     };
-  }, []);
+  }, [query.q]);
 
   return (
     <Wrapper>
       <Title>
-        <h1>Data List</h1>
+        {query.q !== undefined && query.q !== '' ? (
+          <h1>{query.q} 검색 결과</h1>
+        ) : (
+          <h1>Data List</h1>
+        )}
       </Title>
+      <SearchBar />
       <ButtonWrapper>
         <Button
           className="homeBtn"
@@ -66,11 +87,15 @@ function DataList() {
           Home
         </Button>
       </ButtonWrapper>
-      <div>
-        {dataset.map((data) => (
-          <DataPreview key={data.id} data={data} />
-        ))}
-      </div>
+      {dataset.length > 0 ? (
+        <div>
+          {dataset.map((data) => (
+            <DataPreview key={data.id} data={data} />
+          ))}
+        </div>
+      ) : (
+        <div>검색된 데이터가 없습니다.</div>
+      )}
     </Wrapper>
   );
 }

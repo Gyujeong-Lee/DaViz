@@ -21,7 +21,7 @@ export default function SearchBar() {
   };
 
   const searchDatasets = () => {
-    history.push(`/search?q=${searchInput}`);
+    history.push(`/datalist?q=${searchInput}`);
   };
 
   return (
