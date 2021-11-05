@@ -20,4 +20,5 @@ class BasicResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Basic_Result
-        exclude = ('dataset',)
+        # fields = ('__all__')
+        exclude = ('dataset', )

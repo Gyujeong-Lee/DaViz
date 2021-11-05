@@ -158,6 +158,7 @@ def upload(request, format=None):
 
         # DB에 저장 (table append)
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
+
         print(time.time() -s)
         return Response(serializers.data, status=status.HTTP_201_CREATED)
 
@@ -177,10 +178,10 @@ def download(request, dataset_name):
 @api_view(['GET'])
 def overall(request, dataset_id):
     dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
-    basic_result = get_list_or_404(Basic_Result.objects.filter(dataset=dataset_info))
-    # result_serializers = BasicResultSerializer(basic_result, many=True)
-    info_serializers = DataInfoSerializer(dataset_info)
+    basic_result = get_list_or_404(Basic_Result.objects.filter(dataset_id=dataset_id))
     result_serializers = BasicResultSerializer(basic_result, many=True)
+    info_serializers = DataInfoSerializer(dataset_info)
+
     overall = {
         'result': result_serializers.data,
         'info': info_serializers.data
@@ -191,9 +192,10 @@ def overall(request, dataset_id):
 @api_view(['GET'])
 def detail(request, dataset_id):
     #해당 dataset의 basic result 가져오기 5개 
-    basic_result = get_list_or_404(Basic_Result.objects.filter(id=dataset_id)[:5])
+    basic_result = get_list_or_404(Basic_Result.objects.filter(dataset_id=dataset_id)[:5])
+    print('1')
     #serializing
-    # serializers = BasicResultSerializer(basic_result, many=True)
+    serializers = BasicResultSerializer(basic_result, many=True)
 
     return Response(serializers.data, status=status.HTTP_200_OK)
 
