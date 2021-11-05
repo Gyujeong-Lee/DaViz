@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import { useRecoilValue } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
+import { overallInfoState } from '../utils/state';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
@@ -86,13 +88,16 @@ const DSWrapper = styled.div`
 `;
 
 // Overall - Column 전환 버튼
-function SelectButton() {
+function SelectButton({ id }) {
   const history = useHistory();
 
   return (
     <Buttons>
       <Stack spacing={2} direction="row">
-        <Button variant="outlined" onClick={() => history.push('/1/detail')}>
+        <Button
+          variant="outlined"
+          onClick={() => history.push(`/${id}/detail`)}
+        >
           Overall
         </Button>
         <Button variant="contained">Column</Button>
@@ -103,6 +108,8 @@ function SelectButton() {
 
 function DetailColumn({ match }) {
   const history = useHistory();
+  const overallInfos = useRecoilValue(overallInfoState);
+
   const {
     params: { id }
   } = match;
@@ -120,7 +127,9 @@ function DetailColumn({ match }) {
       <Between>
         <Title>
           <AlbumIcon />
-          <p>{id} Data Title</p>
+          <p>
+            {id}. {overallInfos.title}
+          </p>
         </Title>
         <Buttons>
           <Button className="back" onClick={goDL}>
@@ -132,7 +141,7 @@ function DetailColumn({ match }) {
         </Buttons>
       </Between>
       <Container maxWidth="xl">
-        <SelectButton />
+        <SelectButton id={id} />
         <h2>Column Detail</h2>
         <SelectColumn />
         <div id="scroll-horizontal" style={{ height: `18em` }}>

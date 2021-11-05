@@ -103,7 +103,7 @@ export default function DataPreview({ data }) {
             }
           }}
           onClick={() => {
-            history.push('/1/detail');
+            history.push(`/${data.id}/detail`);
           }}
         >
           <Title>

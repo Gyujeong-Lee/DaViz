@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
+import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { overallDataState, overallInfoState } from '../utils/state';
 import DataTable from '../components/DataTable';
-// import BoxPlotChart from '../components/charts/BoxPlotChart';
-import DoughnutChart from '../components/charts/DoughnutChart';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -62,14 +63,8 @@ const Buttons = styled.div`
   margin-top: 1rem;
 `;
 
-const BoxPlotWrapper = styled.div`
-  max-width: 30%;
-  display: flex;
-  justify-content: center;
-`;
-
 // Overall - Column 전환 버튼
-function SelectButton() {
+function SelectButton({ id }) {
   const history = useHistory();
 
   return (
@@ -78,7 +73,7 @@ function SelectButton() {
         <Button variant="contained">Overall</Button>
         <Button
           variant="outlined"
-          onClick={() => history.push('/1/detail/column')}
+          onClick={() => history.push(`/${id}/detail/column`)}
         >
           Column
         </Button>
@@ -89,6 +84,9 @@ function SelectButton() {
 
 function DetailOverall({ match }) {
   const history = useHistory();
+  const [overallDatas, setOverallDatas] = useRecoilState(overallDataState);
+  const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
+
   const {
     params: { id }
   } = match;
@@ -101,12 +99,26 @@ function DetailOverall({ match }) {
     history.push('/datalist');
   };
 
+  useEffect(() => {
+    axios
+      .get(`/datasets/${id}/overall`)
+      .then((res) => {
+        setOverallDatas(res.data.result);
+        setOverallInfos(res.data.info);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <Header>
         <Title>
           <AlbumIcon />
-          <p>{id} Data Title</p>
+          <p>
+            {id}. {overallInfos.title}
+          </p>
         </Title>
         <Buttons>
           <Button className="back" onClick={goDL}>
@@ -118,12 +130,9 @@ function DetailOverall({ match }) {
         </Buttons>
       </Header>
       <Container maxWidth="xl">
-        <SelectButton />
-        <h2>#Data Name</h2>
-        <DataTable key={id} />
-        <BoxPlotWrapper>
-          <DoughnutChart />
-        </BoxPlotWrapper>
+        <SelectButton id={id} />
+        <h2># {overallInfos.title}</h2>
+        <DataTable key={id} overallDatas={overallDatas} />
       </Container>
     </Wrapper>
   );
