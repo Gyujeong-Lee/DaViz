@@ -3,47 +3,34 @@ import styled from 'styled-components';
 import Chart from 'chart.js/auto';
 
 const Wrapper = styled.div`
-  min-width: 150px;
-  max-width: 180px;
-  width: 60%;
-  // height: 350px;
+  min-width: 120px;
+  max-width: 150px;
 `;
 
-const randomInt = () => Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-
-const DoughnutChart = () => {
+const DoughnutChart = ({ xAxis, yAxis }) => {
   const chartContainer = useRef(null);
-
-  const dataset = [
-    randomInt(),
-    randomInt(),
-    randomInt(),
-    randomInt(),
-    randomInt()
-  ];
-  const label = ['A', 'B', 'C', 'D', 'E'];
 
   const chartConfig = {
     type: 'doughnut',
     data: {
       // x축 데이터
-      labels: label,
+      labels: yAxis,
       datasets: [
         {
           // y축 데이터
-          data: dataset,
+          data: xAxis,
           borderWidth: 1,
           backgroundColor: [
-            'rgba(255, 99, 132, 0.8)',
-            'rgba(54, 162, 235, 0.8)',
-            'rgba(255, 206, 86, 0.8)',
-            'rgba(75, 192, 192, 0.8)',
-            'rgba(153, 102, 255, 0.8)',
-            'rgba(255, 159, 64, 0.8)'
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(255, 206, 86, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(255, 159, 64, 0.5)'
           ],
           borderColor: [
-            'rgba(255, 99, 132, 1)',
             'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
             'rgba(255, 206, 86, 1)',
             'rgba(75, 192, 192, 1)',
             'rgba(153, 102, 255, 1)',

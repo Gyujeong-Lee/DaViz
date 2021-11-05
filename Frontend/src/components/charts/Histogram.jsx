@@ -7,31 +7,18 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const Histogram = () => {
+const Histogram = ({ xAxis, yAxis }) => {
   const chartContainer = useRef(null);
 
   const chartConfig = {
     type: 'bar',
     data: {
       // x축
-      labels: [
-        'Red',
-        'Blue',
-        'Yellow',
-        'Green',
-        'Purple',
-        'Orange',
-        'Red',
-        'Blue',
-        'Yellow',
-        'Green',
-        'Purple',
-        'Orange'
-      ],
+      labels: xAxis,
       datasets: [
         {
           // y축
-          data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+          data: yAxis,
           borderWidth: 1,
           backgroundColor: ['rgba(54, 162, 235, 0.2)'],
           borderColor: ['rgba(54, 162, 235, 1)']
@@ -49,6 +36,13 @@ const Histogram = () => {
         }
       },
       scales: {
+        xAxes: [
+          {
+            ticks: {
+              display: false
+            }
+          }
+        ],
         yAxes: [
           {
             ticks: {

@@ -6,6 +6,7 @@ import qs from 'qs'; // url 쿼리 값 읽기
 
 import Button from '@mui/material/Button';
 import HomeIcon from '@mui/icons-material/Home';
+import Typography from '@mui/material/Typography';
 import DataPreview from '../components/DataPreview';
 import SearchBar from '../components/SearchBar';
 
@@ -62,18 +63,19 @@ function DataList({ location }) {
           setDataset([]);
         });
     }
-    return () => {
-      console.log('unmount');
-    };
   }, [query.q]);
 
   return (
     <Wrapper>
       <Title>
         {query.q !== undefined && query.q !== '' ? (
-          <h1>{query.q} 검색 결과</h1>
+          <Typography variant="h3" mt={4} mb={4}>
+            {query.q} 검색 결과
+          </Typography>
         ) : (
-          <h1>Data List</h1>
+          <Typography variant="h3" mt={4} mb={4}>
+            DATASET LIST
+          </Typography>
         )}
       </Title>
       <SearchBar />
@@ -87,14 +89,22 @@ function DataList({ location }) {
           Home
         </Button>
       </ButtonWrapper>
-      {dataset.length > 0 ? (
+      {query.q !== undefined || query.q !== '' ? (
         <div>
           {dataset.map((data) => (
             <DataPreview key={data.id} data={data} />
           ))}
         </div>
       ) : (
-        <div>검색된 데이터가 없습니다.</div>
+        <Typography
+          variant="h3"
+          component="div"
+          align="center"
+          color="primary"
+          mt={5}
+        >
+          검색 결과가 존재하지 않습니다.
+        </Typography>
       )}
     </Wrapper>
   );

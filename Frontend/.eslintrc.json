@@ -27,6 +27,8 @@
                 "singleQuote": true
             }
         ],
+        "no-nested-ternary": "off", // 중첩 삼항연산 허용
+        "no-console" : "off", // 콘솔 출력 허용
         "react/jsx-filename-extension": [
             1,
             {

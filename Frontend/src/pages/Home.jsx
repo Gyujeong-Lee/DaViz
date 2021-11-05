@@ -59,6 +59,10 @@ function CustomButton(props) {
   return <ButtonUnstyled {...props} component={CustomButtonRoot} />;
 }
 
+const BottomWrapper = styled.div`
+  margin-top: 1.8%;
+`;
+
 export default function Home() {
   const history = useHistory();
   const [openModal, setOpenModal] = useRecoilState(homestate);
@@ -69,7 +73,7 @@ export default function Home() {
         <img src={logo} className="App-logo" alt="logo" />
         <h1>DaViz</h1>
       </header>
-      <div>
+      <BottomWrapper>
         <SearchBar />
         <Midbutton>
           <Stack spacing={25} direction="row">
@@ -90,7 +94,7 @@ export default function Home() {
           </Stack>
           {openModal && <FileAddForm />}
         </Midbutton>
-      </div>
+      </BottomWrapper>
     </>
   );
 }

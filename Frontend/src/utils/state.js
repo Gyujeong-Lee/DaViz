@@ -13,3 +13,17 @@ export const loadingstate = atom({
     loading: false
   }
 });
+
+export const overallDataState = atom({
+  key: 'overallData',
+  default: {
+    overallDatas: []
+  }
+});
+
+export const overallInfoState = atom({
+  key: 'overalldata',
+  default: {
+    overallInfos: []
+  }
+});
