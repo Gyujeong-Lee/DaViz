@@ -8,10 +8,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useHistory } from 'react-router';
-
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useRecoilState } from 'recoil';
-import { homestate } from '../utils/state';
+import { homestate, loadingstate } from '../utils/state';
+import Loading from './Loading';
 
 const MainTitle = styled(DialogTitle)`
   display: flex;
@@ -24,6 +24,7 @@ const UploadFormMargin = styled(DialogContent)`
 
 export default function FileAddForm() {
   const history = useHistory();
+  const [loading, setLoading] = useRecoilState(loadingstate);
   const [buttonActive, setButtonActive] = useState(true);
   const [uploadModal, setUploadModal] = useRecoilState(homestate);
   const [requestData, setRequestData] = useState({
@@ -89,11 +90,12 @@ export default function FileAddForm() {
     formData.append('title', requestData.title);
     formData.append('description', requestData.description);
     formData.append('file', requestData.file[0].file);
-
+    setLoading(false);
     axios
       .post('/datasets/upload/', formData)
       .then((res) => {
         handleClose();
+        setLoading(true);
         history.push(`/${res.data.id}/detail`);
       })
       .catch((err) => {
@@ -148,9 +150,12 @@ export default function FileAddForm() {
             <Button onClick={handleClose} color="error">
               Cancel
             </Button>
-            <Button onClick={submitData} disabled={buttonActive}>
-              Create
-            </Button>
+            {loading && (
+              <Button onClick={submitData} disabled={buttonActive}>
+                Create
+              </Button>
+            )}
+            {!loading && <Loading />}
           </>
         </DialogActions>
       </Dialog>
