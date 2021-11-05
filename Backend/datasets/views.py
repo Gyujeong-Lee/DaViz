@@ -161,7 +161,7 @@ def overall(request, dataset_id):
     # result_serializers = BasicResultSerializer(basic_result, many=True)
     info_serializers = DataInfoSerializer(dataset_info)
     overall = {
-        'result': serializers.data,
+        # 'result': result_serializers.data,
         'info': info_serializers.data
     }
     return JsonResponse(overall, status=status.HTTP_200_OK)
