@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import DataList from './pages/DataList';
 import DetailOverall from './pages/DetailOverall';
 import DetailColumn from './pages/DetailColumn';
+import SearchedDataList from './pages/SearchedDataList';
 import Footer from './layout/Footer';
 import ScrollToTop from './utils/ScrollRestoration';
 import './App.css';
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/datalist" component={DataList} />
           <Route exact path="/:id/detail/" component={DetailOverall} />
           <Route exact path="/:id/detail/column" component={DetailColumn} />
+          <Route exact path="/search" component={SearchedDataList} />
         </Switch>
         <Footer />
       </BrowserRouter>
