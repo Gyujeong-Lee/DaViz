@@ -4,6 +4,15 @@ import Box from '@mui/material/Box';
 import AlbumIcon from '@mui/icons-material/Album';
 import { useHistory } from 'react-router';
 
+const Content = styled.div`
+  p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+`;
+
 const PreviewBox = styled(Box)`
   display: flex;
   justify-content: center;
@@ -111,21 +120,22 @@ export default function DataPreview({ data }) {
             <p>
               {data.id}. {data.title}
             </p>
+            <p>{data.created_at.slice(0, 10)}</p>
           </Title>
           <Information>
-            <div>Column: {columnList.length}개</div>
-            <div>{columns}</div>
+            <Content>
+              <p>Columns ({columnList.length})</p>
+              <p>{columns}</p>
+            </Content>
           </Information>
           <Description>
-            <div>
-              <p>Data Classfication : ~~~~</p>
-            </div>
-            <div>
-              <p>Data Description: {data.description}</p>
-            </div>
+            <Content>
+              <p style={{ weight: `bold` }}>Data Description</p>
+              <p>{data.description}</p>
+            </Content>
           </Description>
           <Updated>
-            <p>Last Updated</p>
+            <p>Created At</p>
             <p>{data.created_at.slice(0, 10)}</p>
           </Updated>
         </Box>
