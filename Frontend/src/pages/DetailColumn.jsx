@@ -123,23 +123,20 @@ function DetailColumn({ match }) {
     history.push('/datalist');
   };
 
+  const getDetailData = async () => {
+    await axios
+      .get(`/datasets/${id}/detail`)
+      .then((res) => {
+        setDetailDatas(res.data);
+        console.log(res.data, '찍힘');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
-    const getDetail = async () => {
-      try {
-        await axios
-          .get(`/datasets/${id}/detail`)
-          .then((res) => {
-            setDetailDatas(res.data);
-            console.log(res.data, '찍힘');
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    getDetail();
+    getDetailData();
   }, []);
 
   return (
@@ -164,16 +161,12 @@ function DetailColumn({ match }) {
         <SelectColumn />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
-            <DSWrapper>
-              {detailDatas.length > 1 &&
-                Array.from(detailDatas).map((detail) => (
-                  <DataStatistics key={id} detail={detail} />
-                ))}
-            </DSWrapper>
-
-            <DataStatistics />
-            <DataStatistics />
-            <DataStatistics />
+            {detailDatas.length >= 1 &&
+              detailDatas.map((detailData) => (
+                <DSWrapper>
+                  <DataStatistics detail={detailData} />
+                </DSWrapper>
+              ))}
           </ScrollHorizontal>
         </div>
         <hr />

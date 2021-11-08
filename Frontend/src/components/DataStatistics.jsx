@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -17,30 +17,35 @@ const CardContents = styled(CardContent)`
 
 export default function DataStatistics(props) {
   const { detail } = props;
-  console.log(detail, '받아온 한 개');
-  // useEffect(() => {
-  //   const getDetail = async () => {
-  //     const { detail } = props;
-  //     console.log(detail, '받아온 한 개');
-  //   };
-  //   getDetail();
-  // }, []);
+  const [data, setData] = useState({
+    id: null,
+    name: null
+  });
+  useEffect(() => {
+    if (detail === undefined) {
+      return;
+    }
+    setData(detail);
+  }, []);
+
   return (
     <div>
       <CardContents>
         <Typography gutterBottom variant="h5" component="div">
-          id /
+          id / {data.id} / {data.dtype}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <h2>name</h2>
+          <h2>{data.name}</h2>
           <ul>
-            <li>Maximum: 30</li>
-            <li>Mean: 30</li>
-            <li>Minimum: 30</li>
-            <li>Std: 30</li>
-            <li>Q1, Q2, Q3: 30</li>
-            <li>Mode: 30</li>
-            <li>Null: 30</li>
+            <li>Maximum: {data.max_val}</li>
+            <li>Mean: {data.mean}</li>
+            <li>Minimum: {data.min_val}</li>
+            <li>Std: {data.std}</li>
+            <li>
+              Q1, Q2, Q3: {data.q1} {data.q2} {data.q3}
+            </li>
+            <li>Mode: {data.mode}</li>
+            <li>Null: {data.null_cnt}</li>
           </ul>
         </Typography>
       </CardContents>
