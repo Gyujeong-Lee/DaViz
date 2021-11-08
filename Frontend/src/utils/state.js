@@ -34,3 +34,10 @@ export const detailDataState = atom({
     detailDatas: []
   }
 });
+
+export const overallOriginDataState = atom({
+  key: 'overallOriginDatas',
+  default: {
+    overallOriginDatas: []
+  }
+});

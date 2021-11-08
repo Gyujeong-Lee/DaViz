@@ -6,8 +6,12 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import { useHistory } from 'react-router';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { overallDataState, overallInfoState } from '../utils/state';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  overallDataState,
+  overallInfoState,
+  overallOriginDataState
+} from '../utils/state';
 import DataTable from '../components/DataTable';
 
 const Wrapper = styled.div`
@@ -84,8 +88,9 @@ function SelectButton({ id }) {
 
 function DetailOverall({ match }) {
   const history = useHistory();
-  const [overallDatas, setOverallDatas] = useRecoilState(overallDataState);
+  const setOverallDatas = useSetRecoilState(overallDataState);
   const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
+  const setOverallOriginDatas = useSetRecoilState(overallOriginDataState);
 
   const {
     params: { id }
@@ -103,8 +108,10 @@ function DetailOverall({ match }) {
     axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
+        const original = JSON.parse(res.data.origin);
         setOverallDatas(res.data.result);
         setOverallInfos(res.data.info);
+        setOverallOriginDatas(original.data);
       })
       .catch((err) => {
         console.log(err);
@@ -132,7 +139,7 @@ function DetailOverall({ match }) {
       <Container maxWidth="xl">
         <SelectButton id={id} />
         <h2># {overallInfos.title}</h2>
-        <DataTable key={id} overallDatas={overallDatas} />
+        <DataTable key={id} />
       </Container>
     </Wrapper>
   );

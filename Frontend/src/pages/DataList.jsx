@@ -43,25 +43,33 @@ function DataList({ location }) {
     history.push('/');
   };
 
+  const searchData = () => {
+    axios
+      .get(`/boards/search/${query.q}`)
+      .then((res) => {
+        setDataset(res.data);
+      })
+      .catch(() => {
+        setDataset([]);
+      });
+  };
+
+  const getData = () => {
+    axios
+      .get('/boards/')
+      .then((res) => {
+        setDataset(res.data);
+      })
+      .catch(() => {
+        setDataset([]);
+      });
+  };
+
   useEffect(() => {
     if (query.q !== undefined && query.q !== '') {
-      axios
-        .get(`/boards/search/${query.q}`)
-        .then((res) => {
-          setDataset(res.data);
-        })
-        .catch(() => {
-          setDataset([]);
-        });
+      searchData();
     } else {
-      axios
-        .get('/boards/')
-        .then((res) => {
-          setDataset(res.data);
-        })
-        .catch(() => {
-          setDataset([]);
-        });
+      getData();
     }
   }, [query.q]);
 
@@ -89,7 +97,7 @@ function DataList({ location }) {
           Home
         </Button>
       </ButtonWrapper>
-      {query.q !== undefined || query.q !== '' ? (
+      {dataset.length >= 1 ? (
         <div>
           {dataset.map((data) => (
             <DataPreview key={data.id} data={data} />
@@ -103,7 +111,7 @@ function DataList({ location }) {
           color="primary"
           mt={5}
         >
-          검색 결과가 존재하지 않습니다.
+          데이터가 존재하지 않습니다.
         </Typography>
       )}
     </Wrapper>
