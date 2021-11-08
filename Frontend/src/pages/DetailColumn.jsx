@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
-import { overallInfoState } from '../utils/state';
+import axios from 'axios';
+import { detailDataState } from '../utils/state';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
@@ -108,7 +109,7 @@ function SelectButton({ id }) {
 
 function DetailColumn({ match }) {
   const history = useHistory();
-  const overallInfos = useRecoilValue(overallInfoState);
+  const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
 
   const {
     params: { id }
@@ -122,14 +123,32 @@ function DetailColumn({ match }) {
     history.push('/datalist');
   };
 
+  useEffect(() => {
+    const getDetail = async () => {
+      try {
+        await axios
+          .get(`/datasets/${id}/detail`)
+          .then((res) => {
+            setDetailDatas(res.data);
+            console.log(res.data, '찍힘');
+            console.log('비동기 확인', detailDatas);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    getDetail();
+  }, []);
+
   return (
     <Wrapper>
       <Between>
         <Title>
           <AlbumIcon />
-          <p>
-            {id}. {overallInfos.title}
-          </p>
+          <p>{id}</p>
         </Title>
         <Buttons>
           <Button className="back" onClick={goDL}>
@@ -146,13 +165,13 @@ function DetailColumn({ match }) {
         <SelectColumn />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
-            {/* for문으로 반복 */}
             <DSWrapper>
-              <DataStatistics />
+              {detailDatas.length > 1 &&
+                detailDatas.map((detail) => (
+                  <DataStatistics key={id} detail={detail} />
+                ))}
             </DSWrapper>
-            <DataStatistics />
-            <DataStatistics />
-            <DataStatistics />
+
             <DataStatistics />
             <DataStatistics />
             <DataStatistics />

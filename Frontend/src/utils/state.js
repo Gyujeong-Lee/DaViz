@@ -27,3 +27,10 @@ export const overallInfoState = atom({
     overallInfos: []
   }
 });
+
+export const detailDataState = atom({
+  key: 'detailData',
+  default: {
+    detailDatas: []
+  }
+});
