@@ -10,8 +10,9 @@ import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   overallDataState,
   overallInfoState,
-  overallOriginDataState
-} from '../utils/state';
+  overallOriginDataState,
+  overallIdState
+} from '../recoil/overallAtom';
 import DataTable from '../components/DataTable';
 
 const Wrapper = styled.div`
@@ -89,8 +90,9 @@ function SelectButton({ id }) {
 function DetailOverall({ match }) {
   const history = useHistory();
   const setOverallDatas = useSetRecoilState(overallDataState);
-  const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
   const setOverallOriginDatas = useSetRecoilState(overallOriginDataState);
+  const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
+  const [overallId, setOverallId] = useRecoilState(overallIdState);
 
   const {
     params: { id }
@@ -104,7 +106,7 @@ function DetailOverall({ match }) {
     history.push('/datalist');
   };
 
-  useEffect(() => {
+  const getDataSets = () => {
     axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
@@ -112,11 +114,18 @@ function DetailOverall({ match }) {
         setOverallDatas(res.data.result);
         setOverallInfos(res.data.info);
         setOverallOriginDatas(original.data);
+        setOverallId(id);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    if (overallId !== id) {
+      getDataSets();
+    }
+  }, [overallId]);
 
   return (
     <Wrapper>

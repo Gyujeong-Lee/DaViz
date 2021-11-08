@@ -8,7 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { overallDataState, overallOriginDataState } from '../utils/state';
+import {
+  overallDataState,
+  overallOriginDataState,
+  overallIdState
+} from '../recoil/overallAtom';
 import Histogram from './charts/Histogram';
 import DoughnutChart from './charts/DoughnutChart';
 
@@ -20,13 +24,13 @@ const NullData = styled.div`
 
 export default function DataTable(props) {
   const { key } = props;
-  const overallDatas = useRecoilValue(overallDataState);
   const [columns, setColumns] = useState([]);
+  const overallDatas = useRecoilValue(overallDataState);
   const overallOriginDatas = useRecoilValue(overallOriginDataState);
+  const overallId = useRecoilValue(overallIdState);
 
   useEffect(() => {
-    console.log(overallOriginDatas);
-    if (overallDatas.length > 0) {
+    if (overallDatas.length > 0 && overallId !== key) {
       overallDatas.forEach((data) => {
         const column = {
           id: data.id,

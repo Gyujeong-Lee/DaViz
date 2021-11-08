@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
-import { detailDataState } from '../utils/state';
+import { detailDataState } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';

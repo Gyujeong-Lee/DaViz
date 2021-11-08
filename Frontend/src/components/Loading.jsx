@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRecoilState } from 'recoil';
-import { loadingstate } from '../utils/state';
+import { loadingstate } from '../recoil/homeAtom';
 
 export default function DelayingAppearance() {
   const [loading] = useRecoilState(loadingstate);
