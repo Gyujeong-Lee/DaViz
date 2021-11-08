@@ -18,6 +18,13 @@ const CardContents = styled(CardContent)`
 export default function DataStatistics(props) {
   const { detail } = props;
   console.log(detail, '받아온 한 개');
+  // useEffect(() => {
+  //   const getDetail = async () => {
+  //     const { detail } = props;
+  //     console.log(detail, '받아온 한 개');
+  //   };
+  //   getDetail();
+  // }, []);
   return (
     <div>
       <CardContents>
@@ -25,7 +32,7 @@ export default function DataStatistics(props) {
           id /
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          <h2>name )</h2>
+          <h2>name</h2>
           <ul>
             <li>Maximum: 30</li>
             <li>Mean: 30</li>

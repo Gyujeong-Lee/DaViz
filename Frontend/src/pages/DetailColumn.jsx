@@ -131,7 +131,6 @@ function DetailColumn({ match }) {
           .then((res) => {
             setDetailDatas(res.data);
             console.log(res.data, '찍힘');
-            console.log('비동기 확인', detailDatas);
           })
           .catch((err) => {
             console.log(err);
@@ -167,7 +166,7 @@ function DetailColumn({ match }) {
           <ScrollHorizontal reverseScroll>
             <DSWrapper>
               {detailDatas.length > 1 &&
-                detailDatas.map((detail) => (
+                Array.from(detailDatas).map((detail) => (
                   <DataStatistics key={id} detail={detail} />
                 ))}
             </DSWrapper>
