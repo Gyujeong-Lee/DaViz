@@ -25,6 +25,7 @@ export default function DataTable(props) {
   const overallOriginDatas = useRecoilValue(overallOriginDataState);
 
   useEffect(() => {
+    console.log(overallOriginDatas);
     if (overallDatas.length > 0) {
       overallDatas.forEach((data) => {
         const column = {
@@ -44,7 +45,7 @@ export default function DataTable(props) {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ minHeight: 450 }}>
+      <TableContainer sx={{ minHeight: 450, maxHeight: 750 }}>
         <Table stickyHeader aria-label="sticky table">
           {/* Columns */}
           <TableHead>
@@ -84,12 +85,11 @@ export default function DataTable(props) {
           </TableHead>
           {/* dataset 원본 row 100개 출력 */}
           <TableBody>
-            {overallOriginDatas.map((overallOriginData) => (
+            {Array.from(overallOriginDatas).map((overallOriginData) => (
               <TableRow
-                key={overallOriginData.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                {overallOriginData.map((data) => (
+                {Array.from(overallOriginData).map((data) => (
                   <TableCell component="th" scope="row">
                     {data}
                   </TableCell>

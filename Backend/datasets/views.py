@@ -161,8 +161,8 @@ def upload(request, format=None):
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
         print(time.time() -s)
-        df = df.drop([0, 100])
-        origin = df.to_json(orient="split")
+        new_df = df.loc[0:100]
+        origin = new_df.to_json(orient="split")
         result = stat_df.to_json(orient='split')
 
         overall = {
@@ -200,8 +200,8 @@ def overall(request, dataset_id):
     
     #위에서 정의한 컬럼만 읽어온다.
     df = pd.read_sql(table_name, con=db_connection)
-    df = df.drop([0, 100])
-    origin = df.to_json(orient="split")
+    new_df = df.loc[0:100]
+    origin = new_df.to_json(orient="split")
 
     overall = {
         'origin': origin,
