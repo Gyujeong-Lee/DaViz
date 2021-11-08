@@ -54,8 +54,8 @@ def graph_axis(now_col):
 
         if bin_cnt:
             histo = plt.hist(now_col, bins=bin_cnt)
-            x_axis = '|'.join(list(map(str, map(int, histo[0]))))
-            y_axis = '|'.join(list(map(str, histo[1].round(1))))
+            x_axis = '|'.join(list(map(str, histo[1].round(1))))
+            y_axis = '|'.join(list(map(str, map(int, histo[0]))))
         else:
             x_axis, y_axis = '', ''
 
@@ -132,7 +132,7 @@ def upload(request, format=None):
             stat_df.loc[col, 'unique_cnt'] = len(unique)
             # x_axis, y_axis 저장
             stat_df.loc[col, ['x_axis', 'y_axis']] = graph_axis(now_col)
-                
+
             # 데이터 타입이 수치형인 경우 (int, float)
             if now_col.dtype != 'object':
                 stat_df.loc[col, ['mean', 'std', 'min_val', 'q1', 'q2', 'q3', 'max_val']] = df[col].describe().values[1:]
