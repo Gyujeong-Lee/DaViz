@@ -6,7 +6,7 @@ import ButtonUnstyled, {
 } from '@mui/core/ButtonUnstyled';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { homestate } from '../utils/state';
+import { uploadState } from '../recoil/homeAtom';
 import logo from '../images/shinhan_logo.png';
 import SearchBar from '../components/SearchBar';
 import FileAddForm from '../components/FileAddForm';
@@ -65,7 +65,7 @@ const BottomWrapper = styled.div`
 
 export default function Home() {
   const history = useHistory();
-  const [openModal, setOpenModal] = useRecoilState(homestate);
+  const [openModal, setOpenModal] = useRecoilState(uploadState);
 
   return (
     <>

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useHistory } from 'react-router';
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useRecoilState } from 'recoil';
-import { homestate, loadingstate } from '../utils/state';
+import { uploadState, loadingstate } from '../recoil/homeAtom';
 import Loading from './Loading';
 
 const MainTitle = styled(DialogTitle)`
@@ -25,8 +25,8 @@ const UploadFormMargin = styled(DialogContent)`
 export default function FileAddForm() {
   const history = useHistory();
   const [loading, setLoading] = useRecoilState(loadingstate);
+  const [uploadModal, setUploadModal] = useRecoilState(uploadState);
   const [buttonActive, setButtonActive] = useState(true);
-  const [uploadModal, setUploadModal] = useRecoilState(homestate);
   const [requestData, setRequestData] = useState({
     title: '',
     description: '',
