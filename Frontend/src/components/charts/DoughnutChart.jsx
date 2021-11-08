@@ -14,11 +14,11 @@ const DoughnutChart = ({ xAxis, yAxis }) => {
     type: 'doughnut',
     data: {
       // x축 데이터
-      labels: yAxis,
+      labels: xAxis,
       datasets: [
         {
           // y축 데이터
-          data: xAxis,
+          data: yAxis,
           borderWidth: 1,
           backgroundColor: [
             'rgba(54, 162, 235, 0.5)',
