@@ -54,8 +54,8 @@ export default function DataTable(props) {
           id: data.id,
           label: data.col_name,
           dtype: data.dtype,
-          xAxis: data.y_axis.split('|'),
-          yAxis: data.x_axis.split('|')
+          xAxis: data.x_axis.split('|'),
+          yAxis: data.y_axis.split('|')
         };
         setColumns((col) => [...col, column]);
       });
