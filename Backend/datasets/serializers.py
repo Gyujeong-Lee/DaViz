@@ -13,7 +13,7 @@ class DataInfoListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Info_Dataset
-        fields = ('id', 'title', 'description', 'created_at', 'file', 'columns',)
+        fields = ('id', 'title', 'description', 'created_at', 'file', 'columns', 'row_cnt',)
 
 # basic result
 class BasicResultSerializer(serializers.ModelSerializer):

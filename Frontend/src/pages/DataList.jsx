@@ -91,8 +91,8 @@ function DataList({ location }) {
       </ButtonWrapper>
       {query.q !== undefined || query.q !== '' ? (
         <div>
-          {dataset.map((data) => (
-            <DataPreview key={data.id} data={data} />
+          {dataset.map((data, index) => (
+            <DataPreview key={data.id} data={data} idx={index} />
           ))}
         </div>
       ) : (

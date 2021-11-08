@@ -21,7 +21,7 @@ def datalist(request):
 
 def search_db(keyword):
     query_set = Info_Dataset.objects.filter(Q(title__icontains= keyword) | Q(description__icontains=keyword) | Q(file__icontains=keyword)).distinct()
-
+     
     return query_set
 
 @api_view(['GET'])
