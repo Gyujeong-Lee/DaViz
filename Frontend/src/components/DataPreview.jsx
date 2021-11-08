@@ -4,6 +4,15 @@ import Box from '@mui/material/Box';
 import AlbumIcon from '@mui/icons-material/Album';
 import { useHistory } from 'react-router';
 
+const Content = styled.div`
+  p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+`;
+
 const PreviewBox = styled(Box)`
   display: flex;
   justify-content: center;
@@ -13,7 +22,7 @@ const PreviewBox = styled(Box)`
 
 const Title = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -23,7 +32,7 @@ const Title = styled.div`
   border-top-left-radius: 3px;
   margin-bottom: 0.1rem;
   p {
-    margin-left: 0.5rem;
+    // margin-left: 0.5rem;
     align-self: center;
     font-size: 1.25rem;
   }
@@ -31,7 +40,6 @@ const Title = styled.div`
 
 const Information = styled.div`
   padding-left: 1rem;
-  font-weight: bold;
   margin: auto;
   color: #0076be;
   background-color: #ffffff;
@@ -54,19 +62,7 @@ const Description = styled.div`
   }
 `;
 
-const Updated = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 0.7rem;
-  color: #000000;
-  background-color: #ffffff;
-  min-height: 15px;
-`;
-
-export default function DataPreview({ data }) {
+export default function DataPreview({ data, idx }) {
   const history = useHistory();
   const [columns, setColumns] = useState([]);
   const [columnList, setColumnList] = useState([]);
@@ -107,27 +103,31 @@ export default function DataPreview({ data }) {
           }}
         >
           <Title>
-            <AlbumIcon />
+            <AlbumIcon sx={{ marginRight: '0.25rem' }} />
             <p>
-              {data.id}. {data.title}
+              {idx + 1}. {data.title}
+            </p>
+            <p style={{ marginBottom: `0px`, fontSize: `0.5rem` }}>
+              {data.created_at.slice(0, 10)}
             </p>
           </Title>
-          <Information>
-            <div>Column: {columnList.length}개</div>
-            <div>{columns}</div>
-          </Information>
           <Description>
-            <div>
-              <p>Data Classfication : ~~~~</p>
-            </div>
-            <div>
-              <p>Data Description: {data.description}</p>
-            </div>
+            <Content>
+              <p style={{ fontWeight: `bold` }}>Data Description</p>
+              <p>{data.description}</p>
+            </Content>
           </Description>
-          <Updated>
-            <p>Last Updated</p>
-            <p>{data.created_at.slice(0, 10)}</p>
-          </Updated>
+          <Information>
+            <Content>
+              <p style={{ fontWeight: `bold` }}>{columnList.length} Columns</p>
+              <p>{columns}</p>
+            </Content>
+          </Information>
+          <Information>
+            <Content>
+              <p style={{ fontWeight: `bold` }}>{data.row_cnt} Records</p>
+            </Content>
+          </Information>
         </Box>
       </PreviewBox>
     </div>

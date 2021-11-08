@@ -99,8 +99,8 @@ function DataList({ location }) {
       </ButtonWrapper>
       {dataset.length >= 1 ? (
         <div>
-          {dataset.map((data) => (
-            <DataPreview key={data.id} data={data} />
+          {dataset.map((data, index) => (
+            <DataPreview key={data.id} data={data} idx={index} />
           ))}
         </div>
       ) : (
