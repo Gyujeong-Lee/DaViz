@@ -43,25 +43,33 @@ function DataList({ location }) {
     history.push('/');
   };
 
+  const searchData = () => {
+    axios
+      .get(`/boards/search/${query.q}`)
+      .then((res) => {
+        setDataset(res.data);
+      })
+      .catch(() => {
+        setDataset([]);
+      });
+  };
+
+  const getData = () => {
+    axios
+      .get('/boards/')
+      .then((res) => {
+        setDataset(res.data);
+      })
+      .catch(() => {
+        setDataset([]);
+      });
+  };
+
   useEffect(() => {
     if (query.q !== undefined && query.q !== '') {
-      axios
-        .get(`/boards/search/${query.q}`)
-        .then((res) => {
-          setDataset(res.data);
-        })
-        .catch(() => {
-          setDataset([]);
-        });
+      searchData();
     } else {
-      axios
-        .get('/boards/')
-        .then((res) => {
-          setDataset(res.data);
-        })
-        .catch(() => {
-          setDataset([]);
-        });
+      getData();
     }
   }, [query.q]);
 

@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
+import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
-import { overallDataState } from '../utils/state';
+import { overallDataState, overallOriginDataState } from '../utils/state';
 import Histogram from './charts/Histogram';
 import DoughnutChart from './charts/DoughnutChart';
 
@@ -18,36 +18,13 @@ const NullData = styled.div`
   color: red;
 `;
 
-// function createData(name, code, population, size) {
-//   const density = population / size;
-//   return { name, code, population, size, density };
-// }
-
-// const rows = [
-//   createData('India', 'IN', 1324171354, 3287263),
-//   createData('China', 'CN', 1403500365, 9596961),
-//   createData('Italy', 'IT', 60483973, 301340),
-//   createData('United States', 'US', 327167434, 9833520),
-//   createData('Canada', 'CA', 37602103, 9984670),
-//   createData('Australia', 'AU', 25475400, 7692024),
-//   createData('Germany', 'DE', 83019200, 357578),
-//   createData('Ireland', 'IE', 4857000, 70273),
-//   createData('Mexico', 'MX', 126577691, 1972550),
-//   createData('Japan', 'JP', 126317000, 377973),
-//   createData('France', 'FR', 67022000, 640679),
-//   createData('United Kingdom', 'GB', 67545757, 242495),
-//   createData('Russia', 'RU', 146793744, 17098246),
-//   createData('Nigeria', 'NG', 200962417, 923768),
-//   createData('Brazil', 'BR', 210147125, 8515767)
-// ];
-
 export default function DataTable(props) {
   const { key } = props;
   const overallDatas = useRecoilValue(overallDataState);
-  const [columns, setColumns] = React.useState([]);
+  const [columns, setColumns] = useState([]);
+  const overallOriginDatas = useRecoilValue(overallOriginDataState);
 
   useEffect(() => {
-    console.log(overallDatas);
     if (overallDatas.length > 0) {
       overallDatas.forEach((data) => {
         const column = {
@@ -69,6 +46,7 @@ export default function DataTable(props) {
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ minHeight: 450 }}>
         <Table stickyHeader aria-label="sticky table">
+          {/* Columns */}
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -104,24 +82,21 @@ export default function DataTable(props) {
               </TableCell>
             ))}
           </TableHead>
-          {/* <TableBody>
-            {rows.map((row) => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  {columns.map((column) => {
-                    const value = row[column.id];
-                    return (
-                      <TableCell key={column.id} align="right">
-                        {column.format && typeof value === 'number'
-                          ? column.format(value)
-                          : value}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody> */}
+          {/* dataset 원본 row 100개 출력 */}
+          <TableBody>
+            {overallOriginDatas.map((overallOriginData) => (
+              <TableRow
+                key={overallOriginData.id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                {overallOriginData.map((data) => (
+                  <TableCell component="th" scope="row">
+                    {data}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
     </Paper>
