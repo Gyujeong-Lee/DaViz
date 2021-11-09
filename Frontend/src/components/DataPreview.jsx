@@ -31,6 +31,10 @@ const Title = styled.div`
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
   margin-bottom: 0.1rem;
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
   p {
     // margin-left: 0.5rem;
     align-self: center;
@@ -62,7 +66,7 @@ const Description = styled.div`
   }
 `;
 
-export default function DataPreview({ data, idx }) {
+export default function DataPreview({ data }) {
   const history = useHistory();
   const [columns, setColumns] = useState([]);
   const [columnList, setColumnList] = useState([]);
@@ -92,21 +96,20 @@ export default function DataPreview({ data, idx }) {
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.3)',
             borderBottom: '3px solid #d3d3d3',
             borderRadius: 1,
-            backgroundColor: '#d3d3d3',
-            '&:hover': {
-              cursor: 'pointer',
-              opacity: [0.9]
-            }
-          }}
-          onClick={() => {
-            history.push(`/${data.id}/detail`);
+            backgroundColor: '#d3d3d3'
           }}
         >
-          <Title>
-            <AlbumIcon sx={{ marginRight: '0.25rem' }} />
-            <p>
-              {idx + 1}. {data.title}
-            </p>
+          <Title
+            onClick={() => {
+              history.push(`/${data.id}/detail`);
+            }}
+          >
+            <div style={{ display: `flex` }}>
+              <AlbumIcon sx={{ marginRight: '0.25rem', alignSelf: `center` }} />
+              <p>
+                {data.id}. {data.title}
+              </p>
+            </div>
             <p style={{ marginBottom: `0px`, fontSize: `0.5rem` }}>
               {data.created_at.slice(0, 10)}
             </p>
