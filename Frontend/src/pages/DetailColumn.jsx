@@ -110,6 +110,7 @@ function SelectButton({ id }) {
 function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
+  const [columnNames, setColumnNames] = React.useState([]);
 
   const {
     params: { id }
@@ -135,8 +136,21 @@ function DetailColumn({ match }) {
       });
   };
 
+  const getDataSets = async () => {
+    await axios
+      .get(`/datasets/${id}/overall`)
+      .then((res) => {
+        setColumnNames(res.data.info.columns);
+        console.log('컬럼 네임', columnNames);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     getDetailData();
+    getDataSets();
     return () => {
       setDetailDatas([]);
     };
@@ -161,7 +175,7 @@ function DetailColumn({ match }) {
       <Container maxWidth="xl">
         <SelectButton id={id} />
         <h2>Column Detail</h2>
-        <SelectColumn />
+        <SelectColumn columnNames={columnNames} />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
             {detailDatas.length >= 1 &&
