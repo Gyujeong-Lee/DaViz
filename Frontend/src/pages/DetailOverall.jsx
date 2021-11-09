@@ -12,9 +12,11 @@ import {
   overallDataState,
   overallInfoState,
   overallOriginDataState,
-  overallIdState
+  overallIdState,
+  overallLoadingState
 } from '../recoil/overallAtom';
 import DataTable from '../components/DataTable';
+import LoadingOverall from '../components/LoadingOverall';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -78,6 +80,11 @@ const SubTitle = styled.div`
   }
 `;
 
+const LoadingOverallPage = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+`;
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -103,6 +110,8 @@ function DetailOverall({ match }) {
   const setOverallOriginDatas = useSetRecoilState(overallOriginDataState);
   const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
   const [overallId, setOverallId] = useRecoilState(overallIdState);
+  const [overallLoading, setOverallLoading] =
+    useRecoilState(overallLoadingState);
 
   const {
     params: { id }
@@ -120,8 +129,8 @@ function DetailOverall({ match }) {
     window.open(overallInfos.file);
   };
 
-  const getDataSets = () => {
-    axios
+  const getDataSets = async () => {
+    await axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
         const original = JSON.parse(res.data.origin);
@@ -134,53 +143,66 @@ function DetailOverall({ match }) {
         }
         setOverallOriginDatas(originData);
         setOverallId(id);
+        setOverallLoading(true);
       })
       .catch((err) => {
         console.log(err);
+        setOverallLoading(true);
       });
   };
 
   useEffect(() => {
     if (overallId !== id) {
+      setOverallLoading(false);
       getDataSets();
+    } else {
+      setOverallLoading(true);
     }
-  }, [overallId]);
+  }, []);
 
   return (
-    <Wrapper>
-      <Header>
-        <Title>
-          <AlbumIcon />
-          <p>
-            {id}. {overallInfos.title}
-          </p>
-        </Title>
-        <Buttons>
-          <Button className="back" onClick={goDL}>
-            Back
-          </Button>
-          <Button className="home" onClick={goHome}>
-            Home
-          </Button>
-        </Buttons>
-      </Header>
-      <Container maxWidth="xl">
-        <SelectButton id={id} />
-        <SubTitle>
-          <h2># {overallInfos.title}</h2>
-          <Button
-            className="downloadBtn"
-            color="info"
-            onClick={downloadFile}
-            startIcon={<FileDownloadIcon />}
-            variant="contained"
-          >
-            Download
-          </Button>
-        </SubTitle>
-        <DataTable key={id} />
-      </Container>
-    </Wrapper>
+    <>
+      {!overallLoading ? (
+        <LoadingOverallPage>
+          <LoadingOverall />
+        </LoadingOverallPage>
+      ) : (
+        <Wrapper>
+          <Header>
+            <Title>
+              <AlbumIcon />
+              <p>
+                {id}. {overallInfos.title}
+              </p>
+            </Title>
+            <Buttons>
+              <Button className="back" onClick={goDL}>
+                Back
+              </Button>
+              <Button className="home" onClick={goHome}>
+                Home
+              </Button>
+            </Buttons>
+          </Header>
+          <Container maxWidth="xl">
+            <SelectButton id={id} />
+            <SubTitle>
+              <h2># {overallInfos.title}</h2>
+              <Button
+                className="downloadBtn"
+                color="info"
+                onClick={downloadFile}
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Download
+              </Button>
+            </SubTitle>
+            <DataTable key={id} />
+          </Container>
+        </Wrapper>
+      )}
+    </>
   );
 }
 
