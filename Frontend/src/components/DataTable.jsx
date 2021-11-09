@@ -21,6 +21,11 @@ const NullData = styled.div`
   justify-content: space-around;
   color: red;
 `;
+const StickyTableCell = styled(TableCell)`
+  && {
+    top: 56.5px;
+  }
+`;
 
 export default function DataTable(props) {
   const { key } = props;
@@ -28,6 +33,7 @@ export default function DataTable(props) {
   const overallDatas = useRecoilValue(overallDataState);
   const overallOriginDatas = useRecoilValue(overallOriginDataState);
   const overallId = useRecoilValue(overallIdState);
+  // const [originData, setOriginData] = useState([]);
 
   useEffect(() => {
     if (overallDatas.length > 0 && overallId !== key) {
@@ -49,14 +55,14 @@ export default function DataTable(props) {
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ minHeight: 450, maxHeight: 750 }}>
+      <TableContainer sx={{ minHeight: 450, maxHeight: 800 }}>
         <Table stickyHeader aria-label="sticky table">
           {/* Columns */}
           <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
-                  key={column.id + column.label + key}
+                  key={column.id + column.label}
                   align="right"
                   style={{ minWidth: 170, maxWidth: 170 }}
                 >
@@ -68,7 +74,7 @@ export default function DataTable(props) {
           {/* Overall 그래프 */}
           <TableHead>
             {columns.map((column) => (
-              <TableCell
+              <StickyTableCell
                 key={column.id}
                 align="right"
                 style={{ minWidth: 170, maxWidth: 170 }}
@@ -84,7 +90,7 @@ export default function DataTable(props) {
                     <span>[null]</span> <span>100%</span>
                   </NullData>
                 )}
-              </TableCell>
+              </StickyTableCell>
             ))}
           </TableHead>
           {/* dataset 원본 row 100개 출력 */}
@@ -94,7 +100,7 @@ export default function DataTable(props) {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Array.from(overallOriginData).map((data) => (
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" align="center">
                     {data}
                   </TableCell>
                 ))}
