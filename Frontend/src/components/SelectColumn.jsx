@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -39,9 +39,22 @@ function getStyles(name, columnName, theme) {
   };
 }
 
-export default function MultipleSelect() {
+export default function MultipleSelect(props) {
   const theme = useTheme();
-  const [columnName, setColumnName] = React.useState([]);
+  const [columnName, setColumnName] = useState([]);
+  // 여기서부터 내가 추가 코드
+  // props 받아와서 namess에 지정
+  const { namess } = props;
+  // undefined 처리하기 위해 setColumns 설정
+  const [columns, setColumns] = useState([]);
+  console.log('받아온 네임', namess);
+  useEffect(() => {
+    if (namess === undefined) {
+      return;
+    }
+    setColumns(namess);
+    console.log('undefined 넘기고 설정 되었는지', columns);
+  }, []);
 
   const handleChange = (event) => {
     const {
