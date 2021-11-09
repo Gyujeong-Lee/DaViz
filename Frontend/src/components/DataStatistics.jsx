@@ -47,9 +47,7 @@ export default function DataStatistics(props) {
             alignItems: 'center'
           }}
         >
-          <div>
-            #{data.id}. {data.col_name}
-          </div>
+          <div># {data.col_name}</div>
           <div style={{ fontSize: '0.8rem' }}>({data.dtype})</div>
         </Typography>
         {data.dtype === 'int64' || data.dtype === 'float64' ? (
