@@ -32,6 +32,8 @@ export default function DataStatistics(props) {
       setMode(data.x_axis.split('|')[0]);
     }
   }, []);
+
+  return (
     <div>
       <CardContents>
         <Typography

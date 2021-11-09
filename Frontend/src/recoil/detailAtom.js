@@ -20,3 +20,10 @@ export const detailBoxPlotState = atom({
     detailBoxPlot: []
   }
 });
+
+export const detailColumnState = atom({
+  key: 'detailColumn',
+  default: {
+    detailColumn: []
+  }
+});

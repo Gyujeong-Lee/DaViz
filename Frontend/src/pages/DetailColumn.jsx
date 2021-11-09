@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
-import { detailDataState } from '../recoil/detailAtom';
+import { detailDataState, detailColumnState } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
@@ -110,7 +110,7 @@ function SelectButton({ id }) {
 function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
-  const [columnNames, setColumnNames] = React.useState([]);
+  const [columnNames, setColumnNames] = useRecoilState(detailColumnState);
 
   const {
     params: { id }
@@ -124,8 +124,8 @@ function DetailColumn({ match }) {
     history.push('/datalist');
   };
 
-  const getDetailData = async () => {
-    await axios
+  const getDetailData = () => {
+    axios
       .get(`/datasets/${id}/detail`)
       .then((res) => {
         setDetailDatas(res.data);
@@ -140,8 +140,8 @@ function DetailColumn({ match }) {
     await axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
-        setColumnNames(res.data.info.columns);
-        console.log('컬럼 네임', columnNames);
+        console.log('컬럼 네임', res.data.info.columns);
+        setColumnNames(res.data.info.columns.split('|'));
       })
       .catch((err) => {
         console.log(err);
@@ -175,7 +175,7 @@ function DetailColumn({ match }) {
       <Container maxWidth="xl">
         <SelectButton id={id} />
         <h2>Column Detail</h2>
-        <SelectColumn columnNames={columnNames} />
+        <SelectColumn namess={columnNames} />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
             {detailDatas.length >= 1 &&

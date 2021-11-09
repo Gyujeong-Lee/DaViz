@@ -17,19 +17,6 @@ const MenuProps = {
   }
 };
 
-const names = [
-  'column 1',
-  'column 2',
-  'column 3',
-  'column 4',
-  'column 5',
-  'column 6',
-  'column 7',
-  'column 8',
-  'column 9',
-  'Daviz'
-];
-
 function getStyles(name, columnName, theme) {
   return {
     fontWeight:
@@ -47,14 +34,15 @@ export default function MultipleSelect(props) {
   const { namess } = props;
   // undefined 처리하기 위해 setColumns 설정
   const [columns, setColumns] = useState([]);
-  console.log('받아온 네임', namess);
   useEffect(() => {
+    console.log('받아온 네임', namess);
+    // console.log(namess, 'select columns');
     if (namess === undefined) {
       return;
     }
     setColumns(namess);
     console.log('undefined 넘기고 설정 되었는지', columns);
-  }, []);
+  }, [namess]);
 
   const handleChange = (event) => {
     const {
@@ -79,7 +67,7 @@ export default function MultipleSelect(props) {
           input={<OutlinedInput label="Column" />}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
+          {columns.map((name) => (
             <MenuItem
               key={name}
               value={name}
