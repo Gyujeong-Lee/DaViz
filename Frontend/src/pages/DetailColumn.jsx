@@ -137,6 +137,9 @@ function DetailColumn({ match }) {
 
   useEffect(() => {
     getDetailData();
+    return () => {
+      setDetailDatas([]);
+    };
   }, []);
 
   return (

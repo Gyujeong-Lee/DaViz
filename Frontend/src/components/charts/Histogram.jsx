@@ -39,7 +39,7 @@ const Histogram = ({ xAxis, yAxis }) => {
         xAxes: [
           {
             ticks: {
-              display: false
+              display: true
             }
           }
         ],

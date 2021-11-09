@@ -113,7 +113,12 @@ function DetailOverall({ match }) {
         const original = JSON.parse(res.data.origin);
         setOverallDatas(res.data.result);
         setOverallInfos(res.data.info);
-        setOverallOriginDatas(original.data);
+        // 원본 데이터 index값 제거
+        const originData = original.data;
+        for (let i = 0; i < originData.length; i++) {
+          originData[i].splice(0, 1);
+        }
+        setOverallOriginDatas(originData);
         setOverallId(id);
       })
       .catch((err) => {

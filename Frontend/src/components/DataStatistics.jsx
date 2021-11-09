@@ -22,10 +22,9 @@ export default function DataStatistics(props) {
     name: null
   });
   useEffect(() => {
-    if (detail === undefined) {
-      return;
+    if (detail !== undefined) {
+      setData(detail);
     }
-    setData(detail);
   }, []);
 
   return (
