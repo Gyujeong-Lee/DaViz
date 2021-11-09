@@ -25,16 +25,13 @@ export default function DataStatistics(props) {
   });
   const [mode, setMode] = useState('');
   useEffect(() => {
-    if (detail === undefined) {
-      return;
+    if (detail !== undefined) {
+      setData(detail);
     }
-    setData(detail);
     if (data.dtype === 'object') {
       setMode(data.x_axis.split('|')[0]);
     }
   }, []);
-
-  return (
     <div>
       <CardContents>
         <Typography
