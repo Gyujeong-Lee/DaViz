@@ -11,7 +11,7 @@ import DataPreview from '../components/DataPreview';
 import SearchBar from '../components/SearchBar';
 
 const Wrapper = styled.div`
-  background-color: #ffffff;
+  background-color: #fffff;
 `;
 
 const ButtonWrapper = styled.div`

@@ -3,8 +3,7 @@ import styled from 'styled-components';
 
 const FooterStyle = styled.div`
   background-color: #f5f5f5;
-  margin-top: 5rem;
-  padding: 2.5vh;
+  padding: 1.5vh;
   text-align: center;
   font-size: 0.8rem;
   color: #999;
@@ -19,7 +18,7 @@ const FooterStyle = styled.div`
 
 function Footer() {
   return (
-    <div>
+    <div style={{ marginTop: `2rem` }}>
       <FooterStyle>
         <p className="name">이규정, 김윤서, 방지환, 정희진</p>
         <p className="copyright">© With 신한은행</p>

@@ -13,7 +13,7 @@ import FileAddForm from '../components/FileAddForm';
 import '../App.css';
 
 const CustomButtonRoot = styled('button')`
-  background-color: #007fff;
+  background-color: #0076be;
   padding: 15px 20px;
   border-radius: 10px;
   color: #fff;
@@ -33,7 +33,7 @@ const CustomButtonRoot = styled('button')`
   }
 
   &.${buttonUnstyledClasses.active} {
-    background-color: #004386;
+    background-color: #0b1966;
   }
 
   &.${buttonUnstyledClasses.focusVisible} {
