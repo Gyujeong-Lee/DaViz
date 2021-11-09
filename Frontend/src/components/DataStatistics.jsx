@@ -24,14 +24,17 @@ export default function DataStatistics(props) {
     col_name: null
   });
   const [mode, setMode] = useState('');
+
   useEffect(() => {
-    if (detail !== undefined) {
-      setData(detail);
+    console.log(detail);
+    if (detail === undefined) {
+      return;
     }
-    if (data.dtype === 'object') {
-      setMode(data.x_axis.split('|')[0]);
+    setData(detail);
+    if (detail.dtype === 'object') {
+      setMode(detail.x_axis.split('|')[0]);
     }
-  }, []);
+  }, [detail]);
 
   return (
     <div>

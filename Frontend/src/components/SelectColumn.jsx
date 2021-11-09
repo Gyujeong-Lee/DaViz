@@ -67,7 +67,7 @@ export default function MultipleSelect(props) {
           input={<OutlinedInput label="Column" />}
           MenuProps={MenuProps}
         >
-          {columns.map((name) => (
+          {Array.from(columns).map((name) => (
             <MenuItem
               key={name}
               value={name}

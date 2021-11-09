@@ -140,7 +140,6 @@ function DetailColumn({ match }) {
     await axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
-        console.log('컬럼 네임', res.data.info.columns);
         setColumnNames(res.data.info.columns.split('|'));
       })
       .catch((err) => {
