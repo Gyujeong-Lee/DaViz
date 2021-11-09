@@ -76,7 +76,7 @@ def upload(request, format=None):
 
 
     #같은 데이터셋의 중복
-    if Info_Dataset.objects.filter(file= file_name + '|{}'.format(td_by_day)).exists():
+    if Info_Dataset.objects.filter(file= file_name).exists():
         
         return Response({'messages': '같은 이름의 파일(데이터 셋)이 존재합니다. 해당 분석 결과를 참조해주세요'}, status=status.HTTP_409_CONFLICT)
 
@@ -109,11 +109,11 @@ def upload(request, format=None):
     #유효성 검사
     if serializers.is_valid():
         #원본 데이터 S3 저장
-        serializers.save(file = file_name + '|{}'.format(td_by_day), row_cnt=row_cnt, columns=columns)
+        serializers.save(file = file_name, row_cnt=row_cnt, columns=columns)
 
         s = time.time()
         #기초 통계 내용 분석 후 DB 저장
-        info = get_object_or_404(Info_Dataset, file=file_name + '|{}'.format(td_by_day))
+        info = get_object_or_404(Info_Dataset, file=file_name)
         dataset_id = info.id
         stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'box_min', 'box_max', 'dataset_id'])
 
@@ -194,10 +194,10 @@ def overall(request, dataset_id):
 
     #DB에서 테이블 가져오기
     dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
-    table_name = dataset_info.file
+    create_date = dataset_info.created_at.strftime('%Y%m%d')
+    table_name = str(dataset_info.file) + '|' + create_date
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
-    
     #위에서 정의한 컬럼만 읽어온다.
     df = pd.read_sql(table_name, con=db_connection)
     new_df = df.loc[0:100]
