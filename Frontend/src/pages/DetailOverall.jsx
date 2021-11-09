@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
@@ -68,6 +69,15 @@ const Buttons = styled.div`
   margin-top: 1rem;
 `;
 
+const SubTitle = styled.div`
+  display: flex;
+  justify-content: space-between;
+  .downloadBtn {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+`;
+
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -104,6 +114,10 @@ function DetailOverall({ match }) {
 
   const goDL = () => {
     history.push('/datalist');
+  };
+
+  const downloadFile = () => {
+    window.open(overallInfos.file);
   };
 
   const getDataSets = () => {
@@ -152,7 +166,18 @@ function DetailOverall({ match }) {
       </Header>
       <Container maxWidth="xl">
         <SelectButton id={id} />
-        <h2># {overallInfos.title}</h2>
+        <SubTitle>
+          <h2># {overallInfos.title}</h2>
+          <Button
+            className="downloadBtn"
+            color="info"
+            onClick={downloadFile}
+            startIcon={<FileDownloadIcon />}
+            variant="contained"
+          >
+            Download
+          </Button>
+        </SubTitle>
         <DataTable key={id} />
       </Container>
     </Wrapper>
