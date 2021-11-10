@@ -24,6 +24,13 @@ export const detailBoxPlotState = atom({
 export const detailColumnState = atom({
   key: 'detailColumn',
   default: {
-    detailColumn: []
+    detailColumns: []
+  }
+});
+
+export const selectedColumnState = atom({
+  key: 'selectedColumn',
+  default: {
+    selectedColumn: []
   }
 });

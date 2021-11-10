@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '@mui/material/styles';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import styled from 'styled-components';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  selectedColumnState,
+  detailColumnState,
+  detailDataState
+} from '../recoil/detailAtom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -17,63 +27,93 @@ const MenuProps = {
   }
 };
 
-function getStyles(name, columnName, theme) {
-  return {
-    fontWeight:
-      columnName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium
-  };
-}
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  button {
+    margin-right: 10px;
+  }
+`;
 
-export default function MultipleSelect(props) {
-  const theme = useTheme();
-  const [columnName, setColumnName] = useState([]);
-  // 여기서부터 내가 추가 코드
+export default function MultipleSelect({ id }) {
   // props 받아와서 namess에 지정
-  const { namess } = props;
-  // undefined 처리하기 위해 setColumns 설정
-  const [columns, setColumns] = useState([]);
-  useEffect(() => {
-    // console.log('받아온 네임', namess);
-    // console.log(namess, 'select columns');
-    if (namess === undefined) {
-      return;
-    }
-    setColumns(namess);
-    console.log('undefined 넘기고 설정 되었는지', columns);
-  }, [namess]);
+  const detailColumns = useRecoilValue(detailColumnState);
+  const [selectedColumns, setSelectedColumns] =
+    useRecoilState(selectedColumnState);
+  const [columns, setColumns] = React.useState([]);
+  const setDetailDatas = useSetRecoilState(detailDataState);
 
   const handleChange = (event) => {
     const {
       target: { value }
     } = event;
-    setColumnName(
+    setColumns(
       // On autofill we get a the stringified value.
       typeof value === 'string' ? value.split(',') : value
     );
+    console.log(columns, 'set columns');
   };
+
+  const submitSelect = () => {
+    setSelectedColumns(columns);
+    // axios 요청 보내기
+    let filterCondition = '';
+    for (let i = 0; i < columns.length; i++) {
+      filterCondition += `${columns[i]}=00&`;
+      if (i === columns.length - 1) {
+        filterCondition += `${columns[i]}=00`;
+      }
+    }
+    console.log(filterCondition, 'filterCondition');
+    axios
+      .get(`/datasets/${id}/filter/${filterCondition}`)
+      .then((res) => {
+        setDetailDatas(res.data.data);
+        // console.log(res, 'res');
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+      });
+  };
+
+  const resetSelect = () => {
+    setColumns(selectedColumns);
+  };
+
+  useEffect(() => {
+    setColumns(selectedColumns);
+  }, [selectedColumns]);
 
   return (
     <div>
+      <ButtonContainer>
+        <Button variant="outlined" size="small" onClick={resetSelect}>
+          RESET
+        </Button>
+        <Button variant="outlined" size="small" onClick={submitSelect}>
+          APPLY
+        </Button>
+      </ButtonContainer>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-name-label">Choose Column</InputLabel>
+        <InputLabel id="demo-multiple-checkbox-label">Select</InputLabel>
         <Select
-          labelId="demo-multiple-name-label"
-          id="demo-multiple-name"
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
           multiple
-          value={columnName}
+          value={Array.from(columns)}
           onChange={handleChange}
           input={<OutlinedInput label="Column" />}
           MenuProps={MenuProps}
+          renderValue={(selected) =>
+            selected.length > 1 ? selected.join(', ') : selected
+          }
         >
-          {Array.from(columns).map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, columnName, theme)}
-            >
-              {name}
+          {Array.from(detailColumns).map((column) => (
+            <MenuItem key={column} value={column}>
+              <Checkbox checked={Array.from(columns).indexOf(column) !== -1} />
+              <ListItemText primary={column} />
             </MenuItem>
           ))}
         </Select>

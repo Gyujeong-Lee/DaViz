@@ -4,12 +4,16 @@ import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
 import { overallInfoState } from '../recoil/overallAtom';
-import { detailDataState, detailColumnState } from '../recoil/detailAtom';
+import {
+  detailDataState,
+  detailColumnState,
+  selectedColumnState
+} from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
@@ -116,6 +120,8 @@ function DetailColumn({ match }) {
   // 히스토그램에 보내줄 x, y축 정보만
   // const [columns, setColumns] = useState([]);
   const overallInfos = useRecoilValue(overallInfoState);
+  const setDetailColumns = useSetRecoilState(detailColumnState);
+  const setSelectedColumns = useSetRecoilState(selectedColumnState);
 
   const {
     params: { id }
@@ -135,6 +141,12 @@ function DetailColumn({ match }) {
       .then((res) => {
         setDetailDatas(res.data);
         console.log(res.data, '찍힘');
+        // 초기 column names 5개 저장
+        const temp = [];
+        for (let i = 0; i < res.data.length; i++) {
+          temp.push(res.data[i].col_name);
+        }
+        setSelectedColumns(temp);
       })
       .catch((err) => {
         console.log(err);
@@ -145,7 +157,8 @@ function DetailColumn({ match }) {
     await axios
       .get(`/datasets/${id}/overall`)
       .then((res) => {
-        setColumnNames(res.data.info.columns.split('|'));
+        const temp = res.data.info.columns.split('|');
+        setDetailColumns(temp.splice(0, temp.length - 1));
       })
       .catch((err) => {
         console.log(err);
@@ -195,7 +208,7 @@ function DetailColumn({ match }) {
       <Container maxWidth="xl">
         <SelectButton id={id} />
         <h2>Column Detail</h2>
-        <SelectColumn namess={columnNames} />
+        <SelectColumn id={id} />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
             {detailDatas.length >= 1 &&
