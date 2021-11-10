@@ -23,6 +23,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(15px + 2vmin);
+  font-family: Helvetica, Arial, sans-serif;
   color: white;
 }
 

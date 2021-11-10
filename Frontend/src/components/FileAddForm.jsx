@@ -8,6 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useHistory } from 'react-router';
+import { useAlert } from 'react-alert';
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useRecoilState } from 'recoil';
 import { uploadState, loadingstate } from '../recoil/homeAtom';
@@ -33,6 +34,7 @@ export default function FileAddForm() {
     file: []
   });
 
+  const alert = useAlert();
   const handleAdd = (newFiles) => {
     setRequestData({
       ...requestData,
@@ -97,8 +99,16 @@ export default function FileAddForm() {
         setLoading(true);
         history.push(`/${res.data.id}/detail`);
       })
-      .catch(() => {
+      .catch((error) => {
+        // Error 😨
         setLoading(true);
+        if (error.response) {
+          if (error.response.status === 500) {
+            alert.show('데이터셋을 확인해주세요.', 'error');
+          } else if (error.response.status === 415) {
+            alert.show(`${error.response.data.messages}`, 'error');
+          }
+        }
       });
   };
 
