@@ -241,7 +241,8 @@ def filter(request, dataset_id, condition):
 
     #DB에서 테이블 가져오기
     dataset_info = get_object_or_404(Info_Dataset, id=dataset_id)
-    table_name = dataset_info.file
+    create_date = dataset_info.created_at.strftime('%Y%m%d')
+    table_name = str(dataset_info.file) + '|' + create_date
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
     

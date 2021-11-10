@@ -68,6 +68,7 @@ const Header = styled.div`
 const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   margin-top: 1rem;
 `;
 
@@ -175,7 +176,7 @@ function DetailOverall({ match }) {
                 {id}. {overallInfos.title}
               </p>
             </Title>
-            <Buttons>
+            <Buttons style={{ marginTop: '0px' }}>
               <Button className="back" onClick={goDL}>
                 Back
               </Button>
