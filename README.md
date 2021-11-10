@@ -6,7 +6,7 @@
 
 ## 배포 사이트
 
-http://k5f007.p.ssafy.io/
+https://daviz.shop/
 
 
 
