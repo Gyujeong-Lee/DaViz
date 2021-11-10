@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
@@ -116,9 +116,8 @@ function SelectButton({ id }) {
 function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
-  const [columnNames, setColumnNames] = useRecoilState(detailColumnState);
   // 히스토그램에 보내줄 x, y축 정보만
-  // const [columns, setColumns] = useState([]);
+  const [columns, setColumns] = useState([]);
   const overallInfos = useRecoilValue(overallInfoState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
@@ -139,7 +138,16 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/detail`)
       .then((res) => {
-        setDetailDatas(res.data);
+        const tempDetail = [];
+        for (let i = 0; i < res.data.length; i++) {
+          const data = {
+            xAxis: res.data[i].x_axis.split('|'),
+            yAxis: res.data[i].y_axis.split('|'),
+            ...res.data[i]
+          };
+          tempDetail.push(data);
+        }
+        setDetailDatas(tempDetail);
         console.log(res.data, '찍힘');
         // 초기 column names 5개 저장
         const temp = [];
@@ -169,18 +177,18 @@ function DetailColumn({ match }) {
     getDetailData();
     getDataSets();
     // x, y축 전처리 위해 추가 코드
-    // if (detailDatas.length > 0) {
-    //   detailDatas.forEach((data) => {
-    //     const column = {
-    //       dtype: data.dtype,
-    //       xAxis: data.x_axis.split('|'),
-    //       yAxis: data.y_axis.split('|')
-    //     };
-    //     setColumns(column);
-    //     console.log('히스토', column);
-    //     console.log(columns);
-    //   });
-    // }
+    if (detailDatas.length > 0) {
+      detailDatas.forEach((data) => {
+        const column = {
+          dtype: data.dtype,
+          xAxis: data.x_axis.split('|'),
+          yAxis: data.y_axis.split('|')
+        };
+        setColumns(column);
+        console.log('히스토', column);
+        console.log(columns);
+      });
+    }
     return () => {
       setDetailDatas([]);
       // setColumns([]);
@@ -228,8 +236,7 @@ function DetailColumn({ match }) {
                 <BoxPlotChart detail={detailData} />
               </BoxPlotWrapper>
               <HistogramWrapper>
-                <Histogram />
-                {/* xAxis={detailData.xAxis} yAxis={column.yAxis} */}
+                <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
               <DataStatistics detail={detailData} />
               {/* 필터링 적용 후 */}
