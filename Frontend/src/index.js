@@ -7,7 +7,7 @@ import App from './App';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000';
 // 배포용
-// axios.defaults.baseURL = 'http://k5f007.p.ssafy.io';
+// axios.defaults.baseURL = 'https://daviz.shop';
 
 ReactDOM.render(
   <React.StrictMode>
