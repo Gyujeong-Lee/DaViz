@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
+import { overallInfoState } from '../recoil/overallAtom';
 import { detailDataState, detailColumnState } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
@@ -111,6 +112,7 @@ function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   const [columnNames, setColumnNames] = useRecoilState(detailColumnState);
+  const overallInfos = useRecoilValue(overallInfoState);
 
   const {
     params: { id }
@@ -160,7 +162,9 @@ function DetailColumn({ match }) {
       <Between>
         <Title>
           <AlbumIcon />
-          <p>{id}</p>
+          <p>
+            {id}. {overallInfos.title}
+          </p>
         </Title>
         <Buttons>
           <Button className="back" onClick={goDL}>

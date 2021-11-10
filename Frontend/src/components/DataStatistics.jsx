@@ -71,7 +71,7 @@ export default function DataStatistics(props) {
           <Typography variant="body2" color="text.secondary">
             <h2>{data.name}</h2>
             <ul>
-              <li>Unique Value count: {data.unique_cnt}</li>
+              <li>Unique Value: {data.unique_cnt}</li>
               <li>Mode: {mode}</li>
               <li>Null: {data.null_cnt}</li>
             </ul>
