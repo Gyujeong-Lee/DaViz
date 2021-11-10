@@ -69,7 +69,7 @@ const BoxPlotChart = (props) => {
     return () => {
       newChartInstance.destroy();
     };
-  }, [chartContainer]);
+  }, [chartContainer, detail]);
 
   return (
     <Wrapper>

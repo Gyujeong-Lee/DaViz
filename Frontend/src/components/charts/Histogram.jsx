@@ -59,7 +59,7 @@ const Histogram = ({ xAxis, yAxis }) => {
     return () => {
       newChartInstance.destroy();
     };
-  }, [chartContainer]);
+  }, [chartContainer, xAxis, yAxis]);
 
   return (
     <Wrapper>
