@@ -190,7 +190,7 @@ function DetailColumn({ match }) {
       <Container maxWidth="xl">
         <SelectButton id={id} />
         <h2>Column Detail</h2>
-        <SelectColumn />
+        <SelectColumn id={id} />
         <div id="scroll-horizontal" style={{ height: `18em` }}>
           <ScrollHorizontal reverseScroll>
             {detailDatas.length >= 1 &&

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,8 +9,12 @@ import Select from '@mui/material/Select';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedColumnState, detailColumnState } from '../recoil/detailAtom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  selectedColumnState,
+  detailColumnState,
+  detailDataState
+} from '../recoil/detailAtom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,12 +37,13 @@ const ButtonContainer = styled.div`
   }
 `;
 
-export default function MultipleSelect() {
+export default function MultipleSelect({ id }) {
   // props 받아와서 namess에 지정
   const detailColumns = useRecoilValue(detailColumnState);
   const [selectedColumns, setSelectedColumns] =
     useRecoilState(selectedColumnState);
   const [columns, setColumns] = React.useState([]);
+  const setDetailDatas = useSetRecoilState(detailDataState);
 
   const handleChange = (event) => {
     const {
@@ -52,6 +58,24 @@ export default function MultipleSelect() {
 
   const submitSelect = () => {
     setSelectedColumns(columns);
+    // axios 요청 보내기
+    let filterCondition = '';
+    for (let i = 0; i < columns.length; i++) {
+      filterCondition += `${columns[i]}=00&`;
+      if (i === columns.length - 1) {
+        filterCondition += `${columns[i]}=00`;
+      }
+    }
+    console.log(filterCondition, 'filterCondition');
+    axios
+      .get(`/datasets/${id}/filter/${filterCondition}`)
+      .then((res) => {
+        setDetailDatas(res.data.data);
+        // console.log(res, 'res');
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+      });
   };
 
   const resetSelect = () => {
