@@ -223,8 +223,11 @@ function DetailColumn({ match }) {
         <SelectButton id={id} />
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
-        <div id="scroll-horizontal" style={{ height: `18em` }}>
-          <ScrollHorizontal reverseScroll>
+        <div id="scroll-horizontal" style={{ height: '18em' }}>
+          <ScrollHorizontal
+            reverseScroll
+            config={{ stiffness: detailDatas.length <= 4 ? 0 : 100 }}
+          >
             {detailDatas.length >= 1 &&
               detailDatas.map((detailData) => (
                 <DSWrapper>
