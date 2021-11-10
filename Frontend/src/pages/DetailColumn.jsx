@@ -143,12 +143,18 @@ function DetailColumn({ match }) {
           const data = {
             xAxis: res.data[i].x_axis.split('|'),
             yAxis: res.data[i].y_axis.split('|'),
+            detailBoxPlot: [
+              res.data[i].min_val,
+              res.data[i].max_val,
+              res.data[i].q1,
+              res.data[i].q2,
+              res.data[i].q3
+            ],
             ...res.data[i]
           };
           tempDetail.push(data);
         }
         setDetailDatas(tempDetail);
-        console.log(res.data, '찍힘');
         // 초기 column names 5개 저장
         const temp = [];
         for (let i = 0; i < res.data.length; i++) {

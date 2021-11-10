@@ -70,8 +70,24 @@ export default function MultipleSelect({ id }) {
     axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
-        setDetailDatas(res.data.data);
-        // console.log(res, 'res');
+        const tmp = res.data.data;
+        const tempDetail = [];
+        for (let i = 0; i < tmp.length; i++) {
+          const data = {
+            xAxis: tmp[i].x_axis.split('|'),
+            yAxis: tmp[i].y_axis.split('|'),
+            detailBoxPlot: [
+              tmp[i].min_val,
+              tmp[i].max_val,
+              tmp[i].q1,
+              tmp[i].q2,
+              tmp[i].q3
+            ],
+            ...tmp[i]
+          };
+          tempDetail.push(data);
+        }
+        setDetailDatas(tempDetail);
       })
       .catch((err) => {
         console.log(err, 'err');
