@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Chart from 'chart.js/auto';
 import { BoxPlotController } from '@sgratzl/chartjs-chart-boxplot';
@@ -13,11 +13,33 @@ const Wrapper = styled.div`
   }
 `;
 
-const BoxPlotChart = () => {
+const BoxPlotChart = (props) => {
+  const { detail } = props;
+  console.log('데이터 확인', detail);
+  const [columns, setColumns] = useState([]);
+  const [labelName, setLabelName] = useState('');
   const chartContainer = useRef(null);
 
-  const label = ['title'];
-  const columnData = [[-5, -3, -1, 5, 9]]; // [min, max, q1, q2, q3]
+  useEffect(() => {
+    console.log('박플', detail);
+    if (detail !== undefined) {
+      if (detail.dtype !== 'object') {
+        const column = [[//eslint-disable-line
+          detail.max_val,//eslint-disable-line
+          detail.min_val,//eslint-disable-line
+          detail.q1,//eslint-disable-line
+          detail.q2,//eslint-disable-line
+          detail.q3//eslint-disable-line
+        ]];//eslint-disable-line
+        console.log(column, '잘 넣었니');
+        setColumns(column);
+        setLabelName(detail.col_name);
+      }
+      console.log('어차피 안 찍혀', columns);
+    }
+  }, [detail]);
+
+  const label = ['result'];
 
   const chartConfig = {
     type: 'boxplot',
@@ -25,14 +47,14 @@ const BoxPlotChart = () => {
       labels: label,
       datasets: [
         {
-          label: 'title',
-          backgroundColor: 'rgba(255,0,0,0.5)',
-          borderColor: 'red',
+          label: labelName,
+          backgroundColor: 'rgba(38,139,238,0.5)',
+          borderColor: 'rgba(38,139,238)',
           borderWidth: 1,
           outlierColor: '#ffffff',
-          padding: 25,
+          padding: 20,
           itemRadius: 0,
-          data: columnData
+          data: columns
         }
       ]
     },

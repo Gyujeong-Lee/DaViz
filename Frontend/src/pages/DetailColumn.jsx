@@ -83,6 +83,7 @@ const HistogramWrapper = styled.div`
 const GraphWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
 `;
 
 const DSWrapper = styled.div`
@@ -112,6 +113,8 @@ function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   const [columnNames, setColumnNames] = useRecoilState(detailColumnState);
+  // 히스토그램에 보내줄 x, y축 정보만
+  // const [columns, setColumns] = useState([]);
   const overallInfos = useRecoilValue(overallInfoState);
 
   const {
@@ -152,8 +155,22 @@ function DetailColumn({ match }) {
   useEffect(() => {
     getDetailData();
     getDataSets();
+    // x, y축 전처리 위해 추가 코드
+    // if (detailDatas.length > 0) {
+    //   detailDatas.forEach((data) => {
+    //     const column = {
+    //       dtype: data.dtype,
+    //       xAxis: data.x_axis.split('|'),
+    //       yAxis: data.y_axis.split('|')
+    //     };
+    //     setColumns(column);
+    //     console.log('히스토', column);
+    //     console.log(columns);
+    //   });
+    // }
     return () => {
       setDetailDatas([]);
+      // setColumns([]);
     };
   }, []);
 
@@ -190,16 +207,22 @@ function DetailColumn({ match }) {
           </ScrollHorizontal>
         </div>
         <hr />
-        <GraphWrapper>
-          <BoxPlotWrapper>
-            <BoxPlotChart />
-          </BoxPlotWrapper>
-          <HistogramWrapper>
-            <Histogram />
-          </HistogramWrapper>
-          <DataStatistics />
-          <DataStatistics />
-        </GraphWrapper>
+        {/* for 문 */}
+        {detailDatas.length >= 1 &&
+          detailDatas.map((detailData) => (
+            <GraphWrapper>
+              <BoxPlotWrapper>
+                <BoxPlotChart detail={detailData} />
+              </BoxPlotWrapper>
+              <HistogramWrapper>
+                <Histogram />
+                {/* xAxis={detailData.xAxis} yAxis={column.yAxis} */}
+              </HistogramWrapper>
+              <DataStatistics detail={detailData} />
+              {/* 필터링 적용 후 */}
+              <DataStatistics />
+            </GraphWrapper>
+          ))}
       </Container>
     </Wrapper>
   );

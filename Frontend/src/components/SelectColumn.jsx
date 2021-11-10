@@ -35,7 +35,7 @@ export default function MultipleSelect(props) {
   // undefined 처리하기 위해 setColumns 설정
   const [columns, setColumns] = useState([]);
   useEffect(() => {
-    console.log('받아온 네임', namess);
+    // console.log('받아온 네임', namess);
     // console.log(namess, 'select columns');
     if (namess === undefined) {
       return;
