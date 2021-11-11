@@ -14,6 +14,28 @@ const CardContents = styled(CardContent)`
   h2 {
     color: white;
   }
+  #stat_num {
+    display: inline-block;
+    width: 125px;
+    margin-top: 5px;
+    color: white;
+  }
+  #stat_obj {
+    display: inline-block;
+    width: 140px;
+    margin-top: 5px;
+    color: white;
+  }
+  #stat_num > div {
+    margin-top: 6px;
+  }
+  #stat_obj > div {
+    margin-top: 6px;
+  }
+  #stat_top {
+    display: flex;
+    justify-content: space-around;
+  }
 `;
 
 export default function DataStatistics(props) {
@@ -37,7 +59,7 @@ export default function DataStatistics(props) {
   }, [detail]);
 
   return (
-    <div>
+    <div id="top">
       <CardContents>
         <Typography
           gutterBottom
@@ -53,28 +75,49 @@ export default function DataStatistics(props) {
           <div style={{ fontSize: '0.8rem' }}>({data.dtype})</div>
         </Typography>
         {data.dtype === 'int64' || data.dtype === 'float64' ? (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" id="stat_top">
             <h2>{data.name}</h2>
-            <ul>
-              <li>Maximum: {data.max_val.toFixed(2)}</li>
-              <li>Mean: {data.mean.toFixed(2)}</li>
-              <li>Minimum: {data.min_val.toFixed(2)}</li>
-              <li>Std: {data.std.toFixed(2)}</li>
-              <li>
-                Q1, Q2, Q3: {data.q1} {data.q2} {data.q3}
-              </li>
-              <li>Mode: {data.mode}</li>
-              <li>Null: {data.null_cnt}</li>
-            </ul>
+            <div id="stat_num">
+              <div>Maximum</div>
+              <div>Mean</div>
+              <div>Minimum</div>
+              <div>Std</div>
+              <div>Q1, Q2, Q3</div>
+              <div>Mode</div>
+              <div>Null</div>
+            </div>
+            <div id="stat_num">
+              <div>{data.max_val.toFixed(2)}</div>
+              <div>{data.mean.toFixed(2)}</div>
+              <div>{data.min_val.toFixed(2)}</div>
+              <div>{data.std.toFixed(2)}</div>
+              <div>
+                <span>{data.q1}, </span>
+                <span>{data.q2}, </span>
+                <span>{data.q3}</span>
+              </div>
+              <div>{data.mode}</div>
+              <div>{data.null_cnt}</div>
+            </div>
           </Typography>
         ) : (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" id="stat_top">
             <h2>{data.name}</h2>
-            <ul>
+            <div id="stat_obj">
+              <div>Unique Value</div>
+              <div>Mode</div>
+              <div>Null</div>
+            </div>
+            <div id="stat_obj">
+              <div>{data.unique_cnt}</div>
+              <div>{mode}</div>
+              <div>{data.null_cnt}</div>
+            </div>
+            {/* <ul>
               <li>Unique Value: {data.unique_cnt}</li>
               <li>Mode: {mode}</li>
               <li>Null: {data.null_cnt}</li>
-            </ul>
+            </ul> */}
           </Typography>
         )}
       </CardContents>
