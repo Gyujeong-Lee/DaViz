@@ -34,3 +34,10 @@ export const selectedColumnState = atom({
     selectedColumn: []
   }
 });
+
+export const filterConditionState = atom({
+  key: 'filterCondition',
+  default: {
+    filterCondition: []
+  }
+});

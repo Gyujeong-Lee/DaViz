@@ -12,7 +12,8 @@ import { overallInfoState } from '../recoil/overallAtom';
 import {
   detailDataState,
   detailColumnState,
-  selectedColumnState
+  selectedColumnState,
+  filterConditionState
 } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
@@ -137,6 +138,8 @@ function DetailColumn({ match }) {
   const overallInfos = useRecoilValue(overallInfoState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
+  const [filterCondition, setFilterCondition] =
+    useRecoilState(filterConditionState);
   const config = { stiffness: detailDatas.length <= 4 ? 3 : 100 };
 
   const {
@@ -174,9 +177,16 @@ function DetailColumn({ match }) {
         setDetailDatas(tempDetail);
         // 초기 column names 5개 저장
         const temp = [];
+        let filterTemp = '';
         for (let i = 0; i < res.data.length; i++) {
           temp.push(res.data[i].col_name);
+          if (i === res.data.length - 1) {
+            filterTemp += `${res.data[i].col_name}=00`;
+          } else {
+            filterTemp += `${res.data[i].col_name}=00&`;
+          }
         }
+        setFilterCondition(filterTemp.split('&'));
         setSelectedColumns(temp);
       })
       .catch((err) => {
@@ -194,6 +204,86 @@ function DetailColumn({ match }) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const getFilteredDetailData = (condition) => {
+    axios
+      .get(`/datasets/${id}/filter/${condition.join('&')}`)
+      .then((res) => {
+        const tmp = res.data.data;
+        const tempDetail = [];
+        for (let i = 0; i < tmp.length; i++) {
+          const data = {
+            xAxis: tmp[i].x_axis.split('|'),
+            yAxis: tmp[i].y_axis.split('|'),
+            detailBoxPlot: [
+              tmp[i].min_val,
+              tmp[i].max_val,
+              tmp[i].q1,
+              tmp[i].q2,
+              tmp[i].q3
+            ],
+            ...tmp[i]
+          };
+          tempDetail.push(data);
+        }
+        setDetailDatas(tempDetail);
+      })
+      .catch((err) => {
+        console.log(err, 'err');
+      });
+  };
+  // null 제거
+  const deleteNull = (index) => {
+    console.log(index, 'delete-null');
+    console.log(filterCondition[index]);
+    const temp = [];
+    filterCondition.forEach((item) => {
+      if (
+        filterCondition[index].slice(0, filterCondition[index].length - 3) ===
+        item.slice(0, item.length - 3)
+      ) {
+        const isNull = Number(item.slice(item.length - 2, item.length - 1));
+        const isOutlier = Number(item.slice(item.length - 1, item.length));
+        if (isNull === 1) {
+          temp.push(`${item.slice(0, item.length - 3)}=0${isOutlier}`);
+        } else if (isNull === 0) {
+          temp.push(`${item.slice(0, item.length - 3)}=1${isOutlier}`);
+        }
+      } else {
+        temp.push(item);
+      }
+    });
+    setFilterCondition(temp);
+    // detailDatas 업데이트
+    getFilteredDetailData(temp);
+  };
+
+  // 아웃라이어 제거
+  const deleteOutlier = (index) => {
+    console.log(index, 'delete-outlier');
+    console.log(filterCondition[index]);
+    const temp = [];
+    filterCondition.forEach((item) => {
+      if (
+        filterCondition[index].slice(0, filterCondition[index].length - 3) ===
+        item.slice(0, item.length - 3)
+      ) {
+        const isNull = Number(item.slice(item.length - 2, item.length - 1));
+        const isOutlier = Number(item.slice(item.length - 1, item.length));
+        if (isOutlier === 1) {
+          temp.push(`${item.slice(0, item.length - 3)}=${isNull}0`);
+        } else if (isOutlier === 0) {
+          temp.push(`${item.slice(0, item.length - 3)}=${isNull}1`);
+        }
+      } else {
+        temp.push(item);
+      }
+    });
+    setFilterCondition(temp);
+
+    // detailDatas 업데이트
+    getFilteredDetailData(temp);
   };
 
   useEffect(() => {
@@ -247,13 +337,21 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
           >
             {detailDatas.length >= 1 &&
-              detailDatas.map((detailData) => (
+              detailDatas.map((detailData, index) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
-                  <Button variant="outlined" size="small">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => deleteNull(index)}
+                  >
                     Null
                   </Button>
-                  <Button variant="outlined" size="small">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => deleteOutlier(index)}
+                  >
                     Outlier
                   </Button>
                 </DSWrapper>
