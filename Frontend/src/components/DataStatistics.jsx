@@ -14,6 +14,18 @@ const CardContents = styled(CardContent)`
   h2 {
     color: white;
   }
+  #stat_top {
+    width: 260px;
+    margin-left: 10px;
+  }
+  #stat_top > div {
+    display: flex;
+    justify-content: space-between;
+  }
+  #stat_top > div > span {
+    margin-top: 6px;
+    color: white;
+  }
 `;
 
 export default function DataStatistics(props) {
@@ -37,7 +49,7 @@ export default function DataStatistics(props) {
   }, [detail]);
 
   return (
-    <div>
+    <div id="top">
       <CardContents>
         <Typography
           gutterBottom
@@ -53,28 +65,56 @@ export default function DataStatistics(props) {
           <div style={{ fontSize: '0.8rem' }}>({data.dtype})</div>
         </Typography>
         {data.dtype === 'int64' || data.dtype === 'float64' ? (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" id="stat_top">
             <h2>{data.name}</h2>
-            <ul>
-              <li>Maximum: {data.max_val.toFixed(2)}</li>
-              <li>Mean: {data.mean.toFixed(2)}</li>
-              <li>Minimum: {data.min_val.toFixed(2)}</li>
-              <li>Std: {data.std.toFixed(2)}</li>
-              <li>
-                Q1, Q2, Q3: {data.q1} {data.q2} {data.q3}
-              </li>
-              <li>Mode: {data.mode}</li>
-              <li>Null: {data.null_cnt}</li>
-            </ul>
+            <div>
+              <span>Maximum</span>
+              <span>{data.max_val.toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Mean</span>
+              <span>{data.mean.toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Minimum</span>
+              <span>{data.min_val.toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Std</span>
+              <span>{data.std.toFixed(2)}</span>
+            </div>
+            <div>
+              <span>Q1 / Q2 / Q3</span>
+              <span>
+                <span>{data.q1} / </span>
+                <span>{data.q2} / </span>
+                <span>{data.q3}</span>
+              </span>
+            </div>
+            <div>
+              <span>Mode</span>
+              <span>{data.mode}</span>
+            </div>
+            <div>
+              <span>Null</span>
+              <span>{data.null_cnt}</span>
+            </div>
           </Typography>
         ) : (
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" id="stat_top">
             <h2>{data.name}</h2>
-            <ul>
-              <li>Unique Value: {data.unique_cnt}</li>
-              <li>Mode: {mode}</li>
-              <li>Null: {data.null_cnt}</li>
-            </ul>
+            <div>
+              <span>Unique Value</span>
+              <span>{data.unique_cnt}</span>
+            </div>
+            <div>
+              <span>Mode</span>
+              <span>{mode}</span>
+            </div>
+            <div>
+              <span>Null</span>
+              <span>{data.null_cnt}</span>
+            </div>
           </Typography>
         )}
       </CardContents>

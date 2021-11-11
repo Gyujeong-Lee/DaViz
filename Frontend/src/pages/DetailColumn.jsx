@@ -74,6 +74,8 @@ const Between = styled.div`
 const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+
   margin-top: 1rem;
 `;
 
@@ -110,6 +112,8 @@ const DSWrapper = styled.div`
 const ScrollWrapper = styled.div`
   color: black;
   height: 22em;
+  margin-bottom: 5rem;
+  margin-top: 1rem;
   transform: ${(props) =>
     props.length < 5 || 'translate3d(0px,0px,0px) !important'};
 `;
@@ -313,29 +317,29 @@ function DetailColumn({ match }) {
                 </DSWrapper>
               ))}
           </ScrollHorizontal>
+          <hr />
         </ScrollWrapper>
-        <hr />
         {/* for 문 */}
         {detailDatas.length >= 1 &&
           detailDatas.map((detailData) => (
             <GraphWrapper>
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
-                <BoxPlotWrapper>
+                <BoxPlotWrapper style={{ width: '15rem' }}>
                   <BoxPlotChart detail={detailData} />
                 </BoxPlotWrapper>
               ) : (
-                <DoughnutWrapper>
+                <DoughnutWrapper style={{ width: '15rem' }}>
                   <DoughnutChart
                     xAxis={detailData.xAxis}
                     yAxis={detailData.yAxis}
                   />
                 </DoughnutWrapper>
               )}
-              <HistogramWrapper>
+              <HistogramWrapper style={{ width: '15rem' }}>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
-              <DataStatistics detail={detailData} />
+              <DataStatistics detail={detailData} style={{ width: '15rem' }} />
               {/* 필터링 적용 후 */}
               <DataStatistics />
             </GraphWrapper>
