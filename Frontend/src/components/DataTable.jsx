@@ -63,7 +63,7 @@ export default function DataTable(props) {
               {columns.map((column) => (
                 <TableCell
                   key={column.id + column.label}
-                  align="right"
+                  align="center"
                   style={{ minWidth: 170, maxWidth: 170 }}
                 >
                   {column.label}

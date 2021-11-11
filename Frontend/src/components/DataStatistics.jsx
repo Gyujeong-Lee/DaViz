@@ -87,10 +87,10 @@ export default function DataStatistics(props) {
               <div>Null</div>
             </div>
             <div id="stat_num">
-              <div>{data.max_val.toFixed(2)}</div>
-              <div>{data.mean.toFixed(2)}</div>
-              <div>{data.min_val.toFixed(2)}</div>
-              <div>{data.std.toFixed(2)}</div>
+              <div>{data.max_val}</div>
+              <div>{data.mean}</div>
+              <div>{data.min_val}</div>
+              <div>{data.std}</div>
               <div>
                 <span>{data.q1}, </span>
                 <span>{data.q2}, </span>

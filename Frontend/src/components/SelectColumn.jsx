@@ -13,7 +13,8 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   selectedColumnState,
   detailColumnState,
-  detailDataState
+  detailDataState,
+  filterConditionState
 } from '../recoil/detailAtom';
 
 const ITEM_HEIGHT = 48;
@@ -44,7 +45,7 @@ export default function MultipleSelect({ id }) {
     useRecoilState(selectedColumnState);
   const [columns, setColumns] = React.useState([]);
   const setDetailDatas = useSetRecoilState(detailDataState);
-
+  const setFilterCondition = useSetRecoilState(filterConditionState);
   const handleChange = (event) => {
     const {
       target: { value }
@@ -67,6 +68,7 @@ export default function MultipleSelect({ id }) {
       }
     }
     console.log(filterCondition, 'filterCondition');
+    setFilterCondition(filterCondition.split('&'));
     axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
@@ -100,6 +102,7 @@ export default function MultipleSelect({ id }) {
 
   useEffect(() => {
     setColumns(selectedColumns);
+    console.log(detailColumns);
   }, [selectedColumns]);
 
   return (
@@ -112,7 +115,7 @@ export default function MultipleSelect({ id }) {
           APPLY
         </Button>
       </ButtonContainer>
-      <FormControl sx={{ m: 1, width: 300 }}>
+      <FormControl sx={{ m: 1, width: 500 }}>
         <InputLabel id="demo-multiple-checkbox-label">Select</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
