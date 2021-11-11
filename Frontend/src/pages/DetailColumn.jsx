@@ -17,6 +17,7 @@ import {
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
+import DoughnutChart from '../components/charts/DoughnutChart';
 import SelectColumn from '../components/SelectColumn';
 
 const Wrapper = styled.div`
@@ -80,6 +81,11 @@ const BoxPlotWrapper = styled.div`
   max-width: 30%;
 `;
 const HistogramWrapper = styled.div`
+  width: 25%;
+  max-width: 30%;
+`;
+
+const DoughnutWrapper = styled.div`
   width: 25%;
   max-width: 30%;
 `;
@@ -241,9 +247,20 @@ function DetailColumn({ match }) {
         {detailDatas.length >= 1 &&
           detailDatas.map((detailData) => (
             <GraphWrapper>
-              <BoxPlotWrapper>
-                <BoxPlotChart detail={detailData} />
-              </BoxPlotWrapper>
+              {/* <h4>{{ detailData 제발 여기 column name 쓰고싶어요 }}</h4> */}
+              {detailData.dtype === 'int64' ||
+              detailData.dtype === 'float64' ? (
+                <BoxPlotWrapper>
+                  <BoxPlotChart detail={detailData} />
+                </BoxPlotWrapper>
+              ) : (
+                <DoughnutWrapper>
+                  <DoughnutChart
+                    xAxis={detailData.xAxis}
+                    yAxis={detailData.yAxis}
+                  />
+                </DoughnutWrapper>
+              )}
               <HistogramWrapper>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
