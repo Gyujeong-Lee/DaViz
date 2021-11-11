@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import Tooltip from '@mui/material/Tooltip';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
@@ -76,6 +77,12 @@ const Buttons = styled.div`
   margin-top: 1rem;
 `;
 
+const EraseButton = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+`;
+
 const BoxPlotWrapper = styled.div`
   width: 25%;
   max-width: 30%;
@@ -102,7 +109,7 @@ const DSWrapper = styled.div`
 
 const ScrollWrapper = styled.div`
   color: black;
-  height: 20em;
+  height: 22em;
   transform: ${(props) =>
     props.length < 5 || 'translate3d(0px,0px,0px) !important'};
 `;
@@ -134,6 +141,20 @@ function DetailColumn({ match }) {
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
   const config = { stiffness: detailDatas.length <= 4 ? 3 : 100 };
+  const NullErase = `
+    Null 값이 포함된 행이 삭제됩니다.
+  `;
+  const modifiedZScore = `
+    p-value의 값이 0.5보다 큼으로 'modified z-score' 사용
+  `;
+
+  const IQR = `
+    정규분포를 따르지 않고 왜도의 절대값이 2 이하임으로 'IQR' 사용
+  `;
+
+  const SIQR = `
+    정규분포를 따르지 않고 왜도의 절대값이 2 초과함으로 'SIQR' 사용
+  `;
 
   const {
     params: { id }
@@ -204,7 +225,6 @@ function DetailColumn({ match }) {
           yAxis: data.y_axis.split('|')
         };
         setColumns(column);
-        console.log('히스토', column);
         console.log(columns);
       });
     }
@@ -246,12 +266,50 @@ function DetailColumn({ match }) {
               detailDatas.map((detailData) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
-                  <Button variant="outlined" size="small">
-                    Null
-                  </Button>
-                  <Button variant="outlined" size="small">
-                    Outlier
-                  </Button>
+                  <EraseButton>
+                    <Tooltip title={NullErase}>
+                      <Button
+                        sx={{ m: 1 }}
+                        variant="outlined"
+                        color="secondary"
+                      >
+                        Null
+                      </Button>
+                    </Tooltip>
+                    {detailData.p_value < '0.5' ? (
+                      Math.abs(detailData.skewness) < 2 ? (
+                        <Tooltip title={IQR}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant="outlined"
+                            color="primary"
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>
+                      ) : (
+                        <Tooltip title={SIQR}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant="outlined"
+                            color="primary"
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>
+                      )
+                    ) : (
+                      <Tooltip title={modifiedZScore}>
+                        <Button
+                          sx={{ m: 1 }}
+                          variant="outlined"
+                          color="primary"
+                        >
+                          Outlier
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </EraseButton>
                 </DSWrapper>
               ))}
           </ScrollHorizontal>
