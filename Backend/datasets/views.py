@@ -198,12 +198,9 @@ def overall(request, dataset_id):
     table_name = str(dataset_info.file) + '|' + create_date
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
-    #위에서 정의한 컬럼만 읽어온다.
-    # print(2)/
-    df = pd.read_sql(table_name, con=db_connection)
-    # print(3)
-    new_df = df.loc[0:100]
-    origin = new_df.to_json(orient="split")
+    query = f"SELECT * FROM DaViz.`{table_name}` t WHERE t.index < 100"
+    df = pd.read_sql(query, con=db_connection)
+    origin = df.to_json(orient="split")
 
 
     overall = {

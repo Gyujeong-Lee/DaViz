@@ -7,7 +7,7 @@ class Info_Dataset(models.Model):
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     file = models.FileField()
-    columns = models.CharField(max_length=500, blank=True)
+    columns = models.TextField()
     row_cnt = models.IntegerField(blank=True)
 
 
