@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 const CardContents = styled(CardContent)`
   background-color: #0076be;
   width: 280px;
-  height: 230px;
+  height: 250px;
   color: white;
   li {
     color: white;
@@ -71,26 +71,46 @@ export default function DataStatistics(props) {
             <h2>{data.name}</h2>
             <div>
               <span>Maximum</span>
-              <span>{data.max_val.toFixed(2)}</span>
+              <span>
+                {typeof data.max_val === 'number'
+                  ? data.max_val.toFixed(2)
+                  : data.max_val}
+              </span>
             </div>
             <div>
               <span>Mean</span>
-              <span>{data.mean.toFixed(2)}</span>
+              <span>
+                {typeof data.mean === 'number'
+                  ? data.mean.toFixed(2)
+                  : data.mean}
+              </span>
             </div>
             <div>
               <span>Minimum</span>
-              <span>{data.min_val.toFixed(2)}</span>
+              <span>
+                {typeof data.min_val === 'number'
+                  ? data.min_val.toFixed(2)
+                  : data.min_val}
+              </span>
             </div>
             <div>
               <span>Std</span>
-              <span>{data.std.toFixed(2)}</span>
+              <span>
+                {typeof data.std === 'number' ? data.std.toFixed(2) : data.std}
+              </span>
             </div>
             <div>
               <span>Q1 / Q2 / Q3</span>
               <span>
-                <span>{data.q1.toFixed(3)} / </span>
-                <span>{data.q2.toFixed(3)} / </span>
-                <span>{data.q3.toFixed(3)}</span>
+                <span>
+                  {typeof data.q1 === 'number' ? data.q1.toFixed(3) : data.q1} /{' '}
+                </span>
+                <span>
+                  {typeof data.q2 === 'number' ? data.q2.toFixed(3) : data.q2} /{' '}
+                </span>
+                <span>
+                  {typeof data.q3 === 'number' ? data.q3.toFixed(3) : data.q3}
+                </span>
               </span>
             </div>
             <div>
