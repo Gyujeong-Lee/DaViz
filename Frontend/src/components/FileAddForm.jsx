@@ -97,7 +97,7 @@ export default function FileAddForm() {
       .then((res) => {
         handleClose();
         setLoading(true);
-        history.push(`/${res.data.id}/detail`);
+        history.push('/datalist');
       })
       .catch((error) => {
         // Error 😨
@@ -107,6 +107,8 @@ export default function FileAddForm() {
             alert.show('데이터셋을 확인해주세요.', 'error');
           } else if (error.response.status === 415) {
             alert.show(`${error.response.data.messages}`, 'error');
+          } else if (error.response.status === 409) {
+            alert.show(`${error.response.data.messages}`, 'error')
           }
         }
       });
