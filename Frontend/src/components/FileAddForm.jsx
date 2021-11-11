@@ -94,7 +94,7 @@ export default function FileAddForm() {
     setLoading(false);
     axios
       .post('/datasets/upload/', formData)
-      .then((res) => {
+      .then(() => {
         handleClose();
         setLoading(true);
         console.log(res);
