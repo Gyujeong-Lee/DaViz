@@ -112,7 +112,7 @@ const DSWrapper = styled.div`
 const ScrollWrapper = styled.div`
   color: black;
   height: 22em;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
   margin-top: 1rem;
   transform: ${(props) =>
     props.length < 5 || 'translate3d(0px,0px,0px) !important'};
@@ -149,15 +149,15 @@ function DetailColumn({ match }) {
     Null 값이 포함된 행이 삭제됩니다.
   `;
   const modifiedZScore = `
-    p-value의 값이 0.5보다 큼으로 'modified z-score' 사용
+    p-value 값이 0.5보다 큼 > 'modified z-score' 사용
   `;
 
   const IQR = `
-    정규분포를 따르지 않고 왜도의 절대값이 2 이하임으로 'IQR' 사용
+    정규분포를 따르지 않고 왜도 절대값이 2 이하 > 'IQR' 사용
   `;
 
   const SIQR = `
-    정규분포를 따르지 않고 왜도의 절대값이 2 초과함으로 'SIQR' 사용
+    정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
   `;
 
   const {
@@ -280,6 +280,7 @@ function DetailColumn({ match }) {
                         Null
                       </Button>
                     </Tooltip>
+                    {/* 여기서부터 outlier버튼 */}
                     {detailData.p_value < '0.5' ? (
                       Math.abs(detailData.skewness) < 2 ? (
                         <Tooltip title={IQR}>

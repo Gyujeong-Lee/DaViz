@@ -86,9 +86,9 @@ export default function DataStatistics(props) {
             <div>
               <span>Q1 / Q2 / Q3</span>
               <span>
-                <span>{data.q1} / </span>
-                <span>{data.q2} / </span>
-                <span>{data.q3}</span>
+                <span>{data.q1.toFixed(3)} / </span>
+                <span>{data.q2.toFixed(3)} / </span>
+                <span>{data.q3.toFixed(3)}</span>
               </span>
             </div>
             <div>
