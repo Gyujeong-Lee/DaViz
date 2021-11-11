@@ -109,7 +109,7 @@ def upload(request, format=None):
     #유효성 검사
     if serializers.is_valid():
         #원본 데이터 S3 저장
-        serializers.save(file = file_name, row_cnt=row_cnt, columns=columns)
+        serializers.save(file = csv_file, row_cnt=row_cnt, columns=columns)
 
         s = time.time()
         #기초 통계 내용 분석 후 DB 저장

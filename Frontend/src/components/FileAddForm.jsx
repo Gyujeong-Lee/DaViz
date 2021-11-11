@@ -94,10 +94,10 @@ export default function FileAddForm() {
     setLoading(false);
     axios
       .post('/datasets/upload/', formData)
-      .then((res) => {
+      .then(() => {
         handleClose();
         setLoading(true);
-        history.push(`/${res.data.id}/detail`);
+        history.push('/datalist');
       })
       .catch((error) => {
         // Error 😨
@@ -106,6 +106,8 @@ export default function FileAddForm() {
           if (error.response.status === 500) {
             alert.show('데이터셋을 확인해주세요.', 'error');
           } else if (error.response.status === 415) {
+            alert.show(`${error.response.data.messages}`, 'error');
+          } else if (error.response.status === 409) {
             alert.show(`${error.response.data.messages}`, 'error');
           }
         }

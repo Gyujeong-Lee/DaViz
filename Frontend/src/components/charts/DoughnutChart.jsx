@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import Chart from 'chart.js/auto';
 
 const Wrapper = styled.div`
-  min-width: 120px;
-  max-width: 150px;
+  width: 100%;
+  height: 100%;
 `;
 
 const DoughnutChart = ({ xAxis, yAxis }) => {
