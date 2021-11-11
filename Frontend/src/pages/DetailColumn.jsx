@@ -109,7 +109,6 @@ const ScrollWrapper = styled.div`
   margin-top: 1rem;
   transform: ${(props) =>
     props.length < 5 || 'translate3d(0px,0px,0px) !important'};
-    
 `;
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {

@@ -97,7 +97,6 @@ export default function FileAddForm() {
       .then(() => {
         handleClose();
         setLoading(true);
-        console.log(res);
         history.push('/datalist');
       })
       .catch((error) => {
