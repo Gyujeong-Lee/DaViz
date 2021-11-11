@@ -313,6 +313,13 @@ def filter(request, dataset_id, condition):
             uc = q3 + 1.5*iqr
             box = now_col[(now_col>=lc)&(now_col<=uc)]
 
+            if df[col].dtype == 'int64':
+                min_val = int(box.min())
+                max_val = int(box.max())
+            else:
+                min_val = box.min()
+                max_val = box.max()
+
             result = {
                 'col_name' : col,
                 'mean' : col_describe['mean'],
@@ -330,8 +337,8 @@ def filter(request, dataset_id, condition):
                 'q1' : q1,
                 'q2' : col_describe['50%'],
                 'q3' : q3,
-                'box_min' : box.min(),
-                'box_max' : box.max(),
+                'box_min' : min_val,
+                'box_max' : max_val,
             }
         for key, val in result.items():
             if type(val) == np.int64:
