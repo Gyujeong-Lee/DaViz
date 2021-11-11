@@ -97,6 +97,7 @@ export default function FileAddForm() {
       .then((res) => {
         handleClose();
         setLoading(true);
+        console.log(res);
         history.push('/datalist');
       })
       .catch((error) => {
@@ -108,7 +109,7 @@ export default function FileAddForm() {
           } else if (error.response.status === 415) {
             alert.show(`${error.response.data.messages}`, 'error');
           } else if (error.response.status === 409) {
-            alert.show(`${error.response.data.messages}`, 'error')
+            alert.show(`${error.response.data.messages}`, 'error');
           }
         }
       });
