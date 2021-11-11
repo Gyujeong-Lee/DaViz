@@ -94,7 +94,7 @@ export default function FileAddForm() {
     setLoading(false);
     axios
       .post('/datasets/upload/', formData)
-      .then((res) => {
+      .then(() => {
         handleClose();
         setLoading(true);
         history.push('/datalist');
@@ -108,7 +108,7 @@ export default function FileAddForm() {
           } else if (error.response.status === 415) {
             alert.show(`${error.response.data.messages}`, 'error');
           } else if (error.response.status === 409) {
-            alert.show(`${error.response.data.messages}`, 'error')
+            alert.show(`${error.response.data.messages}`, 'error');
           }
         }
       });
