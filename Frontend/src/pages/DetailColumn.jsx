@@ -102,6 +102,15 @@ const DSWrapper = styled.div`
   margin-right: 3rem;
 `;
 
+const ScrollWrapper = styled.div`
+  color: black;
+  height: 20em;
+  margin-bottom: 5rem;
+  margin-top: 1rem;
+  transform: ${(props) =>
+    props.length < 5 || 'translate3d(0px,0px,0px) !important'};
+    
+`;
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -129,6 +138,7 @@ function DetailColumn({ match }) {
   const overallInfos = useRecoilValue(overallInfoState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
+  const config = { stiffness: detailDatas.length <= 4 ? 3 : 100 };
 
   const {
     params: { id }
@@ -231,28 +241,31 @@ function DetailColumn({ match }) {
         <SelectButton id={id} />
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
-        <div
-          id="scroll-horizontal"
-          style={{ height: '18em', marginBottom: '5rem', marginTop: '1rem' }}
-        >
+        <ScrollWrapper length={detailDatas.length}>
           <ScrollHorizontal
             reverseScroll
-            config={{ stiffness: detailDatas.length <= 4 ? 0 : 100 }}
+            config={config}
+            className="scroll-horizontal"
           >
             {detailDatas.length >= 1 &&
               detailDatas.map((detailData) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
+                  <Button variant="outlined" size="small">
+                    Null
+                  </Button>
+                  <Button variant="outlined" size="small">
+                    Outlier
+                  </Button>
                 </DSWrapper>
               ))}
           </ScrollHorizontal>
           <hr />
-        </div>
+        </ScrollWrapper>
         {/* for 문 */}
         {detailDatas.length >= 1 &&
           detailDatas.map((detailData) => (
             <GraphWrapper>
-              {/* <h4>{{ detailData 제발 여기 column name 쓰고싶어요 }}</h4> */}
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
                 <BoxPlotWrapper style={{ width: '15rem' }}>
