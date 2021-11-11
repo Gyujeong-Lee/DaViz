@@ -14,7 +14,8 @@ import {
   detailDataState,
   detailColumnState,
   selectedColumnState,
-  filterConditionState
+  filterConditionState,
+  originColumnState
 } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
@@ -115,8 +116,6 @@ const ScrollWrapper = styled.div`
   height: 22em;
   margin-bottom: 3rem;
   margin-top: 1rem;
-  transform: ${(props) =>
-    props.length < 5 || 'translate3d(0px,0px,0px) !important'};
 `;
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
@@ -144,6 +143,8 @@ function DetailColumn({ match }) {
   const [columns, setColumns] = useState([]);
   const overallInfos = useRecoilValue(overallInfoState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
+  const [originalColumnDatas, setOriginColumnDatas] =
+    useRecoilState(originColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
   const [filterCondition, setFilterCondition] =
     useRecoilState(filterConditionState);
@@ -196,6 +197,7 @@ function DetailColumn({ match }) {
           tempDetail.push(data);
         }
         setDetailDatas(tempDetail);
+        setOriginColumnDatas(tempDetail);
         // 초기 column names 5개 저장
         const temp = [];
         let filterTemp = '';
@@ -302,7 +304,6 @@ function DetailColumn({ match }) {
       }
     });
     setFilterCondition(temp);
-
     // detailDatas 업데이트
     getFilteredDetailData(temp);
   };
@@ -324,7 +325,7 @@ function DetailColumn({ match }) {
     }
     return () => {
       setDetailDatas([]);
-      // setColumns([]);
+      setOriginColumnDatas([]);
     };
   }, []);
 
@@ -350,7 +351,7 @@ function DetailColumn({ match }) {
         <SelectButton id={id} />
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
-        <ScrollWrapper length={detailDatas.length}>
+        <ScrollWrapper>
           <ScrollHorizontal
             reverseScroll
             config={config}
@@ -416,7 +417,7 @@ function DetailColumn({ match }) {
         </ScrollWrapper>
         {/* for 문 */}
         {detailDatas.length >= 1 &&
-          detailDatas.map((detailData) => (
+          detailDatas.map((detailData, index) => (
             <GraphWrapper>
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
@@ -434,9 +435,17 @@ function DetailColumn({ match }) {
               <HistogramWrapper style={{ width: '15rem' }}>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
-              <DataStatistics detail={detailData} style={{ width: '15rem' }} />
+              <DataStatistics
+                isOrigin={false}
+                detail={detailData}
+                style={{ width: '15rem' }}
+              />
               {/* 필터링 적용 후 */}
-              <DataStatistics />
+              <DataStatistics
+                isOrigin
+                detail={originalColumnDatas[index]}
+                style={{ width: '15rem' }}
+              />
             </GraphWrapper>
           ))}
       </Container>

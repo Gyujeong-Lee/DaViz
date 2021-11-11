@@ -14,7 +14,8 @@ import {
   selectedColumnState,
   detailColumnState,
   detailDataState,
-  filterConditionState
+  filterConditionState,
+  originColumnState
 } from '../recoil/detailAtom';
 
 const ITEM_HEIGHT = 48;
@@ -45,6 +46,7 @@ export default function MultipleSelect({ id }) {
     useRecoilState(selectedColumnState);
   const [columns, setColumns] = React.useState([]);
   const setDetailDatas = useSetRecoilState(detailDataState);
+  const setOriginColumnDatas = useSetRecoilState(originColumnState);
   const setFilterCondition = useSetRecoilState(filterConditionState);
   const handleChange = (event) => {
     const {
@@ -90,6 +92,7 @@ export default function MultipleSelect({ id }) {
           tempDetail.push(data);
         }
         setDetailDatas(tempDetail);
+        setOriginColumnDatas(tempDetail);
       })
       .catch((err) => {
         console.log(err, 'err');

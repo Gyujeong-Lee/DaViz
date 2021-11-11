@@ -29,7 +29,7 @@ const CardContents = styled(CardContent)`
 `;
 
 export default function DataStatistics(props) {
-  const { detail } = props;
+  const { detail, isOrigin } = props;
   const [data, setData] = useState({
     id: null,
     name: null,
@@ -61,7 +61,9 @@ export default function DataStatistics(props) {
             alignItems: 'center'
           }}
         >
-          <div># {data.col_name}</div>
+          <div>
+            # {isOrigin && 'origin'} {data.col_name}
+          </div>
           <div style={{ fontSize: '0.8rem' }}>({data.dtype})</div>
         </Typography>
         {data.dtype === 'int64' || data.dtype === 'float64' ? (

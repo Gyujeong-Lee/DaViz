@@ -41,3 +41,10 @@ export const filterConditionState = atom({
     filterCondition: []
   }
 });
+
+export const originColumnState = atom({
+  key: 'originColumn',
+  default: {
+    originColumnDatas: []
+  }
+});
