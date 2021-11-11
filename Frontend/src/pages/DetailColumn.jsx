@@ -102,7 +102,7 @@ const DSWrapper = styled.div`
 
 const ScrollWrapper = styled.div`
   color: black;
-  height: 18em;
+  height: 20em;
   transform: ${(props) =>
     props.length < 5 || 'translate3d(0px,0px,0px) !important'};
 `;
@@ -246,6 +246,12 @@ function DetailColumn({ match }) {
               detailDatas.map((detailData) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
+                  <Button variant="outlined" size="small">
+                    Null
+                  </Button>
+                  <Button variant="outlined" size="small">
+                    Outlier
+                  </Button>
                 </DSWrapper>
               ))}
           </ScrollHorizontal>
@@ -255,7 +261,6 @@ function DetailColumn({ match }) {
         {detailDatas.length >= 1 &&
           detailDatas.map((detailData) => (
             <GraphWrapper>
-              {/* <h4>{{ detailData 제발 여기 column name 쓰고싶어요 }}</h4> */}
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
                 <BoxPlotWrapper>
