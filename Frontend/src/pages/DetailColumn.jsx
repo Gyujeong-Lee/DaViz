@@ -135,6 +135,12 @@ function SelectButton({ id }) {
   );
 }
 
+// function Outliers() {
+//   return (
+
+//   );
+// }
+
 function DetailColumn({ match }) {
   const history = useHistory();
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
@@ -350,6 +356,7 @@ function DetailColumn({ match }) {
         <SelectButton id={id} />
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
+        <h5>* 범주형 데이터는 Null 값 처리만 가능합니다.</h5>
         <ScrollWrapper>
           <ScrollHorizontal
             reverseScroll
@@ -364,7 +371,7 @@ function DetailColumn({ match }) {
                     <Tooltip title={NullErase}>
                       <Button
                         sx={{ m: 1 }}
-                        variant="outlined"
+                        variant="text"
                         color="secondary"
                         onClick={() => deleteNull(index)}
                       >
@@ -372,42 +379,51 @@ function DetailColumn({ match }) {
                       </Button>
                     </Tooltip>
                     {/* 여기서부터 outlier버튼 */}
-                    {detailData.p_value < '0.5' ? (
-                      Math.abs(detailData.skewness) < 2 ? (
-                        <Tooltip title={IQR}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>
-                      ) : (
-                        <Tooltip title={SIQR}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>
-                      )
-                    ) : (
-                      <Tooltip title={modifiedZScore}>
-                        <Button
-                          sx={{ m: 1 }}
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => deleteOutlier(index)}
-                        >
-                          Outlier
-                        </Button>
-                      </Tooltip>
-                    )}
+                    {/* 즉시발동함수 */}
+                    {(function () {
+                      if (detailData.dtype === 'object') {
+                        return null;
+                      } else if (detailData.p_value > '0.5') {
+                        return (
+                          <Tooltip title={modifiedZScore}>
+                            <Button
+                              sx={{ m: 1 }}
+                              variant="text"
+                              color="primary"
+                              onClick={() => deleteOutlier(index)}
+                            >
+                              Outlier
+                            </Button>
+                          </Tooltip>
+                        );
+                      } else if (Math.abs(detailData.skewness) < 2) {
+                        return (
+                          <Tooltip title={IQR}>
+                            <Button
+                              sx={{ m: 1 }}
+                              variant="text"
+                              color="primary"
+                              onClick={() => deleteOutlier(index)}
+                            >
+                              Outlier
+                            </Button>
+                          </Tooltip>
+                        );
+                      } else {
+                        return (
+                          <Tooltip title={SIQR}>
+                            <Button
+                              sx={{ m: 1 }}
+                              variant="text"
+                              color="primary"
+                              onClick={() => deleteOutlier(index)}
+                            >
+                              Outlier
+                            </Button>
+                          </Tooltip>
+                        );
+                      }
+                    })()}
                   </EraseButton>
                 </DSWrapper>
               ))}
