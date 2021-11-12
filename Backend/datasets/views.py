@@ -321,6 +321,8 @@ def filter(request, dataset_id, condition):
             else:
                 mode = unique.values[0]
                 p_value = shapiro(now_col.dropna().values).pvalue
+            outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
+
             result = {
                 'col_name' : col,
                 'mean' : col_describe['mean'],
@@ -340,6 +342,7 @@ def filter(request, dataset_id, condition):
                 'q3' : q3,
                 'box_min' : box.min(),
                 'box_max' : box.max(),
+                'outlier_cnt' : outlier_cnt,
             }
         for key, val in result.items():
             if type(val) == np.int64:
