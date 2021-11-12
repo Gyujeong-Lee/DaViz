@@ -75,7 +75,10 @@ export default function MultipleSelect({ id }) {
     await axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
+        console.log(res);
         console.log(res.data, 'res.data');
+        console.log(res.data.data, 'res.data.data');
+        console.log(typeof res.data, '데이터타입');
         console.log(typeof res.data.data, '데이터타입');
         let tmp = res.data.data;
         if (typeof tmp === 'string') {

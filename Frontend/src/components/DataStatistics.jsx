@@ -38,7 +38,7 @@ export default function DataStatistics(props) {
   const [mode, setMode] = useState('');
 
   useEffect(() => {
-    console.log(detail);
+    // console.log(detail);
     if (detail === undefined) {
       return;
     }

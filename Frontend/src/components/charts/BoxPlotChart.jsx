@@ -15,7 +15,6 @@ const Wrapper = styled.div`
 
 const BoxPlotChart = (props) => {
   const { detail } = props;
-  // console.log('데이터 확인', detail);
   const chartContainer = useRef(null);
 
   const label = ['result'];
