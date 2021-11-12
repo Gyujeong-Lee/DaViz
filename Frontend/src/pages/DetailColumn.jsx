@@ -264,8 +264,8 @@ function DetailColumn({ match }) {
   };
   // null 제거
   const deleteNull = (index) => {
+    console.log(filterCondition.join('&'));
     console.log(index, 'delete-null');
-    console.log(filterCondition[index]);
     const temp = [];
     filterCondition.forEach((item) => {
       if (
@@ -287,21 +287,6 @@ function DetailColumn({ match }) {
     // detailDatas 업데이트
     getFilteredDetailData(temp);
   };
-
-  // onclick 버튼 디자인
-  // const [currentClick, setCurrentClick] = useState(null);
-  // const GetClick = (e) => {
-  //   setCurrentClick(e.target.id);
-  // };
-
-  // userEffect(
-  //   (e) => {
-  //     if (currentClick !== null) {
-  //       let current = document.getElementById(currentClick);
-  //       current.style.variant = "contained";
-  //     }
-  //   }
-  // )
 
   // 아웃라이어 제거
   const deleteOutlier = (index) => {
@@ -387,7 +372,13 @@ function DetailColumn({ match }) {
                     <Tooltip title={NullErase}>
                       <Button
                         sx={{ m: 1 }}
-                        variant="text"
+                        variant={
+                          Array.from(filterCondition)
+                            .join('&')
+                            .includes(`${detailData.col_name}=0`)
+                            ? 'outlined'
+                            : 'contained'
+                        }
                         color="secondary"
                         onClick={() => deleteNull(index)}
                       >
@@ -404,7 +395,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={modifiedZScore}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >
@@ -417,7 +417,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={IQR}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >
@@ -430,7 +439,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={SIQR}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >
