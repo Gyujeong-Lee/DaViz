@@ -47,7 +47,7 @@ const Title = styled.div`
 const Between = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-: center;
   margin-bottom: 0.5rem;
   color: #ffffff;
   background-color: #0076be;
@@ -77,7 +77,6 @@ const Buttons = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-
   margin-top: 1rem;
 `;
 
@@ -338,9 +337,9 @@ function DetailColumn({ match }) {
             {id}. {overallInfos.title}
           </p>
         </Title>
-        <Buttons>
+        <Buttons style={{ marginTop: '0px' }}>
           <Button className="back" onClick={goDL}>
-            Back
+            List
           </Button>
           <Button className="home" onClick={goHome}>
             Home
