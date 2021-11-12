@@ -163,6 +163,10 @@ function DetailColumn({ match }) {
     정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
   `;
 
+  const NoOutliers = `
+    Outliers가 존재하지 않습니다.
+  `;
+
   const {
     params: { id }
   } = match;
@@ -388,7 +392,18 @@ function DetailColumn({ match }) {
                     {/* 여기서부터 outlier버튼 */}
                     {/* 즉시발동함수 */}
                     {(function () {
-                      if (detailData.dtype === 'object') {
+                      if (detailData.outlier_cnt === '0') {
+                        <Tooltip title={NoOutliers}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant="outlined"
+                            color="primary"
+                            onClick={() => deleteOutlier(index)}
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>;
+                      } else if (detailData.dtype === 'object') {
                         return null;
                       } else if (detailData.p_value > '0.5') {
                         return (
@@ -457,6 +472,7 @@ function DetailColumn({ match }) {
                           </Tooltip>
                         );
                       }
+                      return null;
                     })()}
                   </EraseButton>
                 </DSWrapper>
