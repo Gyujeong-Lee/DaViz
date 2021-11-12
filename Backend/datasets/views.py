@@ -315,6 +315,7 @@ def filter(request, dataset_id, condition):
             lc = q1 - 1.5*iqr
             uc = q3 + 1.5*iqr
             box = now_col[(now_col>=lc)&(now_col<=uc)]
+            outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
 
             result = {
                 'col_name' : col,
@@ -335,6 +336,7 @@ def filter(request, dataset_id, condition):
                 'q3' : q3,
                 'box_min' : box.min(),
                 'box_max' : box.max(),
+                'outlier_cnt' : outlier_cnt,
             }
         for key, val in result.items():
             if type(val) == np.int64:
