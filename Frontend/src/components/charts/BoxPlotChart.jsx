@@ -53,12 +53,10 @@ const BoxPlotChart = (props) => {
         }
       },
       scales: {
-        xAxes: [
-          {
-            categoryPercentage: 0.5,
-            barPercentage: 0.7
-          }
-        ]
+        x: {
+          categoryPercentage: 0.5,
+          barPercentage: 0.7
+        }
       }
     }
   };

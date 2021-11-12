@@ -264,8 +264,8 @@ function DetailColumn({ match }) {
   };
   // null 제거
   const deleteNull = (index) => {
+    console.log(filterCondition.join('&'));
     console.log(index, 'delete-null');
-    console.log(filterCondition[index]);
     const temp = [];
     filterCondition.forEach((item) => {
       if (
@@ -372,7 +372,13 @@ function DetailColumn({ match }) {
                     <Tooltip title={NullErase}>
                       <Button
                         sx={{ m: 1 }}
-                        variant="text"
+                        variant={
+                          Array.from(filterCondition)
+                            .join('&')
+                            .includes(`${detailData.col_name}=0`)
+                            ? 'outlined'
+                            : 'contained'
+                        }
                         color="secondary"
                         onClick={() => deleteNull(index)}
                       >
@@ -389,7 +395,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={modifiedZScore}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >
@@ -402,7 +417,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={IQR}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >
@@ -415,7 +439,16 @@ function DetailColumn({ match }) {
                           <Tooltip title={SIQR}>
                             <Button
                               sx={{ m: 1 }}
-                              variant="text"
+                              variant={
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=00`) ||
+                                Array.from(filterCondition)
+                                  .join('&')
+                                  .includes(`${detailData.col_name}=10`)
+                                  ? 'outlined'
+                                  : 'contained'
+                              }
                               color="primary"
                               onClick={() => deleteOutlier(index)}
                             >

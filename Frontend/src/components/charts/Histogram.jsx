@@ -36,20 +36,9 @@ const Histogram = ({ xAxis, yAxis }) => {
         }
       },
       scales: {
-        xAxis: [
-          {
-            ticks: {
-              display: true
-            }
-          }
-        ],
-        yAxis: [
-          {
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ]
+        y: {
+          beginAtZero: true
+        }
       }
     }
   };
