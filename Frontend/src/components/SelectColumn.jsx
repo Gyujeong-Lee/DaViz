@@ -40,7 +40,6 @@ const ButtonContainer = styled.div`
 `;
 
 export default function MultipleSelect({ id }) {
-  // props 받아와서 namess에 지정
   const detailColumns = useRecoilValue(detailColumnState);
   const [selectedColumns, setSelectedColumns] =
     useRecoilState(selectedColumnState);
@@ -52,16 +51,11 @@ export default function MultipleSelect({ id }) {
     const {
       target: { value }
     } = event;
-    setColumns(
-      // On autofill we get a the stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    );
-    console.log(columns, 'set columns');
+    setColumns(typeof value === 'string' ? value.split(',') : value);
   };
 
   const submitSelect = async () => {
     setSelectedColumns(columns);
-    // axios 요청 보내기
     let filterCondition = '';
     for (let i = 0; i < columns.length; i++) {
       if (i === columns.length - 1) {
@@ -70,7 +64,6 @@ export default function MultipleSelect({ id }) {
         filterCondition += `${columns[i]}=00&`;
       }
     }
-    console.log(filterCondition, 'filterCondition');
     setFilterCondition(filterCondition.split('&'));
     await axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
@@ -101,7 +94,7 @@ export default function MultipleSelect({ id }) {
         }
       })
       .catch((err) => {
-        console.log(err, 'err');
+        console.log(err);
       });
   };
 
@@ -111,7 +104,6 @@ export default function MultipleSelect({ id }) {
 
   useEffect(() => {
     setColumns(selectedColumns);
-    console.log(detailColumns);
   }, [selectedColumns]);
 
   return (

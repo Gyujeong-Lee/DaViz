@@ -72,14 +72,13 @@ export default function DataPreview({ data }) {
   const [columnList, setColumnList] = useState([]);
 
   useEffect(() => {
-    // column 7개 출력
     const column = data.columns.split('|');
     setColumnList(column);
     let columnNames = [];
-    if (column.length < 7) {
-      columnNames = column.slice(0, column.length - 1).join(', ');
+    if (column.length < 10) {
+      columnNames = column.slice(0, column.length - 1).join(' / ');
     } else {
-      columnNames = column.slice(0, 6).join(', ');
+      columnNames = column.slice(0, 11).join(' / ');
       columnNames += ' ...';
     }
     setColumns(columnNames);

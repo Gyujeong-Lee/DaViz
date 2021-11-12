@@ -146,8 +146,7 @@ function DetailOverall({ match }) {
         setOverallId(id);
         setOverallLoading(true);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setOverallLoading(true);
       });
   };

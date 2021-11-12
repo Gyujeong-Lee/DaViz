@@ -33,7 +33,6 @@ export default function DataTable(props) {
   const overallDatas = useRecoilValue(overallDataState);
   const overallOriginDatas = useRecoilValue(overallOriginDataState);
   const overallId = useRecoilValue(overallIdState);
-  // const [originData, setOriginData] = useState([]);
 
   useEffect(() => {
     if (overallDatas.length > 0 && overallId !== key) {

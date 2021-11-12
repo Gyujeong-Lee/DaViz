@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useRecoilState } from 'recoil';
 import { loadingstate } from '../recoil/homeAtom';
 
-export default function DelayingAppearance() {
+export default function Loading() {
   const [loading] = useRecoilState(loadingstate);
   const timerRef = React.useRef();
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
@@ -89,15 +89,18 @@ const EraseButton = styled.div`
 const BoxPlotWrapper = styled.div`
   width: 25%;
   max-width: 30%;
+  width: 20rem;
 `;
 const HistogramWrapper = styled.div`
   width: 25%;
   max-width: 30%;
+  width: 20rem;
 `;
 
 const DoughnutWrapper = styled.div`
   width: 25%;
   max-width: 30%;
+  width: 20rem;
 `;
 
 const GraphWrapper = styled.div`
@@ -116,6 +119,27 @@ const ScrollWrapper = styled.div`
   margin-bottom: 3rem;
   margin-top: 1rem;
 `;
+
+// Tooltips
+const NullErase = `
+Null 값이 포함된 행이 삭제됩니다.
+`;
+const modifiedZScore = `
+p-value 값이 0.5보다 큼 > 'modified z-score' 사용
+`;
+
+const IQR = `
+정규분포를 따르지 않고 왜도 절대값이 2 이하 > 'IQR' 사용
+`;
+
+const SIQR = `
+정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
+`;
+
+const NoOutliers = `
+Outliers가 존재하지 않습니다.
+`;
+
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -137,35 +161,15 @@ function SelectButton({ id }) {
 
 function DetailColumn({ match }) {
   const history = useHistory();
-  const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
-  // 히스토그램에 보내줄 x, y축 정보만
-  const [columns, setColumns] = useState([]);
   const overallInfos = useRecoilValue(overallInfoState);
+  const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
+  const [filterCondition, setFilterCondition] =
+    useRecoilState(filterConditionState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const [originalColumnDatas, setOriginColumnDatas] =
     useRecoilState(originColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
-  const [filterCondition, setFilterCondition] =
-    useRecoilState(filterConditionState);
   const config = { stiffness: detailDatas.length <= 4 ? 3 : 100 };
-  const NullErase = `
-    Null 값이 포함된 행이 삭제됩니다.
-  `;
-  const modifiedZScore = `
-    p-value 값이 0.5보다 큼 > 'modified z-score' 사용
-  `;
-
-  const IQR = `
-    정규분포를 따르지 않고 왜도 절대값이 2 이하 > 'IQR' 사용
-  `;
-
-  const SIQR = `
-    정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
-  `;
-
-  const NoOutliers = `
-    Outliers가 존재하지 않습니다.
-  `;
 
   const {
     params: { id }
@@ -236,13 +240,11 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
-        console.log(res);
         let tmp = res.data.data;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
         }
         const tempDetail = [];
-        console.log(tmp, typeof tmp, 'tmp');
         if (tmp !== undefined) {
           for (let i = 0; i < tmp.length; i++) {
             const data = {
@@ -263,13 +265,11 @@ function DetailColumn({ match }) {
         }
       })
       .catch((err) => {
-        console.log(err, 'err');
+        console.log(err);
       });
   };
   // null 제거
   const deleteNull = (index) => {
-    console.log(filterCondition.join('&'));
-    console.log(detailDatas[index], 'delete-null');
     const temp = [];
     filterCondition.forEach((item) => {
       if (detailDatas[index].col_name === item.slice(0, item.length - 3)) {
@@ -291,8 +291,6 @@ function DetailColumn({ match }) {
 
   // 아웃라이어 제거
   const deleteOutlier = (index) => {
-    console.log(index, 'delete-outlier');
-    console.log(filterCondition[index]);
     const temp = [];
     filterCondition.forEach((item) => {
       if (detailDatas[index].col_name === item.slice(0, item.length - 3)) {
@@ -315,18 +313,6 @@ function DetailColumn({ match }) {
   useEffect(() => {
     getDetailData();
     getDataSets();
-    // x, y축 전처리 위해 추가 코드
-    if (detailDatas.length > 0) {
-      detailDatas.forEach((data) => {
-        const column = {
-          dtype: data.dtype,
-          xAxis: data.x_axis.split('|'),
-          yAxis: data.y_axis.split('|')
-        };
-        setColumns(column);
-        console.log(columns);
-      });
-    }
     return () => {
       setDetailDatas([]);
       setOriginColumnDatas([]);
@@ -490,18 +476,18 @@ function DetailColumn({ match }) {
             <GraphWrapper>
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
-                <BoxPlotWrapper style={{ width: '15rem' }}>
+                <BoxPlotWrapper>
                   <BoxPlotChart detail={detailData} />
                 </BoxPlotWrapper>
               ) : (
-                <DoughnutWrapper style={{ width: '15rem' }}>
+                <DoughnutWrapper>
                   <DoughnutChart
                     xAxis={detailData.xAxis}
                     yAxis={detailData.yAxis}
                   />
                 </DoughnutWrapper>
               )}
-              <HistogramWrapper style={{ width: '15rem' }}>
+              <HistogramWrapper>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
               <DataStatistics
