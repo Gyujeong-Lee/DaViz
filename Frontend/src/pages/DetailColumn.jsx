@@ -269,19 +269,16 @@ function DetailColumn({ match }) {
   // null 제거
   const deleteNull = (index) => {
     console.log(filterCondition.join('&'));
-    console.log(index, 'delete-null');
+    console.log(detailDatas[index], 'delete-null');
     const temp = [];
     filterCondition.forEach((item) => {
-      if (
-        filterCondition[index].slice(0, filterCondition[index].length - 3) ===
-        item.slice(0, item.length - 3)
-      ) {
+      if (detailDatas[index].col_name === item.slice(0, item.length - 3)) {
         const isNull = Number(item.slice(item.length - 2, item.length - 1));
         const isOutlier = Number(item.slice(item.length - 1, item.length));
         if (isNull === 1) {
-          temp.push(`${item.slice(0, item.length - 3)}=0${isOutlier}`);
+          temp.push(`${detailDatas[index].col_name}=0${isOutlier}`);
         } else if (isNull === 0) {
-          temp.push(`${item.slice(0, item.length - 3)}=1${isOutlier}`);
+          temp.push(`${detailDatas[index].col_name}=1${isOutlier}`);
         }
       } else {
         temp.push(item);
@@ -298,16 +295,13 @@ function DetailColumn({ match }) {
     console.log(filterCondition[index]);
     const temp = [];
     filterCondition.forEach((item) => {
-      if (
-        filterCondition[index].slice(0, filterCondition[index].length - 3) ===
-        item.slice(0, item.length - 3)
-      ) {
+      if (detailDatas[index].col_name === item.slice(0, item.length - 3)) {
         const isNull = Number(item.slice(item.length - 2, item.length - 1));
         const isOutlier = Number(item.slice(item.length - 1, item.length));
         if (isOutlier === 1) {
-          temp.push(`${item.slice(0, item.length - 3)}=${isNull}0`);
+          temp.push(`${detailDatas[index].col_name}=${isNull}0`);
         } else if (isOutlier === 0) {
-          temp.push(`${item.slice(0, item.length - 3)}=${isNull}1`);
+          temp.push(`${detailDatas[index].col_name}=${isNull}1`);
         }
       } else {
         temp.push(item);
