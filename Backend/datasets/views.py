@@ -363,8 +363,10 @@ def filter(request, dataset_id, condition):
                 result[key] = str(val)
 
         if result['dtype'] == 'int64':
-            result['min_val'] = int(result['min_val'])
-            result['max_val'] = int(result['max_val'])
+            if not result['min_val']:
+                result['min_val'] = int(result['min_val'])
+            if not result['max_val']:
+                result['max_val'] = int(result['max_val'])
 
         results.append(result)
 

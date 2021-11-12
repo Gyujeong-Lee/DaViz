@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 
 const CardContents = styled(CardContent)`
   background-color: #0076be;
-  width: 280px;
-  height: 260px;
+  width: 320px;
+  height: 240px;
   color: white;
   li {
     color: white;
@@ -15,7 +15,7 @@ const CardContents = styled(CardContent)`
     color: white;
   }
   #stat_top {
-    width: 260px;
+    width: 300px;
     margin-left: 10px;
   }
   #stat_top > div {
