@@ -53,8 +53,8 @@ const DoughnutChart = ({ xAxis, yAxis }) => {
         }
       },
       scales: {
-        y: {
-          beginAtZero: true
+        yAxis: {
+          display: false
         }
       }
     }
