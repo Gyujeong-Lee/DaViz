@@ -178,7 +178,7 @@ function DetailOverall({ match }) {
             </Title>
             <Buttons style={{ marginTop: '0px' }}>
               <Button className="back" onClick={goDL}>
-                Back
+                List
               </Button>
               <Button className="home" onClick={goHome}>
                 Home

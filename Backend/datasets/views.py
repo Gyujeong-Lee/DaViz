@@ -97,13 +97,14 @@ def upload(request, format=None):
         print('잘못된 형식입니다.')
         return Response({'messages': 'csv 파일 형식만 지원합니다.'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-    print(time.time() -s)
+    print('통신 및 검사 : {}'.format(time.time()-s))
 
     #dataframe(원본 데이터)을 DB에 저장
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
     df.to_sql(name='{}|{}'.format(file_name, td_by_day), con=db_connection, if_exists='replace', index=True)
-    print(time.time() -s)
+    print('table 생성 : {}'.format(time.time()-s))
+
 
     serializers = DataInfoSerializer(data=request.data)
     #유효성 검사
@@ -160,7 +161,7 @@ def upload(request, format=None):
         # DB에 저장 (table append)
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
-        print(time.time() -s)
+        print('기본 분석 결과 저장 : {}'.format(time.time()-s))
         new_df = df.loc[0:100]
         origin = new_df.to_json(orient="split")
         result = stat_df.to_json(orient='split')
@@ -228,6 +229,10 @@ def detail(request, dataset_id):
 ##컬럼내용 url로 입력받음, 해당 컬럼 분기 처리하여 재분석
 @api_view(['GET'])
 def filter(request, dataset_id, condition):
+    # 시간 측정과 네이밍을 위해
+    s = time.time()
+    td = datetime.date.today()
+
     #column 뽑아내기
     #val = 1 -> filter o // val = 0 -> filter x 
     conditions = condition.split('&')
@@ -245,9 +250,10 @@ def filter(request, dataset_id, condition):
     table_name = str(dataset_info.file) + '|' + create_date
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
-    
+
     #위에서 정의한 컬럼만 읽어온다.
     df = pd.read_sql(table_name, con=db_connection)
+    print('불러오기 : {}'.format(time.time()-s))
     df_cols = list(df.columns)
     columns = sorted(conditions_dict.keys(), key=lambda x:df_cols.index(x))
 
@@ -347,6 +353,8 @@ def filter(request, dataset_id, condition):
 
         results.append(result)
 
+    print('통계치 계산 : {}'.format(time.time()-s))
+    
     data = {
         'data' : results,
     }
