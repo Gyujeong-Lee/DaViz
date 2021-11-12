@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 const CardContents = styled(CardContent)`
   background-color: #0076be;
   width: 280px;
-  height: 250px;
+  height: 260px;
   color: white;
   li {
     color: white;
@@ -103,13 +103,13 @@ export default function DataStatistics(props) {
               <span>Q1 / Q2 / Q3</span>
               <span>
                 <span>
-                  {typeof data.q1 === 'number' ? data.q1.toFixed(3) : data.q1} /{' '}
+                  {typeof data.q1 === 'number' ? data.q1.toFixed(2) : data.q1} /{' '}
                 </span>
                 <span>
-                  {typeof data.q2 === 'number' ? data.q2.toFixed(3) : data.q2} /{' '}
+                  {typeof data.q2 === 'number' ? data.q2.toFixed(2) : data.q2} /{' '}
                 </span>
                 <span>
-                  {typeof data.q3 === 'number' ? data.q3.toFixed(3) : data.q3}
+                  {typeof data.q3 === 'number' ? data.q3.toFixed(2) : data.q3}
                 </span>
               </span>
             </div>

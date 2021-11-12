@@ -315,20 +315,25 @@ def filter(request, dataset_id, condition):
             lc = q1 - 1.5*iqr
             uc = q3 + 1.5*iqr
             box = now_col[(now_col>=lc)&(now_col<=uc)]
-
+            if len(unique.values) == 0:
+                mode = None
+                p_value = None
+            else:
+                mode = unique.values[0]
+                p_value = shapiro(now_col.dropna().values).pvalue
             result = {
                 'col_name' : col,
                 'mean' : col_describe['mean'],
                 'std' : now_col.std(),
                 'min_val' : col_describe['min'],
                 'max_val' : col_describe['max'],
-                'mode' : unique.values[0],
+                'mode' : mode,
                 'dtype' : df[col].dtype,
                 'unique_cnt' : len(unique),
                 'x_axis' : x_axis,
                 'y_axis' : y_axis,
                 'null_cnt' : df[col].isna().sum(),
-                'p_value' : shapiro(now_col.dropna().values).pvalue,
+                'p_value' : p_value,
                 'skewness' : now_col.skew(),
                 'q1' : q1,
                 'q2' : col_describe['50%'],

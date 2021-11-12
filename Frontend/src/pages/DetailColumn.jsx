@@ -83,7 +83,7 @@ const Buttons = styled.div`
 const EraseButton = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 10px;
+  margin-top: 7px;
 `;
 
 const BoxPlotWrapper = styled.div`
@@ -134,12 +134,6 @@ function SelectButton({ id }) {
     </Buttons>
   );
 }
-
-// function Outliers() {
-//   return (
-
-//   );
-// }
 
 function DetailColumn({ match }) {
   const history = useHistory();
@@ -286,6 +280,21 @@ function DetailColumn({ match }) {
     // detailDatas 업데이트
     getFilteredDetailData(temp);
   };
+
+  // onclick 버튼 디자인
+  // const [currentClick, setCurrentClick] = useState(null);
+  // const GetClick = (e) => {
+  //   setCurrentClick(e.target.id);
+  // };
+
+  // userEffect(
+  //   (e) => {
+  //     if (currentClick !== null) {
+  //       let current = document.getElementById(currentClick);
+  //       current.style.variant = "contained";
+  //     }
+  //   }
+  // )
 
   // 아웃라이어 제거
   const deleteOutlier = (index) => {
