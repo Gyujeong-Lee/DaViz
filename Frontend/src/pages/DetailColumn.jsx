@@ -288,21 +288,6 @@ function DetailColumn({ match }) {
     getFilteredDetailData(temp);
   };
 
-  // onclick 버튼 디자인
-  // const [currentClick, setCurrentClick] = useState(null);
-  // const GetClick = (e) => {
-  //   setCurrentClick(e.target.id);
-  // };
-
-  // userEffect(
-  //   (e) => {
-  //     if (currentClick !== null) {
-  //       let current = document.getElementById(currentClick);
-  //       current.style.variant = "contained";
-  //     }
-  //   }
-  // )
-
   // 아웃라이어 제거
   const deleteOutlier = (index) => {
     console.log(index, 'delete-outlier');
