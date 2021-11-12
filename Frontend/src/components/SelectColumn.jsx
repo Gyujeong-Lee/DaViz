@@ -59,40 +59,48 @@ export default function MultipleSelect({ id }) {
     console.log(columns, 'set columns');
   };
 
-  const submitSelect = () => {
+  const submitSelect = async () => {
     setSelectedColumns(columns);
     // axios 요청 보내기
     let filterCondition = '';
     for (let i = 0; i < columns.length; i++) {
-      filterCondition += `${columns[i]}=00&`;
       if (i === columns.length - 1) {
         filterCondition += `${columns[i]}=00`;
+      } else {
+        filterCondition += `${columns[i]}=00&`;
       }
     }
     console.log(filterCondition, 'filterCondition');
     setFilterCondition(filterCondition.split('&'));
-    axios
+    await axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
-        const tmp = res.data.data;
-        const tempDetail = [];
-        for (let i = 0; i < tmp.length; i++) {
-          const data = {
-            xAxis: tmp[i].x_axis.split('|'),
-            yAxis: tmp[i].y_axis.split('|'),
-            detailBoxPlot: [
-              tmp[i].min_val,
-              tmp[i].max_val,
-              tmp[i].q1,
-              tmp[i].q2,
-              tmp[i].q3
-            ],
-            ...tmp[i]
-          };
-          tempDetail.push(data);
+        console.log(res.data, 'res.data');
+        console.log(typeof res.data.data, '데이터타입');
+        let tmp = res.data.data;
+        if (typeof res.data.data === 'string') {
+          tmp = JSON.parse([res.data.data]);
         }
-        setDetailDatas(tempDetail);
-        setOriginColumnDatas(tempDetail);
+        const tempDetail = [];
+        if (tmp !== undefined) {
+          for (let i = 0; i < tmp.length; i++) {
+            const data = {
+              xAxis: tmp[i].x_axis.split('|'),
+              yAxis: tmp[i].y_axis.split('|'),
+              detailBoxPlot: [
+                tmp[i].min_val,
+                tmp[i].max_val,
+                tmp[i].q1,
+                tmp[i].q2,
+                tmp[i].q3
+              ],
+              ...tmp[i]
+            };
+            tempDetail.push(data);
+          }
+          setDetailDatas(tempDetail);
+          setOriginColumnDatas(tempDetail);
+        }
       })
       .catch((err) => {
         console.log(err, 'err');
