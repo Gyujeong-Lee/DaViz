@@ -78,7 +78,7 @@ export default function MultipleSelect({ id }) {
         console.log(res.data, 'res.data');
         console.log(typeof res.data.data, '데이터타입');
         let tmp = res.data.data;
-        if (typeof res.data.data === 'string') {
+        if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
         }
         const tempDetail = [];

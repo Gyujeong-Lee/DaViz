@@ -234,7 +234,7 @@ function DetailColumn({ match }) {
       .then((res) => {
         console.log(res);
         let tmp = res.data.data;
-        if (typeof res.data.data === 'string') {
+        if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
         }
         const tempDetail = [];
