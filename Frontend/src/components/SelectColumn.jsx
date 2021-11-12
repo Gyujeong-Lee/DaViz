@@ -64,9 +64,10 @@ export default function MultipleSelect({ id }) {
     // axios 요청 보내기
     let filterCondition = '';
     for (let i = 0; i < columns.length; i++) {
-      filterCondition += `${columns[i]}=00&`;
       if (i === columns.length - 1) {
         filterCondition += `${columns[i]}=00`;
+      } else {
+        filterCondition += `${columns[i]}=00&`;
       }
     }
     console.log(filterCondition, 'filterCondition');

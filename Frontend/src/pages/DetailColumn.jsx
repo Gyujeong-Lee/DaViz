@@ -232,6 +232,8 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
+        console.log(res.data);
+        console.log(typeof res.data);
         const tmp = res.data.data;
         const tempDetail = [];
         for (let i = 0; i < tmp.length; i++) {
