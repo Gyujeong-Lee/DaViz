@@ -75,11 +75,6 @@ export default function MultipleSelect({ id }) {
     await axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
-        console.log(res);
-        console.log(res.data, 'res.data');
-        console.log(res.data.data, 'res.data.data');
-        console.log(typeof res.data, '데이터타입');
-        console.log(typeof res.data.data, '데이터타입');
         let tmp = res.data.data;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
@@ -123,7 +118,7 @@ export default function MultipleSelect({ id }) {
     <div>
       <ButtonContainer>
         <Button variant="outlined" size="small" onClick={resetSelect}>
-          RESET
+          Cancel
         </Button>
         <Button variant="outlined" size="small" onClick={submitSelect}>
           APPLY
