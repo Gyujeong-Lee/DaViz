@@ -377,9 +377,12 @@ function DetailColumn({ match }) {
                       <Button
                         sx={{ m: 1 }}
                         variant={
-                          Array.from(filterCondition)
-                            .join('&')
-                            .includes(`${detailData.col_name}=0`)
+                          Array.from(filterCondition).includes(
+                            `${detailData.col_name}=00`
+                          ) ||
+                          Array.from(filterCondition).includes(
+                            `${detailData.col_name}=01`
+                          )
                             ? 'outlined'
                             : 'contained'
                         }
@@ -396,7 +399,14 @@ function DetailColumn({ match }) {
                         <Tooltip title={NoOutliers}>
                           <Button
                             sx={{ m: 1 }}
-                            variant="outlined"
+                            variant={
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=00`
+                              ) ||
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=10`
+                              )
+                            }
                             color="primary"
                             onClick={() => deleteOutlier(index)}
                           >
@@ -411,12 +421,12 @@ function DetailColumn({ match }) {
                             <Button
                               sx={{ m: 1 }}
                               variant={
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=00`) ||
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=10`)
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=00`
+                                ) ||
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=10`
+                                )
                                   ? 'outlined'
                                   : 'contained'
                               }
@@ -433,12 +443,12 @@ function DetailColumn({ match }) {
                             <Button
                               sx={{ m: 1 }}
                               variant={
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=00`) ||
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=10`)
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=00`
+                                ) ||
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=10`
+                                )
                                   ? 'outlined'
                                   : 'contained'
                               }
@@ -455,12 +465,12 @@ function DetailColumn({ match }) {
                             <Button
                               sx={{ m: 1 }}
                               variant={
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=00`) ||
-                                Array.from(filterCondition)
-                                  .join('&')
-                                  .includes(`${detailData.col_name}=10`)
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=00`
+                                ) ||
+                                Array.from(filterCondition).includes(
+                                  `${detailData.col_name}=10`
+                                )
                                   ? 'outlined'
                                   : 'contained'
                               }
