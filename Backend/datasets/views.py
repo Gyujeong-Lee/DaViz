@@ -68,7 +68,7 @@ def graph_axis(now_col):
 def upload(request, format=None):
     csv_file = request.FILES['file']
     file_name = csv_file.name
-
+    print(type(csv_file))
     # 시간 측정과 네이밍을 위해
     s = time.time()
     td = datetime.date.today()
@@ -104,20 +104,23 @@ def upload(request, format=None):
     db_connection = create_engine(db_connection_str)
     df.to_sql(name='{}|{}'.format(file_name, td_by_day), con=db_connection, if_exists='replace', index=True)
     print('table 생성 : {}'.format(time.time()-s))
-
-
+        
     serializers = DataInfoSerializer(data=request.data)
+
     #유효성 검사
-    if serializers.is_valid():
+    if serializers.is_valid(raise_exception=True):
+        print(2)
         #원본 데이터 S3 저장
         serializers.save(file = csv_file, row_cnt=row_cnt, columns=columns)
-
+        print('serializer')
         s = time.time()
+
         #기초 통계 내용 분석 후 DB 저장
         info = get_object_or_404(Info_Dataset, file=file_name)
         dataset_id = info.id
         stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'box_min', 'box_max', 'dataset_id'])
-
+        
+        print('pandas')
         cols = df.columns
         for col in cols:
             now_col = df[col]
@@ -157,7 +160,7 @@ def upload(request, format=None):
 
         # dataset_id 저장
         stat_df['dataset_id'] = dataset_id
-
+        print('sql 저장')
         # DB에 저장 (table append)
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
@@ -165,12 +168,15 @@ def upload(request, format=None):
         new_df = df.loc[0:100]
         origin = new_df.to_json(orient="split")
         result = stat_df.to_json(orient='split')
-
+        
+        print('뭐가 문제야')
+        
         overall = {
             'origin': origin,
             'info': serializers.data,
             'result': result
         }
+        
         return JsonResponse(overall, status=status.HTTP_201_CREATED)
 
 
@@ -365,9 +371,13 @@ def filter(request, dataset_id, condition):
         results.append(result)
 
     print('통계치 계산 : {}'.format(time.time()-s))
+    # print('{} {}'.format(type(results), results))
     
     data = {
         'data' : results,
     }
+    #1) data: [{id: 1}, {name: gyu}]
 
+    #2) data: '[{id: 1}, {name: gyu}]'
+    
     return JsonResponse(data, status=status.HTTP_200_OK)
