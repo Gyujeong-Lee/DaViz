@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import Chart from 'chart.js/auto';
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 85%;
+  height: 85%;
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;

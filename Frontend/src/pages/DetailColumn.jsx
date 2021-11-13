@@ -89,7 +89,6 @@ const EraseButton = styled.div`
 const BoxPlotWrapper = styled.div`
   width: 25%;
   max-width: 30%;
-  width: 20rem;
 `;
 const HistogramWrapper = styled.div`
   width: 25%;
@@ -106,7 +105,9 @@ const DoughnutWrapper = styled.div`
 const GraphWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-bottom: 30px;
+  padding-bottom: 2.5rem;
+  padding-top: 2.5rem;
+  border-bottom: 1.5px solid #e0e0e0;
 `;
 
 const DSWrapper = styled.div`
@@ -241,7 +242,6 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
-        console.log(res, '필터링');
         let tmp = res.data.data;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
@@ -467,29 +467,134 @@ function DetailColumn({ match }) {
             <GraphWrapper>
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
-                <BoxPlotWrapper>
+                <BoxPlotWrapper style={{ width: '20rem' }}>
                   <BoxPlotChart detail={detailData} />
                 </BoxPlotWrapper>
               ) : (
-                <DoughnutWrapper>
+                <DoughnutWrapper style={{ width: '20rem' }}>
                   <DoughnutChart
                     xAxis={detailData.xAxis}
                     yAxis={detailData.yAxis}
                   />
                 </DoughnutWrapper>
               )}
-              <HistogramWrapper>
+              <HistogramWrapper style={{ width: '20rem' }}>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
+              <DSWrapper>
+                <DataStatistics
+                  isOrigin
+                  detail={originalColumnDatas[index]}
+                  style={{ width: '15rem' }}
+                />
+
+                <EraseButton>
+                  <Tooltip title={NullErase}>
+                    <Button
+                      sx={{ m: 1 }}
+                      variant={
+                        Array.from(filterCondition).includes(
+                          `${detailData.col_name}=00`
+                        ) ||
+                        Array.from(filterCondition).includes(
+                          `${detailData.col_name}=01`
+                        )
+                          ? 'outlined'
+                          : 'contained'
+                      }
+                      color="secondary"
+                      onClick={() => deleteNull(index)}
+                    >
+                      Null
+                    </Button>
+                  </Tooltip>
+                  {/* 여기서부터 outlier버튼 */}
+                  {/* 즉시발동함수 */}
+                  {(function () {
+                    if (detailData.outlier_cnt === 0) {
+                      return (
+                        <Tooltip title={NoOutliers}>
+                          <Button sx={{ m: 1 }} disabled color="primary">
+                            이상치 없음
+                          </Button>
+                        </Tooltip>
+                      );
+                    } else if (detailData.dtype === 'object') {
+                      return null;
+                    } else if (detailData.p_value > '0.5') {
+                      return (
+                        <Tooltip title={modifiedZScore}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant={
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=00`
+                              ) ||
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=10`
+                              )
+                                ? 'outlined'
+                                : 'contained'
+                            }
+                            color="primary"
+                            onClick={() => deleteOutlier(index)}
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>
+                      );
+                    } else if (Math.abs(detailData.skewness) < 2) {
+                      return (
+                        <Tooltip title={IQR}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant={
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=00`
+                              ) ||
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=10`
+                              )
+                                ? 'outlined'
+                                : 'contained'
+                            }
+                            color="primary"
+                            onClick={() => deleteOutlier(index)}
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>
+                      );
+                    } else {
+                      return (
+                        <Tooltip title={SIQR}>
+                          <Button
+                            sx={{ m: 1 }}
+                            variant={
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=00`
+                              ) ||
+                              Array.from(filterCondition).includes(
+                                `${detailData.col_name}=10`
+                              )
+                                ? 'outlined'
+                                : 'contained'
+                            }
+                            color="primary"
+                            onClick={() => deleteOutlier(index)}
+                          >
+                            Outlier
+                          </Button>
+                        </Tooltip>
+                      );
+                    }
+                  })()}
+                </EraseButton>
+              </DSWrapper>
+              {/* 필터링 적용 후 */}
               <DataStatistics
                 isOrigin={false}
                 detail={detailData}
-                style={{ width: '15rem' }}
-              />
-              {/* 필터링 적용 후 */}
-              <DataStatistics
-                isOrigin
-                detail={originalColumnDatas[index]}
                 style={{ width: '15rem' }}
               />
             </GraphWrapper>

@@ -17,7 +17,7 @@ const BoxPlotChart = (props) => {
   const { detail } = props;
   const chartContainer = useRef(null);
 
-  const label = ['result'];
+  const label = [''];
 
   const chartConfig = {
     type: 'boxplot',
