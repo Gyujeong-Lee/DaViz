@@ -378,23 +378,13 @@ function DetailColumn({ match }) {
                     {/* 즉시발동함수 */}
                     {(function () {
                       if (detailData.outlier_cnt === 0) {
-                        <Tooltip title={NoOutliers}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant={
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=00`
-                              ) ||
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=10`
-                              )
-                            }
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>;
+                        return (
+                          <Tooltip title={NoOutliers}>
+                            <Button sx={{ m: 1 }} disabled color="primary">
+                              이상치 없음
+                            </Button>
+                          </Tooltip>
+                        );
                       } else if (detailData.dtype === 'object') {
                         return null;
                       } else if (detailData.p_value > '0.5') {
@@ -464,7 +454,6 @@ function DetailColumn({ match }) {
                           </Tooltip>
                         );
                       }
-                      return null;
                     })()}
                   </EraseButton>
                 </DSWrapper>
