@@ -1,21 +1,22 @@
-# README :cookie:
+# DaViz (데이비즈):cookie:
 
-### DaViz (데이비즈)
-
-
-
-## 배포 사이트
-
-https://daviz.shop/
+> Data + Visualization
+>
+> 개발 기간 : 10.13 ~ 11.19 (6주)
+>
+> 배포 주소 :  https://daviz.shop/
 
 
 
 ## 목차📚
 
-- 기획 의도
-- 서비스 소개
+- [기획 의도](#기획-의도)
+- [서비스 소개](#서비스-소개)
 
-
+- [개발 스택](#개발-스택)
+- [서비스 구조](#서비스-구조)
+- [Getting Started](#getting-started)
+- [팀원 소개](#팀원-소개)
 
 ## 기획 의도
 
@@ -53,7 +54,7 @@ https://daviz.shop/
 > 빅데이터 분석을 위한 데이터셋 feature 시각화 프로그램
 >
 > - [프로토타입](./설계/prototype.pdf)
-> - [기능명세서](./설계/기능 명세서 - 시트1.pdf)
+> - [기능명세서](./설계/기능명세서.pdf)
 > - [Notion](https://www.notion.so/PJT-Daviz-00f38c7cd62d4dfcad1e45f04bc2ad7b)
 
 #### 주요기능
@@ -67,3 +68,101 @@ https://daviz.shop/
     - 범주형 : null
 - 데이터 시각화
   - 데이터 유형에 따라 그에 맞는 그래프를 통해 데이터 분포 시각화
+
+
+
+
+
+## 개발 스택
+
+#### FE
+
+- React, Recoil, react-router, Chart.js, MUI, styled-components
+
+#### BE
+
+- Django REST API, Swagger, MySQL(AWS RDS), Pandas, AWS S3
+
+#### 배포
+
+- AWS EC2, Nginx, gunicorn
+
+#### 협업툴
+
+- JIRA(일정 관리), Gitlab(코드 관리), Notion(내용 정리)
+- Discord, Webex (팀미팅)
+
+
+
+## 서비스 구조
+
+- 시스템 아키텍쳐
+
+![architecture](README.assets/architecture.png)
+
+
+
+
+
+
+
+## Getting Started
+
+> 프로젝트 환경설정
+
+#### Backend (Django)
+
+```bash
+# 가상환경 생성
+$ python -m venv venv
+# 가상환경 활성화
+$ source venv/Scripts/activate
+# requirements 설치
+$ pip install -r requirements.txt
+# migrations
+$ python manage.py migrate
+# 실행
+$ python manage.py runserver
+```
+
+#### Frontend (React)
+
+```bash
+# 라이브러리 설치
+$ npm install
+# React 실행
+$ npm start
+```
+
+#### Server
+
+> 배포문서 참고
+
+
+
+## 팀원 소개
+
+> 담당 역할, 기술
+
+#### 이규정 (Leader)
+
+- Backend
+- API 문서 작성, Swagger
+
+#### 김윤서
+
+- 데이터 분석
+- Frontend
+
+#### 방지환
+
+- Frontend
+  - 페이지 구조 설계 및 개발
+  - 파일 업로드 기능
+  - Chart.js 시각화
+
+#### 정희진
+
+- 데이터 분석
+- Backend
+- 배포
