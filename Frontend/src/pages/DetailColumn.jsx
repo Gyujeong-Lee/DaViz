@@ -187,6 +187,7 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/detail`)
       .then((res) => {
+        console.log('5개 날라오는거', res);
         const tempDetail = [];
         for (let i = 0; i < res.data.length; i++) {
           const data = {
@@ -240,6 +241,7 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
+        console.log(res, '필터링');
         let tmp = res.data.data;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
@@ -375,7 +377,7 @@ function DetailColumn({ match }) {
                     {/* 여기서부터 outlier버튼 */}
                     {/* 즉시발동함수 */}
                     {(function () {
-                      if (detailData.outlier_cnt === '0') {
+                      if (detailData.outlier_cnt === 0) {
                         <Tooltip title={NoOutliers}>
                           <Button
                             sx={{ m: 1 }}
