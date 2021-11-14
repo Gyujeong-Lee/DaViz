@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,6 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import CircularProgress from '@mui/material/CircularProgress';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import {
@@ -13,8 +14,9 @@ import {
   overallOriginDataState,
   overallIdState
 } from '../recoil/overallAtom';
-import Histogram from './charts/Histogram';
-import DoughnutChart from './charts/DoughnutChart';
+
+const Histogram = React.lazy(() => import('./charts/Histogram'));
+const DoughnutChart = React.lazy(() => import('./charts/DoughnutChart'));
 
 const NullData = styled.div`
   display: flex;
@@ -80,9 +82,16 @@ export default function DataTable(props) {
               >
                 {column.xAxis.length > 1 ? (
                   column.dtype === 'int64' || column.dtype === 'float64' ? (
-                    <Histogram xAxis={column.xAxis} yAxis={column.yAxis} />
+                    <Suspense fallback={<CircularProgress />}>
+                      <Histogram xAxis={column.xAxis} yAxis={column.yAxis} />
+                    </Suspense>
                   ) : (
-                    <DoughnutChart xAxis={column.xAxis} yAxis={column.yAxis} />
+                    <Suspense fallback={<CircularProgress />}>
+                      <DoughnutChart
+                        xAxis={column.xAxis}
+                        yAxis={column.yAxis}
+                      />
+                    </Suspense>
                   )
                 ) : (
                   <NullData>
