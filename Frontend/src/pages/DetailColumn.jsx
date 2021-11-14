@@ -188,7 +188,6 @@ function DetailColumn({ match }) {
     axios
       .get(`/datasets/${id}/detail`)
       .then((res) => {
-        console.log('5개 날라오는거', res);
         const tempDetail = [];
         for (let i = 0; i < res.data.length; i++) {
           const data = {
@@ -312,6 +311,99 @@ function DetailColumn({ match }) {
     getFilteredDetailData(temp);
   };
 
+  const NullButton = ({ detailData, index }) => {
+    const { col_name } = detailData;
+    return (
+      <Tooltip title={NullErase}>
+        <Button
+          sx={{ m: 1 }}
+          variant={
+            Array.from(filterCondition).includes(`${col_name}=00`) ||
+            Array.from(filterCondition).includes(`${col_name}=01`)
+              ? 'outlined'
+              : 'contained'
+          }
+          color="secondary"
+          onClick={() => deleteNull(index)}
+        >
+          Null
+        </Button>
+      </Tooltip>
+    );
+  };
+
+  const OutlierButton = ({ detailData, index }) => {
+    const { outlier_cnt, dtype, p_value, skewness, col_name } = detailData;
+    // 즉시발동함수
+    if (outlier_cnt === 0) {
+      return (
+        <Tooltip title={NoOutliers}>
+          <Button sx={{ m: 1 }} disabled color="primary">
+            이상치 없음
+          </Button>
+        </Tooltip>
+      );
+    } else if (dtype === 'object') {
+      return null;
+    } else if (p_value > '0.5') {
+      return (
+        <Tooltip title={modifiedZScore}>
+          <Button
+            sx={{ m: 1 }}
+            variant={
+              Array.from(filterCondition).includes(`${col_name}=00`) ||
+              Array.from(filterCondition).includes(`${col_name}=10`)
+                ? 'outlined'
+                : 'contained'
+            }
+            color="primary"
+            onClick={() => deleteOutlier(index)}
+          >
+            Outlier
+          </Button>
+        </Tooltip>
+      );
+    } else if (Math.abs(skewness) < 2) {
+      return (
+        <Tooltip title={IQR}>
+          <Button
+            sx={{ m: 1 }}
+            variant={
+              Array.from(filterCondition).includes(`${col_name}=00`) ||
+              Array.from(filterCondition).includes(`${col_name}=10`)
+                ? 'outlined'
+                : 'contained'
+            }
+            color="primary"
+            onClick={() => deleteOutlier(index)}
+          >
+            Outlier
+          </Button>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip title={SIQR}>
+          <Button
+            sx={{ m: 1 }}
+            variant={
+              Array.from(filterCondition).includes(
+                `${detailData.col_name}=00`
+              ) ||
+              Array.from(filterCondition).includes(`${detailData.col_name}=10`)
+                ? 'outlined'
+                : 'contained'
+            }
+            color="primary"
+            onClick={() => deleteOutlier(index)}
+          >
+            Outlier
+          </Button>
+        </Tooltip>
+      );
+    }
+  };
+
   useEffect(() => {
     getDetailData();
     getDataSets();
@@ -355,106 +447,8 @@ function DetailColumn({ match }) {
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
                   <EraseButton>
-                    <Tooltip title={NullErase}>
-                      <Button
-                        sx={{ m: 1 }}
-                        variant={
-                          Array.from(filterCondition).includes(
-                            `${detailData.col_name}=00`
-                          ) ||
-                          Array.from(filterCondition).includes(
-                            `${detailData.col_name}=01`
-                          )
-                            ? 'outlined'
-                            : 'contained'
-                        }
-                        color="secondary"
-                        onClick={() => deleteNull(index)}
-                      >
-                        Null
-                      </Button>
-                    </Tooltip>
-                    {/* 여기서부터 outlier버튼 */}
-                    {/* 즉시발동함수 */}
-                    {(function () {
-                      if (detailData.outlier_cnt === 0) {
-                        return (
-                          <Tooltip title={NoOutliers}>
-                            <Button sx={{ m: 1 }} disabled color="primary">
-                              이상치 없음
-                            </Button>
-                          </Tooltip>
-                        );
-                      } else if (detailData.dtype === 'object') {
-                        return null;
-                      } else if (detailData.p_value > '0.5') {
-                        return (
-                          <Tooltip title={modifiedZScore}>
-                            <Button
-                              sx={{ m: 1 }}
-                              variant={
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=00`
-                                ) ||
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=10`
-                                )
-                                  ? 'outlined'
-                                  : 'contained'
-                              }
-                              color="primary"
-                              onClick={() => deleteOutlier(index)}
-                            >
-                              Outlier
-                            </Button>
-                          </Tooltip>
-                        );
-                      } else if (Math.abs(detailData.skewness) < 2) {
-                        return (
-                          <Tooltip title={IQR}>
-                            <Button
-                              sx={{ m: 1 }}
-                              variant={
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=00`
-                                ) ||
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=10`
-                                )
-                                  ? 'outlined'
-                                  : 'contained'
-                              }
-                              color="primary"
-                              onClick={() => deleteOutlier(index)}
-                            >
-                              Outlier
-                            </Button>
-                          </Tooltip>
-                        );
-                      } else {
-                        return (
-                          <Tooltip title={SIQR}>
-                            <Button
-                              sx={{ m: 1 }}
-                              variant={
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=00`
-                                ) ||
-                                Array.from(filterCondition).includes(
-                                  `${detailData.col_name}=10`
-                                )
-                                  ? 'outlined'
-                                  : 'contained'
-                              }
-                              color="primary"
-                              onClick={() => deleteOutlier(index)}
-                            >
-                              Outlier
-                            </Button>
-                          </Tooltip>
-                        );
-                      }
-                    })()}
+                    <NullButton detailData={detailData} index={index} />
+                    <OutlierButton detailData={detailData} index={index} />
                   </EraseButton>
                 </DSWrapper>
               ))}
@@ -487,108 +481,9 @@ function DetailColumn({ match }) {
                   detail={originalColumnDatas[index]}
                   style={{ width: '15rem' }}
                 />
-
                 <EraseButton>
-                  <Tooltip title={NullErase}>
-                    <Button
-                      sx={{ m: 1 }}
-                      variant={
-                        Array.from(filterCondition).includes(
-                          `${detailData.col_name}=00`
-                        ) ||
-                        Array.from(filterCondition).includes(
-                          `${detailData.col_name}=01`
-                        )
-                          ? 'outlined'
-                          : 'contained'
-                      }
-                      color="secondary"
-                      onClick={() => deleteNull(index)}
-                    >
-                      Null
-                    </Button>
-                  </Tooltip>
-                  {/* 여기서부터 outlier버튼 */}
-                  {/* 즉시발동함수 */}
-                  {(function () {
-                    if (detailData.outlier_cnt === 0) {
-                      return (
-                        <Tooltip title={NoOutliers}>
-                          <Button sx={{ m: 1 }} disabled color="primary">
-                            이상치 없음
-                          </Button>
-                        </Tooltip>
-                      );
-                    } else if (detailData.dtype === 'object') {
-                      return null;
-                    } else if (detailData.p_value > '0.5') {
-                      return (
-                        <Tooltip title={modifiedZScore}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant={
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=00`
-                              ) ||
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=10`
-                              )
-                                ? 'outlined'
-                                : 'contained'
-                            }
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>
-                      );
-                    } else if (Math.abs(detailData.skewness) < 2) {
-                      return (
-                        <Tooltip title={IQR}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant={
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=00`
-                              ) ||
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=10`
-                              )
-                                ? 'outlined'
-                                : 'contained'
-                            }
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>
-                      );
-                    } else {
-                      return (
-                        <Tooltip title={SIQR}>
-                          <Button
-                            sx={{ m: 1 }}
-                            variant={
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=00`
-                              ) ||
-                              Array.from(filterCondition).includes(
-                                `${detailData.col_name}=10`
-                              )
-                                ? 'outlined'
-                                : 'contained'
-                            }
-                            color="primary"
-                            onClick={() => deleteOutlier(index)}
-                          >
-                            Outlier
-                          </Button>
-                        </Tooltip>
-                      );
-                    }
-                  })()}
+                  <NullButton detailData={detailData} index={index} />
+                  <OutlierButton detailData={detailData} index={index} />
                 </EraseButton>
               </DSWrapper>
               {/* 필터링 적용 후 */}

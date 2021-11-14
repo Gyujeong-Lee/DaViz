@@ -50,6 +50,7 @@
     "object-shorthand": "off",
     "no-else-return": "off",
     "no-plusplus": "off",
-    "import/no-named-as-default": 0
+    "import/no-named-as-default": 0,
+    "camelcase": "off"
   }
 }
