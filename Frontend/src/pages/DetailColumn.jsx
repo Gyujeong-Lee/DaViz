@@ -126,15 +126,15 @@ const NullErase = `
 Null 값이 포함된 행이 삭제됩니다.
 `;
 const modifiedZScore = `
-p-value 값이 0.5보다 큼 > 'modified z-score' 사용
+p-value 값이 0.5보다 큼 => 'modified z-score' 사용
 `;
 
 const IQR = `
-정규분포를 따르지 않고 왜도 절대값이 2 이하 > 'IQR' 사용
+정규분포를 따르지 않고 왜도 절대값이 2 이하 => 'IQR' 사용
 `;
 
 const SIQR = `
-정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
+정규분포를 따르지 않고 왜도 절대값이 2 초과 => 'SIQR' 사용
 `;
 
 const NoOutliers = `
@@ -252,6 +252,7 @@ function DetailColumn({ match }) {
         const tempDetail = [];
         if (tmp !== undefined) {
           for (let i = 0; i < tmp.length; i++) {
+            console.log(tmp[i].outlier_cnt);
             const data = {
               xAxis: tmp[i].x_axis.split('|'),
               yAxis: tmp[i].y_axis.split('|'),
