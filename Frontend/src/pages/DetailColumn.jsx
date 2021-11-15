@@ -23,6 +23,7 @@ import Histogram from '../components/charts/Histogram';
 import DoughnutChart from '../components/charts/DoughnutChart';
 import SelectColumn from '../components/SelectColumn';
 
+const isClicked = [];
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -252,7 +253,7 @@ function DetailColumn({ match }) {
         const tempDetail = [];
         if (tmp !== undefined) {
           for (let i = 0; i < tmp.length; i++) {
-            console.log(tmp[i].outlier_cnt);
+            // console.log(tmp[i].outlier_cnt);
             const data = {
               xAxis: tmp[i].x_axis.split('|'),
               yAxis: tmp[i].y_axis.split('|'),
@@ -285,6 +286,9 @@ function DetailColumn({ match }) {
           temp.push(`${detailDatas[index].col_name}=0${isOutlier}`);
         } else if (isNull === 0) {
           temp.push(`${detailDatas[index].col_name}=1${isOutlier}`);
+          if (!isClicked.includes(detailDatas[index].col_name)) {
+            isClicked.push(detailDatas[index].col_name);
+          }
         }
       } else {
         temp.push(item);
@@ -305,8 +309,13 @@ function DetailColumn({ match }) {
         const isOutlier = Number(item.slice(item.length - 1, item.length));
         if (isOutlier === 1) {
           temp.push(`${detailDatas[index].col_name}=${isNull}0`);
+          console.log(isClicked);
         } else if (isOutlier === 0) {
           temp.push(`${detailDatas[index].col_name}=${isNull}1`);
+          if (!isClicked.includes(detailDatas[index].col_name)) {
+            console.log(isClicked);
+            isClicked.push(detailDatas[index].col_name);
+          }
         }
       } else {
         temp.push(item);
@@ -341,7 +350,8 @@ function DetailColumn({ match }) {
   const OutlierButton = ({ detailData, index }) => {
     const { outlier_cnt, dtype, p_value, skewness, col_name } = detailData;
     // 즉시발동함수
-    if (outlier_cnt === 0) {
+    // console.log(isClicked.includes(col_name));
+    if (outlier_cnt === 0 && !isClicked.includes(col_name)) {
       return (
         <Tooltip title={NoOutliers}>
           <Button sx={{ m: 1 }} disabled color="primary">
