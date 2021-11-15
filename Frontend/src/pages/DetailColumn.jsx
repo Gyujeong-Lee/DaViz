@@ -5,11 +5,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
-import { overallInfoState } from '../recoil/overallAtom';
+// import { overallInfoState } from '../recoil/overallAtom';
 import {
   detailDataState,
   detailColumnState,
@@ -162,8 +162,9 @@ function SelectButton({ id }) {
 
 function DetailColumn({ match }) {
   const history = useHistory();
-  const overallInfos = useRecoilValue(overallInfoState);
+  // const overallInfos = useRecoilValue(overallInfoState);
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
+  const [datasetName, setName] = useState([]);
   const [filterCondition, setFilterCondition] =
     useRecoilState(filterConditionState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
@@ -231,6 +232,8 @@ function DetailColumn({ match }) {
       .then((res) => {
         const temp = res.data.info.columns.split('|');
         setDetailColumns(temp.splice(0, temp.length - 1));
+        const tmp = res.data.info.file.split('/');
+        setName(tmp[tmp.length - 1].split('.')[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -293,6 +296,7 @@ function DetailColumn({ match }) {
   // 아웃라이어 제거
   const deleteOutlier = (index) => {
     const temp = [];
+
     filterCondition.forEach((item) => {
       if (detailDatas[index].col_name === item.slice(0, item.length - 3)) {
         const isNull = Number(item.slice(item.length - 2, item.length - 1));
@@ -419,7 +423,7 @@ function DetailColumn({ match }) {
         <Title>
           <AlbumIcon />
           <p>
-            {id}. {overallInfos.title}
+            {id}. {datasetName}
           </p>
         </Title>
         <Buttons style={{ marginTop: '0px' }}>
