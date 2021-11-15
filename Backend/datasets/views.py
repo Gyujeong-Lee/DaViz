@@ -118,7 +118,7 @@ def upload(request, format=None):
         #기초 통계 내용 분석 후 DB 저장
         info = get_object_or_404(Info_Dataset, file=file_name)
         dataset_id = info.id
-        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'box_min', 'box_max', 'dataset_id'])
+        stat_df = pd.DataFrame(columns=['col_name', 'mean', 'std', 'min_val', 'max_val', 'mode', 'dtype', 'unique_cnt', 'x_axis', 'y_axis', 'null_cnt', 'p_value', 'skewness', 'q1', 'q2', 'q3', 'box_min', 'box_max', 'outlier_cnt', 'dataset_id'])
         
         print('pandas')
         cols = df.columns
@@ -143,7 +143,7 @@ def upload(request, format=None):
                 
                 # mode(최빈값) 저장
                 if not unique.empty:
-                    stat_df.loc[col, 'mode'] = unique.values[0]
+                    stat_df.loc[col, 'mode'] = unique.index[0]
                 # 정규성검정 p-value & skewness 저장
                 if len(now_col.dropna()) >= 3:
                     stat_df.loc[col, 'p_value'] = shapiro(now_col.dropna().values).pvalue
@@ -151,12 +151,39 @@ def upload(request, format=None):
 
                 # box_min, box_max 저장
                 q1 = stat_df.loc[col, 'q1']
+                q2 = stat_df.loc[col, 'q2']
                 q3 = stat_df.loc[col, 'q3']
                 iqr = q3 - q1
                 lc = q1 - 1.5*iqr
                 uc = q3 + 1.5*iqr
                 box = now_col[(now_col>=lc)&(now_col<=uc)]
                 stat_df.loc[col, ['box_min', 'box_max']] = box.min(), box.max()
+
+                # normal distribution이라 가정 -- > modified Z-score 사용
+                if stat_df.loc[col, 'p_value'] and stat_df.loc[col, 'p_value'] > 0.05:
+                    # 1. 해당 컬럼의 중앙값(median) 계산
+                    median = np.median(now_col)
+                    # 2. MAD 계산 (Median Absolute Deviation)
+                    mad = np.median(abs(now_col - median))
+                    # 3. Modified Z-score 구하기 
+                    modified_z_score = 0.6745 * (now_col - median) / mad
+                    outlier_cnt = len(df[(modified_z_score<-3.5)|(modified_z_score>3.5)])
+                # normal distribution이라는 가정 기각
+                else:
+                    # skewness가 높음 --> SIQR 사용
+                    if abs(now_col.skew()) > 2:
+                        l_siqr = q2 - q1
+                        u_siqr = q3 - q2
+                        lc = q1 - 3*l_siqr
+                        uc = q3 + 3*u_siqr
+                    # skewness가 높지 않음 --> IQR 사용
+                    else:
+                        iqr = q3 - q1
+                        lc = q1 - 1.5*iqr
+                        uc = q3 + 1.5*iqr
+                    outlier_cnt = len(df[(now_col<lc)|(now_col>uc)])
+                
+                stat_df.loc[col, 'outlier_cnt'] = outlier_cnt
 
         # dataset_id 저장
         stat_df['dataset_id'] = dataset_id
@@ -168,8 +195,6 @@ def upload(request, format=None):
         new_df = df.loc[0:100]
         origin = new_df.to_json(orient="split")
         result = stat_df.to_json(orient='split')
-        
-        print('뭐가 문제야')
         
         overall = {
             'origin': origin,
@@ -316,6 +341,7 @@ def filter(request, dataset_id, condition):
         else:
             col_describe = df[col].describe()
             q1 = col_describe['25%']
+            q2 = col_describe['50%']
             q3 = col_describe['75%']
             iqr = q3 - q1
             lc = q1 - 1.5*iqr
@@ -324,10 +350,27 @@ def filter(request, dataset_id, condition):
             if len(unique.values) == 0:
                 mode = None
                 p_value = None
+                outlier_cnt = None
             else:
-                mode = unique.values[0]
+                mode = unique.index[0]
                 p_value = shapiro(now_col.dropna().values).pvalue
-            outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
+
+                if p_value > 0.05:
+                    median = np.median(now_col)
+                    mad = np.median(abs(now_col - median))
+                    modified_z_score = 0.6745 * (now_col - median) / mad
+                    outlier_cnt = len(now_col[(modified_z_score<-3.5)|(modified_z_score>3.5)])
+                else:
+                    if abs(now_col.skew()) > 2:
+                        l_siqr = q2 - q1
+                        u_siqr = q3 - q2
+                        lc = q1 - 3*l_siqr
+                        uc = q3 + 3*u_siqr
+                    else:
+                        iqr = q3 - q1
+                        lc = q1 - 1.5*iqr
+                        uc = q3 + 1.5*iqr
+                    outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
 
             result = {
                 'col_name' : col,
@@ -352,8 +395,6 @@ def filter(request, dataset_id, condition):
             }
         for key, val in result.items():
             if type(val) == np.int64:
-                # print(type(val))
-                # print('dd')
                 result[key] = int(val)
             
             elif type(val) == np.float64:
@@ -361,12 +402,15 @@ def filter(request, dataset_id, condition):
 
             elif type(val) != float and type(val) != int and type(val) != str:
                 result[key] = str(val)
+            
+            if pd.isna(result[key]):
+                result[key] = None
 
-        if result['dtype'] == 'int64':
-            if not result['min_val']:
-                result['min_val'] = int(result['min_val'])
-            if not result['max_val']:
-                result['max_val'] = int(result['max_val'])
+        # if result['dtype'] == 'int64':
+        #     if not result['min_val']:
+        #         result['min_val'] = int(result['min_val'])
+        #     if not result['max_val']:
+        #         result['max_val'] = int(result['max_val'])
 
         results.append(result)
 

@@ -31,3 +31,4 @@ class Basic_Result(models.Model):
     q3 = models.FloatField(blank=True, null=True)
     box_min = models.FloatField(blank=True, null=True)
     box_max = models.FloatField(blank=True, null=True)
+    outlier_cnt = models.IntegerField(blank=True, null=True)
