@@ -122,6 +122,17 @@ const ScrollWrapper = styled.div`
   margin-top: 1rem;
 `;
 
+const NullWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  max-width: 30%;
+  width: 20rem;
+  font-size: 1.1rem;
+  color: red;
+`;
+
 // Tooltips
 const NullErase = `
 Null 값이 포함된 행이 삭제됩니다.
@@ -136,10 +147,6 @@ const IQR = `
 
 const SIQR = `
 정규분포를 따르지 않고 왜도 절대값이 2 초과 => 'SIQR' 사용
-`;
-
-const NoOutliers = `
-Outliers가 존재하지 않습니다.
 `;
 
 // Overall - Column 전환 버튼
@@ -172,7 +179,7 @@ function DetailColumn({ match }) {
   const [originalColumnDatas, setOriginColumnDatas] =
     useRecoilState(originColumnState);
   const setSelectedColumns = useSetRecoilState(selectedColumnState);
-  const config = { stiffness: detailDatas.length <= 4 ? 3 : 100 };
+  const config = { stiffness: detailDatas.length <= 4 ? 0 : 100 };
 
   const {
     params: { id }
@@ -325,23 +332,41 @@ function DetailColumn({ match }) {
 
   const NullButton = ({ detailData, index }) => {
     const { col_name } = detailData;
-    return (
-      <Tooltip title={NullErase}>
-        <Button
-          sx={{ m: 1 }}
-          variant={
-            Array.from(filterCondition).includes(`${col_name}=00`) ||
-            Array.from(filterCondition).includes(`${col_name}=01`)
-              ? 'outlined'
-              : 'contained'
-          }
-          color="secondary"
-          onClick={() => deleteNull(index)}
-        >
-          Null
+    if (
+      originalColumnDatas === undefined ||
+      originalColumnDatas === null ||
+      originalColumnDatas[index].x_axis.length <= 0
+    )
+      return (
+        <Button sx={{ m: 1 }} disabled color="primary">
+          NULL 100%
         </Button>
-      </Tooltip>
-    );
+      );
+    else if (originalColumnDatas[index].null_cnt === 0) {
+      return (
+        <Button sx={{ m: 1 }} disabled color="primary">
+          NULL 없음
+        </Button>
+      );
+    } else {
+      return (
+        <Tooltip title={NullErase}>
+          <Button
+            sx={{ m: 1 }}
+            variant={
+              Array.from(filterCondition).includes(`${col_name}=00`) ||
+              Array.from(filterCondition).includes(`${col_name}=01`)
+                ? 'outlined'
+                : 'contained'
+            }
+            color="secondary"
+            onClick={() => deleteNull(index)}
+          >
+            Null
+          </Button>
+        </Tooltip>
+      );
+    }
   };
 
   const OutlierButton = ({ detailData, index }) => {
@@ -350,11 +375,9 @@ function DetailColumn({ match }) {
     // console.log(isClicked.includes(col_name));
     if (outlier_cnt === 0 && !isClicked.includes(col_name)) {
       return (
-        <Tooltip title={NoOutliers}>
-          <Button sx={{ m: 1 }} disabled color="primary">
-            이상치 없음
-          </Button>
-        </Tooltip>
+        <Button sx={{ m: 1 }} disabled color="primary">
+          이상치 없음
+        </Button>
       );
     } else if (dtype === 'object') {
       return null;
@@ -487,9 +510,15 @@ function DetailColumn({ match }) {
             <GraphWrapper>
               {detailData.dtype === 'int64' ||
               detailData.dtype === 'float64' ? (
-                <BoxPlotWrapper style={{ width: '20rem' }}>
-                  <BoxPlotChart detail={detailData} />
-                </BoxPlotWrapper>
+                originalColumnDatas !== undefined &&
+                originalColumnDatas !== null &&
+                originalColumnDatas[index].x_axis.length >= 1 ? (
+                  <BoxPlotWrapper style={{ width: '20rem' }}>
+                    <BoxPlotChart detail={detailData} />
+                  </BoxPlotWrapper>
+                ) : (
+                  <NullWrapper>Null [100%]</NullWrapper>
+                )
               ) : (
                 <DoughnutWrapper style={{ width: '20rem' }}>
                   <DoughnutChart
@@ -498,9 +527,18 @@ function DetailColumn({ match }) {
                   />
                 </DoughnutWrapper>
               )}
-              <HistogramWrapper style={{ width: '20rem' }}>
-                <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
-              </HistogramWrapper>
+              {originalColumnDatas !== undefined &&
+              originalColumnDatas !== null &&
+              originalColumnDatas[index].x_axis.length >= 1 ? (
+                <HistogramWrapper style={{ width: '20rem' }}>
+                  <Histogram
+                    xAxis={detailData.xAxis}
+                    yAxis={detailData.yAxis}
+                  />
+                </HistogramWrapper>
+              ) : (
+                <NullWrapper>Null [100%]</NullWrapper>
+              )}
               <DSWrapper>
                 <DataStatistics
                   isOrigin
