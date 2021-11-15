@@ -286,9 +286,6 @@ function DetailColumn({ match }) {
           temp.push(`${detailDatas[index].col_name}=0${isOutlier}`);
         } else if (isNull === 0) {
           temp.push(`${detailDatas[index].col_name}=1${isOutlier}`);
-          if (!isClicked.includes(detailDatas[index].col_name)) {
-            isClicked.push(detailDatas[index].col_name);
-          }
         }
       } else {
         temp.push(item);
@@ -459,6 +456,19 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
           >
             {detailDatas.length >= 1 &&
+              detailDatas.length < 5 &&
+              detailDatas.map((detailData, index) => (
+                <DSWrapper style={{ transform: 'translate(0, 0, 0)' }}>
+                  <div style={{ width: '50%' }}>
+                    <DataStatistics detail={detailData} />
+                  </div>
+                  <EraseButton>
+                    <NullButton detailData={detailData} index={index} />
+                    <OutlierButton detailData={detailData} index={index} />
+                  </EraseButton>
+                </DSWrapper>
+              ))}
+            {detailDatas.length >= 5 &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />
