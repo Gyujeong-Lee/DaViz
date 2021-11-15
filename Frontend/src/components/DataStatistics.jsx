@@ -53,7 +53,7 @@ export default function DataStatistics(props) {
       <CardContents>
         <Typography
           gutterBottom
-          variant="h5"
+          variant="h6"
           component="div"
           style={{
             display: 'flex',

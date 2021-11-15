@@ -5,11 +5,11 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
-import { overallInfoState } from '../recoil/overallAtom';
+// import { overallInfoState } from '../recoil/overallAtom';
 import {
   detailDataState,
   detailColumnState,
@@ -140,7 +140,8 @@ function DetailColumn({ match }) {
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   // 히스토그램에 보내줄 x, y축 정보만
   const [columns, setColumns] = useState([]);
-  const overallInfos = useRecoilValue(overallInfoState);
+  const [datasetName, setName] = useState([]);
+  // const overallInfos = useRecoilValue(overallInfoState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
   const [originalColumnDatas, setOriginColumnDatas] =
     useRecoilState(originColumnState);
@@ -152,15 +153,15 @@ function DetailColumn({ match }) {
     Null 값이 포함된 행이 삭제됩니다.
   `;
   const modifiedZScore = `
-    p-value 값이 0.5보다 큼 > 'modified z-score' 사용
+    p-value 값이 0.5보다 큼 => 'modified z-score' 사용
   `;
 
   const IQR = `
-    정규분포를 따르지 않고 왜도 절대값이 2 이하 > 'IQR' 사용
+    정규분포를 따르지 않고 왜도 절대값이 2 이하 => 'IQR' 사용
   `;
 
   const SIQR = `
-    정규분포를 따르지 않고 왜도 절대값이 2 초과 > 'SIQR' 사용
+    정규분포를 따르지 않고 왜도 절대값이 2 초과 => 'SIQR' 사용
   `;
 
   const {
@@ -222,6 +223,8 @@ function DetailColumn({ match }) {
       .then((res) => {
         const temp = res.data.info.columns.split('|');
         setDetailColumns(temp.splice(0, temp.length - 1));
+        const tmp = res.data.info.file.split('/');
+        setName(tmp[tmp.length - 1].split('.')[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -234,6 +237,7 @@ function DetailColumn({ match }) {
       .then((res) => {
         console.log(res.data);
         console.log(typeof res.data);
+        console.log('1111111111111111111111111111111요청 성공');
         const tmp = res.data.data;
         const tempDetail = [];
         for (let i = 0; i < tmp.length; i++) {
@@ -303,6 +307,7 @@ function DetailColumn({ match }) {
     console.log(index, 'delete-outlier');
     console.log(filterCondition[index]);
     const temp = [];
+
     filterCondition.forEach((item) => {
       if (
         filterCondition[index].slice(0, filterCondition[index].length - 3) ===
@@ -351,7 +356,7 @@ function DetailColumn({ match }) {
         <Title>
           <AlbumIcon />
           <p>
-            {id}. {overallInfos.title}
+            {id}. {datasetName}
           </p>
         </Title>
         <Buttons style={{ marginTop: '0px' }}>
@@ -461,17 +466,9 @@ function DetailColumn({ match }) {
               <HistogramWrapper style={{ width: '15rem' }}>
                 <Histogram xAxis={detailData.xAxis} yAxis={detailData.yAxis} />
               </HistogramWrapper>
-              <DataStatistics
-                isOrigin={false}
-                detail={detailData}
-                style={{ width: '15rem' }}
-              />
+              <DataStatistics isOrigin detail={originalColumnDatas[index]} />
               {/* 필터링 적용 후 */}
-              <DataStatistics
-                isOrigin
-                detail={originalColumnDatas[index]}
-                style={{ width: '15rem' }}
-              />
+              <DataStatistics isOrigin={false} detail={detailData} />
             </GraphWrapper>
           ))}
       </Container>
