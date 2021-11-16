@@ -61,7 +61,7 @@ export default function DataStatistics(props) {
           }}
         >
           <div>
-            # {isOrigin && 'origin'} {data.col_name}
+            # {isOrigin && '(origin)'} {data.col_name}
           </div>
           <div style={{ fontSize: '0.8rem' }}>({data.dtype})</div>
         </Typography>

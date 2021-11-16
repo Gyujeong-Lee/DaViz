@@ -318,10 +318,11 @@ def filter(request, dataset_id, condition):
                     df = df[(now_col>=lc)&(now_col<=uc)]
                 # skewness가 높지 않음 --> IQR 사용
                 else:
-                    iqr = q3 - q1
-                    lc = q1 - 1.5*iqr
-                    uc = q3 + 1.5*iqr
-                    df = df[(now_col>=lc)&(now_col<=uc)]
+                    if pd.notna(q1) and pd.notna(q3):
+                        iqr = q3 - q1
+                        lc = q1 - 1.5*iqr
+                        uc = q3 + 1.5*iqr
+                        df = df[(now_col>=lc)&(now_col<=uc)]
 
     results = []
     for col in columns:
@@ -353,24 +354,32 @@ def filter(request, dataset_id, condition):
                 outlier_cnt = None
             else:
                 mode = unique.index[0]
-                p_value = shapiro(now_col.dropna().values).pvalue
+                if len(now_col) >= 3:
+                    p_value = shapiro(now_col.dropna().values).pvalue
+                else:
+                    p_value = None
 
-                if p_value > 0.05:
+                if p_value and p_value > 0.05:
                     median = np.median(now_col)
                     mad = np.median(abs(now_col - median))
                     modified_z_score = 0.6745 * (now_col - median) / mad
                     outlier_cnt = len(now_col[(modified_z_score<-3.5)|(modified_z_score>3.5)])
                 else:
+                    lc, uc = None, None
                     if abs(now_col.skew()) > 2:
                         l_siqr = q2 - q1
                         u_siqr = q3 - q2
                         lc = q1 - 3*l_siqr
                         uc = q3 + 3*u_siqr
                     else:
-                        iqr = q3 - q1
-                        lc = q1 - 1.5*iqr
-                        uc = q3 + 1.5*iqr
-                    outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
+                        if pd.notna(q1) and pd.notna(q3):
+                            iqr = q3 - q1
+                            lc = q1 - 1.5*iqr
+                            uc = q3 + 1.5*iqr
+                    if lc and uc:
+                        outlier_cnt = len(now_col[(now_col<lc)|(now_col>uc)])
+                    else:
+                        outlier_cnt = None
 
             result = {
                 'col_name' : col,
@@ -406,12 +415,6 @@ def filter(request, dataset_id, condition):
             if pd.isna(result[key]):
                 result[key] = None
 
-        # if result['dtype'] == 'int64':
-        #     if not result['min_val']:
-        #         result['min_val'] = int(result['min_val'])
-        #     if not result['max_val']:
-        #         result['max_val'] = int(result['max_val'])
-
         results.append(result)
 
     print('통계치 계산 : {}'.format(time.time()-s))
@@ -419,6 +422,7 @@ def filter(request, dataset_id, condition):
     
     data = {
         'data' : results,
+        # 'total_cnt' : df.shape[0]
     }
     #1) data: [{id: 1}, {name: gyu}]
 
