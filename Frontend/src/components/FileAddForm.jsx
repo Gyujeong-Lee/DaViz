@@ -159,7 +159,7 @@ export default function FileAddForm() {
         <DialogActions>
           <>
             <Button onClick={handleClose} color="error">
-              Cancel
+              Close
             </Button>
             {loading && (
               <Button onClick={submitData} disabled={buttonActive}>

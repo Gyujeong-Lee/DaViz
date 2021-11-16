@@ -101,6 +101,13 @@ export default function MultipleSelect({ id }) {
   const resetSelect = () => {
     setColumns(selectedColumns);
   };
+  const selectAll = () => {
+    if (selectedColumns === detailColumns) {
+      setSelectedColumns([]);
+    } else {
+      setSelectedColumns(detailColumns);
+    }
+  };
 
   useEffect(() => {
     setColumns(selectedColumns);
@@ -130,6 +137,14 @@ export default function MultipleSelect({ id }) {
             selected.length > 1 ? selected.join(', ') : selected
           }
         >
+          <MenuItem>
+            <Checkbox
+              clicked={Array.from(detailColumns)}
+              onChange={selectAll}
+              label="checkAll"
+            />
+            <ListItemText primary="All" />
+          </MenuItem>
           {Array.from(detailColumns).map((column) => (
             <MenuItem key={column} value={column}>
               <Checkbox checked={Array.from(columns).indexOf(column) !== -1} />

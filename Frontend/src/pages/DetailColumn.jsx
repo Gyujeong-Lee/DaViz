@@ -490,7 +490,17 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
             style={{ paddingBottom: '40px' }}
           >
-            {detailDatas.length >= 1 &&
+            {detailDatas.length === 4 &&
+              detailDatas.map((detailData, index) => (
+                <DSWrapper style={{ marginRight: '0.5rem' }}>
+                  <DataStatistics detail={detailData} />
+                  <EraseButton>
+                    <NullButton detailData={detailData} index={index} />
+                    <OutlierButton detailData={detailData} index={index} />
+                  </EraseButton>
+                </DSWrapper>
+              ))}
+            {detailDatas.length >= 5 &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper style={{ marginRight: '3rem' }}>
                   <DataStatistics detail={detailData} />
