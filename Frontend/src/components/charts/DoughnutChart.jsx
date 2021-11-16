@@ -45,6 +45,7 @@ const DoughnutChart = ({ xAxis, yAxis }) => {
     },
     options: {
       responsive: true,
+      aspectRatio: 0,
       plugins: {
         legend: {
           display: false
