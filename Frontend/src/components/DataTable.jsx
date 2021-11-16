@@ -108,7 +108,12 @@ export default function DataTable(props) {
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 {Array.from(overallOriginData).map((data) => (
-                  <TableCell component="th" scope="row" align="center">
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    align="center"
+                    style={{ wordBreak: 'break-all' }}
+                  >
                     {data}
                   </TableCell>
                 ))}
