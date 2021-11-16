@@ -7,21 +7,23 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useHistory } from 'react-router';
+import { useAlert } from 'react-alert';
 import ScrollHorizontal from 'react-scroll-horizontal';
 import axios from 'axios';
-// import { overallInfoState } from '../recoil/overallAtom';
 import {
   detailDataState,
   detailColumnState,
   selectedColumnState,
   filterConditionState,
-  originColumnState
+  originColumnState,
+  detailLoadingState
 } from '../recoil/detailAtom';
 import DataStatistics from '../components/DataStatistics';
 import BoxPlotChart from '../components/charts/BoxPlotChart';
 import Histogram from '../components/charts/Histogram';
 import DoughnutChart from '../components/charts/DoughnutChart';
 import SelectColumn from '../components/SelectColumn';
+import LoadingDetail from '../components/LoadingDetail';
 
 const isClicked = [];
 const Wrapper = styled.div`
@@ -132,6 +134,11 @@ const NullWrapper = styled.div`
   font-size: 1.1rem;
   color: red;
 `;
+// const LoadingPage = styled.div`
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+// `;
 
 // Tooltips
 const NullErase = `
@@ -170,7 +177,8 @@ function SelectButton({ id }) {
 
 function DetailColumn({ match }) {
   const history = useHistory();
-  // const overallInfos = useRecoilValue(overallInfoState);
+  const alert = useAlert();
+  const [detailLoading, setDetailLoading] = useRecoilState(detailLoadingState);
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   const [datasetName, setName] = useState([]);
   const [filterCondition, setFilterCondition] =
@@ -253,14 +261,12 @@ function DetailColumn({ match }) {
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
         let tmp = res.data.data;
-        // const totalCnt = res.data.total_cnt;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
         }
         const tempDetail = [];
         if (tmp !== undefined) {
           for (let i = 0; i < tmp.length; i++) {
-            // console.log(tmp[i].outlier_cnt);
             const data = {
               xAxis: tmp[i].x_axis.split('|'),
               yAxis: tmp[i].y_axis.split('|'),
@@ -275,11 +281,15 @@ function DetailColumn({ match }) {
             };
             tempDetail.push(data);
           }
+          alert.show('필터 적용이 완료되었습니다.');
           setDetailDatas(tempDetail);
+          setDetailLoading(true);
         }
       })
       .catch((err) => {
         console.log(err);
+        setDetailLoading(true);
+        alert.show('필터 적용 실패');
       });
   };
   // null 제거
@@ -313,11 +323,11 @@ function DetailColumn({ match }) {
         const isOutlier = Number(item.slice(item.length - 1, item.length));
         if (isOutlier === 1) {
           temp.push(`${detailDatas[index].col_name}=${isNull}0`);
-          console.log(isClicked);
+          // console.log(isClicked);
         } else if (isOutlier === 0) {
           temp.push(`${detailDatas[index].col_name}=${isNull}1`);
           if (!isClicked.includes(detailDatas[index].col_name)) {
-            console.log(isClicked);
+            // console.log(isClicked);
             isClicked.push(detailDatas[index].col_name);
           }
         }
@@ -325,6 +335,7 @@ function DetailColumn({ match }) {
         temp.push(item);
       }
     });
+    setDetailLoading(false);
     setFilterCondition(temp);
     // detailDatas 업데이트
     getFilteredDetailData(temp);
@@ -439,7 +450,6 @@ function DetailColumn({ match }) {
       );
     }
   };
-
   useEffect(() => {
     getDetailData();
     getDataSets();
@@ -448,7 +458,7 @@ function DetailColumn({ match }) {
       setOriginColumnDatas([]);
     };
   }, []);
-
+  console.log(detailLoading);
   return (
     <Wrapper>
       <Between>
@@ -472,6 +482,7 @@ function DetailColumn({ match }) {
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
         <h5>* 범주형 데이터는 Null 값 처리만 가능합니다.</h5>
+        {!detailLoading && <LoadingDetail />}
         <ScrollWrapper>
           <ScrollHorizontal
             reverseScroll
@@ -479,19 +490,6 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
           >
             {detailDatas.length >= 1 &&
-              detailDatas.length < 5 &&
-              detailDatas.map((detailData, index) => (
-                <DSWrapper style={{ transform: 'translate(0, 0, 0)' }}>
-                  <div style={{ width: '50%' }}>
-                    <DataStatistics detail={detailData} />
-                  </div>
-                  <EraseButton>
-                    <NullButton detailData={detailData} index={index} />
-                    <OutlierButton detailData={detailData} index={index} />
-                  </EraseButton>
-                </DSWrapper>
-              ))}
-            {detailDatas.length >= 5 &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper>
                   <DataStatistics detail={detailData} />

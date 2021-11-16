@@ -48,3 +48,10 @@ export const originColumnState = atom({
     originColumnDatas: []
   }
 });
+
+export const detailLoadingState = atom({
+  key: 'detailLoading',
+  default: {
+    detailLoading: false
+  }
+});
