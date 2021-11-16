@@ -102,8 +102,6 @@ def upload(request, format=None):
     #dataframe(원본 데이터)을 DB에 저장
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
     db_connection = create_engine(db_connection_str)
-    df.to_sql(name='{}|{}'.format(file_name, td_by_day), con=db_connection, if_exists='replace', index=True)
-    print('table 생성 : {}'.format(time.time()-s))
         
     serializers = DataInfoSerializer(data=request.data)
 
@@ -131,6 +129,12 @@ def upload(request, format=None):
             stat_df.loc[col, 'dtype'] = now_col.dtype
             # null_cnt 저장
             stat_df.loc[col, 'null_cnt'] = now_col.isna().sum()
+
+            if now_col.dtype == np.bool:
+                df[col] = df[col].astype('str')
+                now_col = df[col]
+            print(now_col.dtype)
+
             # unique_cnt 저장
             unique = now_col.value_counts()
             stat_df.loc[col, 'unique_cnt'] = len(unique)
@@ -139,6 +143,7 @@ def upload(request, format=None):
 
             # 데이터 타입이 수치형인 경우 (int, float)
             if now_col.dtype != 'object':
+                print(1)
                 stat_df.loc[col, ['mean', 'std', 'min_val', 'q1', 'q2', 'q3', 'max_val']] = df[col].describe().values[1:]
                 
                 # mode(최빈값) 저장
@@ -201,6 +206,9 @@ def upload(request, format=None):
             'info': serializers.data,
             'result': result
         }
+
+        df.to_sql(name='{}|{}'.format(file_name, td_by_day), con=db_connection, if_exists='replace', index=True)
+        print('table 생성 : {}'.format(time.time()-s))
         
         return JsonResponse(overall, status=status.HTTP_201_CREATED)
 
@@ -333,7 +341,7 @@ def filter(request, dataset_id, condition):
         if df[col].dtype == 'object':
             result = {
                 'col_name' : col,
-                'dtype' : df[col].dtype,
+                'dtype' : get_object_or_404(Basic_Result, dataset=dataset_info, col_name=col).dtype,
                 'unique_cnt' : len(unique),
                 'x_axis' : x_axis,
                 'y_axis' : y_axis,

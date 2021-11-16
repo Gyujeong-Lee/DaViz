@@ -114,7 +114,7 @@ const GraphWrapper = styled.div`
 `;
 
 const DSWrapper = styled.div`
-  margin-right: 3rem;
+  margin-right: 0rem;
 `;
 
 const ScrollWrapper = styled.div`
@@ -488,10 +488,11 @@ function DetailColumn({ match }) {
             reverseScroll
             config={config}
             className="scroll-horizontal"
+            style={{ paddingBottom: '40px' }}
           >
             {detailDatas.length >= 1 &&
               detailDatas.map((detailData, index) => (
-                <DSWrapper>
+                <DSWrapper style={{ marginRight: '3rem' }}>
                   <DataStatistics detail={detailData} />
                   <EraseButton>
                     <NullButton detailData={detailData} index={index} />

@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 const Stat = styled.div`
   width: 300px;
-  height: 240px;
+  height: 280px;
   // color: white;
 
   div {
@@ -17,7 +17,7 @@ const Stat = styled.div`
 const CardContents = styled(CardContent)`
   background-color: #0583d1;
   width: 320px;
-  height: 240px;
+  height: 285px;
   color: white;
   border-radius: 8px;
   h2 {
@@ -28,7 +28,8 @@ const CardContents = styled(CardContent)`
     margin-left: 5px;
   }
   #stat_top > div > span {
-    margin-top: 6px;
+    margin-bottom: 2.5px;
+    margin-top: 2.5px;
     color: white;
   }
   .name > div > span {
@@ -112,26 +113,23 @@ export default function DataStatistics(props) {
                       : data.std}
                   </span>
                 </div>
+                <hr />
                 <div>
-                  <span>Q1 / Q2 / Q3</span>
+                  <span>Q1</span>
                   <span>
-                    <span>
-                      {typeof data.q1 === 'number'
-                        ? data.q1.toFixed(2)
-                        : data.q1}
-                      {'/ '}
-                    </span>
-                    <span>
-                      {typeof data.q2 === 'number'
-                        ? data.q2.toFixed(2)
-                        : data.q2}
-                      {'/ '}
-                    </span>
-                    <span>
-                      {typeof data.q3 === 'number'
-                        ? data.q3.toFixed(2)
-                        : data.q3}
-                    </span>
+                    {typeof data.q1 === 'number' ? data.q1.toFixed(2) : data.q1}
+                  </span>
+                </div>
+                <div>
+                  <span>Q2</span>
+                  <span>
+                    {typeof data.q2 === 'number' ? data.q2.toFixed(2) : data.q2}
+                  </span>
+                </div>
+                <div>
+                  <span>Q3</span>
+                  <span>
+                    {typeof data.q3 === 'number' ? data.q3.toFixed(2) : data.q3}
                   </span>
                 </div>
                 <div>
