@@ -245,7 +245,7 @@ function DetailColumn({ match }) {
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
         let tmp = res.data.data;
-        console.log(typeof tmp);
+        // const totalCnt = res.data.total_cnt;
         if (typeof tmp === 'string') {
           tmp = JSON.parse([res.data.data]);
         }
