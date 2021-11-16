@@ -515,7 +515,7 @@ function DetailColumn({ match }) {
                     <BoxPlotChart detail={detailData} />
                   </BoxPlotWrapper>
                 ) : (
-                  <NullWrapper>Null [100%]</NullWrapper>
+                  <NullWrapper>Null 100%</NullWrapper>
                 )
               ) : (
                 <DoughnutWrapper style={{ width: '20rem' }}>
@@ -535,7 +535,7 @@ function DetailColumn({ match }) {
                   />
                 </HistogramWrapper>
               ) : (
-                <NullWrapper>Null [100%]</NullWrapper>
+                <NullWrapper>Null 100%</NullWrapper>
               )}
               <DSWrapper>
                 <DataStatistics
