@@ -47,11 +47,25 @@ export default function MultipleSelect({ id }) {
   const setDetailDatas = useSetRecoilState(detailDataState);
   const setOriginColumnDatas = useSetRecoilState(originColumnState);
   const setFilterCondition = useSetRecoilState(filterConditionState);
+
+  const selectAll = () => {
+    if (columns.length === detailColumns.length) {
+      setColumns([]);
+    } else {
+      setColumns(detailColumns);
+    }
+  };
+
   const handleChange = (event) => {
-    const {
-      target: { value }
-    } = event;
-    setColumns(typeof value === 'string' ? value.split(',') : value);
+    const temp = event.target.value;
+    if (temp[temp.length - 1] === 'select-all-values') {
+      selectAll();
+    } else {
+      const {
+        target: { value }
+      } = event;
+      setColumns(typeof value === 'string' ? value.split(',') : value);
+    }
   };
 
   const submitSelect = async () => {
@@ -101,13 +115,6 @@ export default function MultipleSelect({ id }) {
   const resetSelect = () => {
     setColumns(selectedColumns);
   };
-  const selectAll = () => {
-    if (selectedColumns === detailColumns) {
-      setSelectedColumns([]);
-    } else {
-      setSelectedColumns(detailColumns);
-    }
-  };
 
   useEffect(() => {
     setColumns(selectedColumns);
@@ -137,9 +144,9 @@ export default function MultipleSelect({ id }) {
             selected.length > 1 ? selected.join(', ') : selected
           }
         >
-          <MenuItem>
+          <MenuItem key="select-all-values" value="select-all-values">
             <Checkbox
-              clicked={Array.from(detailColumns)}
+              checked={columns.length === detailColumns.length}
               onChange={selectAll}
               label="checkAll"
             />
