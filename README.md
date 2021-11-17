@@ -166,3 +166,33 @@ $ npm start
 - 데이터 분석
 - Backend
 - 배포
+
+
+
+## 화면 구성 
+
+#1. 데이터 등록 및 리스트 확인 (메인페이지)
+
+![image-20211117111901573](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117111901573.png)
+
+
+
+#2. 데이터 등록
+
+![image-20211117111937074](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117111937074.png)
+
+#3. 데이터 목록
+
+![image-20211117112000487](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117112000487.png)
+
+#4. 데이터 분석 - overall
+
+![image-20211117112034537](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117112034537.png)
+
+
+
+#4. 데이터 분석 - column
+
+![image-20211117112050222](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117112050222.png)
+
+![image-20211117112104437](C:\Users\multicampus\AppData\Roaming\Typora\typora-user-images\image-20211117112104437.png)
