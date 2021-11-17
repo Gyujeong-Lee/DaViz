@@ -51,7 +51,7 @@ export default function DataStatistics(props) {
       return;
     }
     setData(detail);
-    if (detail.dtype === 'object') {
+    if (detail.dtype === 'object' || detail.dtype === 'bool') {
       setMode(detail.x_axis.split('|')[0]);
     }
   }, [detail]);
