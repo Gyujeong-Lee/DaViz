@@ -460,7 +460,7 @@ function DetailColumn({ match }) {
       setOriginColumnDatas([]);
     };
   }, []);
-  console.log(detailLoading);
+  // console.log(detailLoading);
   return (
     <Wrapper>
       <Between>

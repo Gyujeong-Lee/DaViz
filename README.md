@@ -139,7 +139,6 @@
   
   - 시연화면
   
-    
 - outlier detection
   - 체크 박스를 통해 outlier 제거 전/후의 데이터 feature를 비교 분석
     - 수치형 : outlier, null
@@ -149,7 +148,6 @@
     - IQR 
     - SIQR
   - 시연화면
-  
   
 - 데이터 시각화
 
@@ -200,11 +198,11 @@
 
 - 시스템 아키텍처
 
-![image-20211117162212919](README.assets/image-20211117162212919.png)
+![architecture](README.assets/architecture.png)
 
 - 시퀀스 다이어그램
 
-  ![daviz_sequence_diagram (1)](README.assets/daviz_sequence_diagram (1).png)
+  ![daviz_sequence_diagram](README.assets/daviz_sequence_diagram.png)
 
 
 
@@ -232,7 +230,8 @@
 #### 방지환
 
 - Frontend
-  - 페이지 구조 설계 및 개발
+  - 페이지 구조, 로직 설계 및 개발
+  - ESlint, Prettier 설정
   - 파일 업로드 기능
   - Chart.js 시각화
 
@@ -265,6 +264,16 @@
 
 
 #### 방지환
+
+- Frontend
+
+  ```
+  부족한 시간 안에 목표했던 기능을 구현하는데 집중한 결과 전체적인 구조가 복잡해지게 설계한 것 같다. 그리고 개발 도중 기능을 추가하다 보니 코드가 엄청 길어지게 되었는데, 다음엔 코드를 최대한 분리하고 컴포넌트 설계를 제대로 한다음 프로젝트를 진행해야 겠다.
+  
+  개발을 편하게 하려고 Overall과 Column 페이지를 url을 분리해서 진행했는데 하나로 만드는게 맞는 것 같고, 필터링 이후 데이터를 분석하는 시간이 오래 걸리기 때문에 로딩 페이지를 제대로 만들어서 사용자 편의성을 더 높여야 했는데 못해서 아쉬웠다.
+  
+  그리고 Recoil의 Atom기능만 사용했는데, Selector 기능도 있으니 다음에 Recoil을 사용하면 더 깊게 알아보고 사용해봐야겠다.
+  ```
 
 
 
