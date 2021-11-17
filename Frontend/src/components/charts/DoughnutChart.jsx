@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Chart from 'chart.js/auto';
+import Tooltip from '@mui/material/Tooltip';
 
 const Wrapper = styled.div`
   width: 85%;
@@ -10,10 +11,12 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const mention = `
+  상위 최대 5개의 항목을 보여줍니다.
+`;
 
 const DoughnutChart = ({ xAxis, yAxis }) => {
   const chartContainer = useRef(null);
-
   const chartConfig = {
     type: 'doughnut',
     data: {
@@ -71,7 +74,9 @@ const DoughnutChart = ({ xAxis, yAxis }) => {
 
   return (
     <Wrapper>
-      <canvas ref={chartContainer} />
+      <Tooltip title={mention}>
+        <canvas ref={chartContainer} />
+      </Tooltip>
     </Wrapper>
   );
 };
