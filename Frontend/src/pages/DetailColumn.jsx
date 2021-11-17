@@ -134,6 +134,17 @@ const NullWrapper = styled.div`
   font-size: 1.1rem;
   color: red;
 `;
+
+const AlertColumn = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1rem;
+  color: red;
+  margin-left: 30rem;
+  letter-spacing: 0.1rem;
+`;
+
 // const LoadingPage = styled.div`
 //   position: absolute;
 //   top: 50%;
@@ -180,7 +191,7 @@ function DetailColumn({ match }) {
   const alert = useAlert();
   const [detailLoading, setDetailLoading] = useRecoilState(detailLoadingState);
   const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
-  const [datasetName, setName] = useState([]);
+  const [datasetName, setDatasetName] = useState([]);
   const [filterCondition, setFilterCondition] =
     useRecoilState(filterConditionState);
   const setDetailColumns = useSetRecoilState(detailColumnState);
@@ -249,7 +260,7 @@ function DetailColumn({ match }) {
         const temp = res.data.info.columns.split('|');
         setDetailColumns(temp.splice(0, temp.length - 1));
         const tmp = res.data.info.file.split('/');
-        setName(tmp[tmp.length - 1].split('.')[0]);
+        setDatasetName(tmp[tmp.length - 1].split('.')[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -492,6 +503,11 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
             style={{ paddingBottom: '40px' }}
           >
+            {detailDatas.length < 4 && (
+              <AlertColumn>
+                4개 이상의 column을 선택하면 확인할 수 있습니다.
+              </AlertColumn>
+            )}
             {detailDatas.length === 4 &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper style={{ marginRight: '0.5rem' }}>
