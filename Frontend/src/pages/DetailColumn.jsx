@@ -392,6 +392,8 @@ function DetailColumn({ match }) {
       );
     } else if (dtype === 'object') {
       return null;
+    } else if (dtype === 'bool') {
+      return null;
     } else if (p_value > '0.5') {
       return (
         <Tooltip title={modifiedZScore}>
