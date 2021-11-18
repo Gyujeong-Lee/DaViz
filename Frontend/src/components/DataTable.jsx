@@ -83,13 +83,18 @@ export default function DataTable(props) {
                 {column.xAxis.length > 1 ? (
                   column.dtype === 'int64' || column.dtype === 'float64' ? (
                     <Suspense fallback={<CircularProgress />}>
-                      <Histogram xAxis={column.xAxis} yAxis={column.yAxis} />
+                      <Histogram
+                        xAxis={column.xAxis}
+                        yAxis={column.yAxis}
+                        aspectRatio={columns.length < 4 ? 3.5 : 1}
+                      />
                     </Suspense>
                   ) : (
                     <Suspense fallback={<CircularProgress />}>
                       <DoughnutChart
                         xAxis={column.xAxis}
                         yAxis={column.yAxis}
+                        aspectRatio={columns.length < 4 ? 3.5 : 1}
                       />
                     </Suspense>
                   )
