@@ -259,8 +259,8 @@ function DetailColumn({ match }) {
       .then((res) => {
         const temp = res.data.info.columns.split('|');
         setDetailColumns(temp.splice(0, temp.length - 1));
-        const tmp = res.data.info.file.split('/');
-        setDatasetName(tmp[tmp.length - 1].split('.')[0]);
+        const tmp = res.data.info.title;
+        setName(tmp);
       })
       .catch((err) => {
         console.log(err);

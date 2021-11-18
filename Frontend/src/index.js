@@ -8,9 +8,9 @@ import AlertTemplate from 'react-alert-template-basic';
 
 import App from './App';
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000';
+// axios.defaults.baseURL = 'http://127.0.0.1:8000';
 // 배포용
-// axios.defaults.baseURL = 'https://daviz.shop';
+axios.defaults.baseURL = 'https://daviz.shop';
 
 const options = {
   // you can also just use 'bottom center'
