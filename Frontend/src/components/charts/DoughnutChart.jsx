@@ -15,7 +15,7 @@ const mention = `
   상위 최대 5개의 항목을 보여줍니다.
 `;
 
-const DoughnutChart = ({ xAxis, yAxis }) => {
+const DoughnutChart = ({ xAxis, yAxis, aspectRatio }) => {
   const chartContainer = useRef(null);
   const chartConfig = {
     type: 'doughnut',
@@ -48,7 +48,7 @@ const DoughnutChart = ({ xAxis, yAxis }) => {
     },
     options: {
       responsive: true,
-      aspectRatio: 0,
+      aspectRatio: aspectRatio,
       plugins: {
         legend: {
           display: false

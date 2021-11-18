@@ -11,7 +11,7 @@ const mention = `
   value의 count를 확인할 수 있습니다.
 `;
 
-const Histogram = ({ xAxis, yAxis }) => {
+const Histogram = ({ xAxis, yAxis, aspectRatio }) => {
   const chartContainer = useRef(null);
 
   const chartConfig = {
@@ -31,6 +31,7 @@ const Histogram = ({ xAxis, yAxis }) => {
     },
     options: {
       responsive: true,
+      aspectRatio: aspectRatio,
       plugins: {
         legend: {
           display: false
