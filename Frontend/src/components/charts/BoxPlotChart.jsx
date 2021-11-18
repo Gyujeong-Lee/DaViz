@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Chart from 'chart.js/auto';
 import { BoxPlotController } from '@sgratzl/chartjs-chart-boxplot';
+import Tooltip from '@mui/material/Tooltip';
 
 Chart.register(BoxPlotController);
 
@@ -11,6 +12,9 @@ const Wrapper = styled.div`
     -webkit-user-select: none;
     -ms-user-select: none;
   }
+`;
+const mention = `
+  이상치 범위를 확인할 수 있는 박스플롯입니다.
 `;
 
 const BoxPlotChart = (props) => {
@@ -70,7 +74,9 @@ const BoxPlotChart = (props) => {
 
   return (
     <Wrapper>
-      <canvas ref={chartContainer} width="100" height="100" />
+      <Tooltip title={mention}>
+        <canvas ref={chartContainer} width="100" height="100" />
+      </Tooltip>
     </Wrapper>
   );
 };

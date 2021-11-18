@@ -260,7 +260,7 @@ function DetailColumn({ match }) {
         const temp = res.data.info.columns.split('|');
         setDetailColumns(temp.splice(0, temp.length - 1));
         const tmp = res.data.info.title;
-        setName(tmp);
+        setDatasetName(tmp);
       })
       .catch((err) => {
         console.log(err);

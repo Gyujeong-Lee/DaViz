@@ -1,10 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Chart from 'chart.js/auto';
+import Tooltip from '@mui/material/Tooltip';
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
+`;
+const mention = `
+  value의 count를 확인할 수 있습니다.
 `;
 
 const Histogram = ({ xAxis, yAxis }) => {
@@ -52,7 +56,9 @@ const Histogram = ({ xAxis, yAxis }) => {
 
   return (
     <Wrapper>
-      <canvas ref={chartContainer} width="100" height="100" />
+      <Tooltip title={mention}>
+        <canvas ref={chartContainer} width="100" height="100" />
+      </Tooltip>
     </Wrapper>
   );
 };
