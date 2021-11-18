@@ -137,7 +137,7 @@
   
     - unique value / mode / null_cnt
   
-  - 시연화면
+  - 시연화면(gif)
   
 - outlier detection
   - 체크 박스를 통해 outlier 제거 전/후의 데이터 feature를 비교 분석
@@ -147,7 +147,7 @@
     - Z 검정 : 데이터셋이 정규 분포를 따르는 경우 
     - IQR 
     - SIQR
-  - 시연화면
+  - 시연화면(gif)
   
 - 데이터 시각화
 
@@ -157,7 +157,7 @@
   - 범주형 
     - 도넛차트, 히스토그램
 
-  - 시연화면
+  - 시연화면(gif)
 
 ### UI/UX
 
