@@ -289,6 +289,7 @@ def filter(request, dataset_id, condition):
 
     #위에서 정의한 컬럼만 읽어온다.
     df = pd.read_sql(table_name, con=db_connection)
+    print(df)
     # print('불러오기 : {}'.format(time.time()-s))
     df_cols = list(df.columns)
     columns = sorted(conditions_dict.keys(), key=lambda x:df_cols.index(x))
@@ -331,7 +332,7 @@ def filter(request, dataset_id, condition):
                         lc = q1 - 1.5*iqr
                         uc = q3 + 1.5*iqr
                         df = df[(now_col>=lc)&(now_col<=uc)]
-
+    print(df)
     results = []
     for col in columns:
         now_col = df[col]
