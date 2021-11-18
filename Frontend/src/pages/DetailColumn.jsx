@@ -304,6 +304,7 @@ function DetailColumn({ match }) {
       }
     });
     setFilterCondition(temp);
+    setDetailLoading(false);
     // detailDatas 업데이트
     getFilteredDetailData(temp);
   };
