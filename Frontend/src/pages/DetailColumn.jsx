@@ -135,15 +135,15 @@ const NullWrapper = styled.div`
   color: red;
 `;
 
-const AlertColumn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.1rem;
-  color: red;
-  margin-left: 30rem;
-  letter-spacing: 0.1rem;
-`;
+// const AlertColumn = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   font-size: 1.1rem;
+//   color: red;
+//   margin-left: 30rem;
+//   letter-spacing: 0.1rem;
+// `;
 
 // const LoadingPage = styled.div`
 //   position: absolute;
@@ -503,11 +503,11 @@ function DetailColumn({ match }) {
             className="scroll-horizontal"
             style={{ paddingBottom: '40px' }}
           >
-            {detailDatas.length < 4 && (
+            {/* {detailDatas.length < 4 && (
               <AlertColumn>
                 4개 이상의 column을 선택하면 확인할 수 있습니다.
               </AlertColumn>
-            )}
+            )} */}
             {detailDatas.length === 4 &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper style={{ marginRight: '0.5rem' }}>
@@ -518,7 +518,8 @@ function DetailColumn({ match }) {
                   </EraseButton>
                 </DSWrapper>
               ))}
-            {detailDatas.length >= 5 &&
+            {detailDatas.length >= 1 &&
+              (detailDatas.length < 4 || detailDatas.length >= 5) &&
               detailDatas.map((detailData, index) => (
                 <DSWrapper style={{ marginRight: '3rem' }}>
                   <DataStatistics detail={detailData} />
