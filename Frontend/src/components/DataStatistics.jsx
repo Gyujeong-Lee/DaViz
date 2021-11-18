@@ -7,7 +7,7 @@ const Stat = styled.div`
   width: 300px;
   height: 280px;
   // color: white;
-
+  word-break: break-all;
   div {
     display: flex;
     justify-content: space-between;

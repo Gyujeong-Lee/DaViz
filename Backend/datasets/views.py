@@ -73,7 +73,7 @@ def upload(request, format=None):
     s = time.time()
     td = datetime.date.today()
     td_by_day = td.strftime('%Y%m%d')
-
+    print('{} 통신시간'.format(s))
 
     #같은 데이터셋의 중복
     if Info_Dataset.objects.filter(file= file_name).exists():
@@ -97,7 +97,7 @@ def upload(request, format=None):
         # print('잘못된 형식입니다.')
         return Response({'messages': 'csv 파일 형식만 지원합니다.'}, status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-    # print('통신 및 검사 : {}'.format(time.time()-s))
+    print('통신 및 검사 : {}'.format(time.time()-s))
 
     #dataframe(원본 데이터)을 DB에 저장
     db_connection_str = 'mysql+pymysql://admin:1q2w3e4r5t!@bee.cjkrtt0iwcwz.ap-northeast-2.rds.amazonaws.com/DaViz'
@@ -110,7 +110,6 @@ def upload(request, format=None):
         # print(2)
         #원본 데이터 S3 저장
         serializers.save(file = csv_file, row_cnt=row_cnt, columns=columns)
-        # print('serializer')
         s = time.time()
 
         #기초 통계 내용 분석 후 DB 저장
@@ -192,7 +191,6 @@ def upload(request, format=None):
 
         # dataset_id 저장
         stat_df['dataset_id'] = dataset_id
-        # print('sql 저장')
         # DB에 저장 (table append)
         stat_df.to_sql(name='datasets_basic_result', con=db_connection, if_exists='append', index=False)
 
@@ -207,8 +205,9 @@ def upload(request, format=None):
             'result': result
         }
 
+        print('분석 완료 : {}'.format(time.time()-s))
         df.to_sql(name='{}|{}'.format(file_name, td_by_day), con=db_connection, if_exists='replace', index=True)
-        # print('table 생성 : {}'.format(time.time()-s))
+        print('table 생성 : {}'.format(time.time()-s))
         
         return JsonResponse(overall, status=status.HTTP_201_CREATED)
 
