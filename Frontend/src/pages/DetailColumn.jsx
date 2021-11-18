@@ -135,22 +135,6 @@ const NullWrapper = styled.div`
   color: red;
 `;
 
-// const AlertColumn = styled.div`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   font-size: 1.1rem;
-//   color: red;
-//   margin-left: 30rem;
-//   letter-spacing: 0.1rem;
-// `;
-
-// const LoadingPage = styled.div`
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-// `;
-
 // Tooltips
 const NullErase = `
 Null 값이 포함된 행이 삭제됩니다.
@@ -496,42 +480,28 @@ function DetailColumn({ match }) {
         <SelectColumn id={id} />
         <h5>* 범주형 데이터는 Null 값 처리만 가능합니다.</h5>
         {!detailLoading && <LoadingDetail />}
-        <ScrollWrapper>
-          <ScrollHorizontal
-            reverseScroll
-            config={config}
-            className="scroll-horizontal"
-            style={{ paddingBottom: '40px' }}
-          >
-            {/* {detailDatas.length < 4 && (
-              <AlertColumn>
-                4개 이상의 column을 선택하면 확인할 수 있습니다.
-              </AlertColumn>
-            )} */}
-            {detailDatas.length === 4 &&
-              detailDatas.map((detailData, index) => (
-                <DSWrapper style={{ marginRight: '0.5rem' }}>
-                  <DataStatistics detail={detailData} />
-                  <EraseButton>
-                    <NullButton detailData={detailData} index={index} />
-                    <OutlierButton detailData={detailData} index={index} />
-                  </EraseButton>
-                </DSWrapper>
-              ))}
-            {detailDatas.length >= 1 &&
-              (detailDatas.length < 4 || detailDatas.length >= 5) &&
-              detailDatas.map((detailData, index) => (
-                <DSWrapper style={{ marginRight: '3rem' }}>
-                  <DataStatistics detail={detailData} />
-                  <EraseButton>
-                    <NullButton detailData={detailData} index={index} />
-                    <OutlierButton detailData={detailData} index={index} />
-                  </EraseButton>
-                </DSWrapper>
-              ))}
-          </ScrollHorizontal>
-          <hr />
-        </ScrollWrapper>
+        {detailDatas.length >= 5 && (
+          <ScrollWrapper>
+            <ScrollHorizontal
+              reverseScroll
+              config={config}
+              className="scroll-horizontal"
+              style={{ paddingBottom: '40px' }}
+            >
+              {detailDatas.length >= 1 &&
+                detailDatas.map((detailData, index) => (
+                  <DSWrapper style={{ marginRight: '3rem' }}>
+                    <DataStatistics detail={detailData} />
+                    <EraseButton>
+                      <NullButton detailData={detailData} index={index} />
+                      <OutlierButton detailData={detailData} index={index} />
+                    </EraseButton>
+                  </DSWrapper>
+                ))}
+            </ScrollHorizontal>
+            <hr />
+          </ScrollWrapper>
+        )}
         {/* for 문 */}
         {detailDatas.length >= 1 &&
           detailDatas.map((detailData, index) => (
