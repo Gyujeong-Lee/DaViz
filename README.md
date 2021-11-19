@@ -136,9 +136,7 @@
   - 범주형
   
     - unique value / mode / null_cnt
-  
-  - 시연화면(gif)
-  
+    
 - outlier detection
   - 체크 박스를 통해 outlier 제거 전/후의 데이터 feature를 비교 분석
     - 수치형 : outlier, null
@@ -161,9 +159,7 @@
   
       - 분포가 치우친 경우 (skewness의 절댓값이 2보다 큰 경우)
         - **SIQR**
-  
-  - 시연화면
-  
+    
 - 데이터 시각화
 
   - 수치형
@@ -171,8 +167,6 @@
 
   - 범주형 
     - 도넛차트(doughnut chart), 막대그래프(bar chart)
-
-  - 시연화면(gif)
 
 ### UI/UX
 
