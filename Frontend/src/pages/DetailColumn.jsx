@@ -379,7 +379,10 @@ function DetailColumn({ match }) {
   const OutlierButton = ({ detailData, index }) => {
     const { outlier_cnt, dtype, p_value, skewness, col_name } = detailData;
 
-    if (outlier_cnt === 0 && !isClicked.includes(col_name)) {
+    if (
+      (outlier_cnt === 0 && !isClicked.includes(col_name)) ||
+      originalColumnDatas[index].x_axis.length <= 0
+    ) {
       return (
         <Button sx={{ m: 1 }} disabled color="primary">
           이상치 없음
