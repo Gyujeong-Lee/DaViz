@@ -173,17 +173,19 @@ function SelectButton({ id }) {
 function DetailColumn({ match }) {
   const history = useHistory();
   const alert = useAlert();
+
   const [detailLoading, setDetailLoading] = useRecoilState(detailLoadingState);
-  const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   const [datasetName, setDatasetName] = useState([]);
+
+  const setDetailColumns = useSetRecoilState(detailColumnState);
+  const setSelectedColumns = useSetRecoilState(selectedColumnState);
+  const [detailDatas, setDetailDatas] = useRecoilState(detailDataState);
   const [filterCondition, setFilterCondition] =
     useRecoilState(filterConditionState);
-  const setDetailColumns = useSetRecoilState(detailColumnState);
   const [originalColumnDatas, setOriginColumnDatas] =
     useRecoilState(originColumnState);
-  const setSelectedColumns = useSetRecoilState(selectedColumnState);
-  const config = { stiffness: detailDatas.length <= 4 ? 0 : 100 };
 
+  const config = { stiffness: detailDatas.length <= 4 ? 0 : 100 };
   const {
     params: { id }
   } = match;
@@ -196,8 +198,8 @@ function DetailColumn({ match }) {
     history.push('/datalist');
   };
 
-  const getDetailData = () => {
-    axios
+  const getDetailData = async () => {
+    await axios
       .get(`/datasets/${id}/detail`)
       .then((res) => {
         const tempDetail = [];
@@ -251,8 +253,8 @@ function DetailColumn({ match }) {
       });
   };
 
-  const getFilteredDetailData = (condition) => {
-    axios
+  const getFilteredDetailData = async (condition) => {
+    await axios
       .get(`/datasets/${id}/filter/${condition.join('&')}`)
       .then((res) => {
         let tmp = res.data.data;
@@ -319,11 +321,9 @@ function DetailColumn({ match }) {
         const isOutlier = Number(item.slice(item.length - 1, item.length));
         if (isOutlier === 1) {
           temp.push(`${detailDatas[index].col_name}=${isNull}0`);
-          // console.log(isClicked);
         } else if (isOutlier === 0) {
           temp.push(`${detailDatas[index].col_name}=${isNull}1`);
           if (!isClicked.includes(detailDatas[index].col_name)) {
-            // console.log(isClicked);
             isClicked.push(detailDatas[index].col_name);
           }
         }
@@ -378,8 +378,7 @@ function DetailColumn({ match }) {
 
   const OutlierButton = ({ detailData, index }) => {
     const { outlier_cnt, dtype, p_value, skewness, col_name } = detailData;
-    // 즉시발동함수
-    // console.log(isClicked.includes(col_name));
+
     if (outlier_cnt === 0 && !isClicked.includes(col_name)) {
       return (
         <Button sx={{ m: 1 }} disabled color="primary">
@@ -456,7 +455,7 @@ function DetailColumn({ match }) {
       setOriginColumnDatas([]);
     };
   }, []);
-  // console.log(detailLoading);
+
   return (
     <Wrapper>
       <Between>
@@ -480,7 +479,15 @@ function DetailColumn({ match }) {
         <h2>Column Detail</h2>
         <SelectColumn id={id} />
         <h5>* 범주형 데이터는 Null 값 처리만 가능합니다.</h5>
-        {!detailLoading && <LoadingDetail />}
+        {!detailLoading && (
+          <div className="loading">
+            <LoadingDetail
+              color="primary"
+              className="loading-content"
+              loading={detailLoading}
+            />
+          </div>
+        )}
         {detailDatas.length >= 5 && (
           <ScrollWrapper>
             <ScrollHorizontal

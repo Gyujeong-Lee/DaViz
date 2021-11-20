@@ -21,13 +21,6 @@ export const overallOriginDataState = atom({
   }
 });
 
-export const overallLoadingState = atom({
-  key: 'overallLoading',
-  default: {
-    overallLoading: false
-  }
-});
-
 // 현재 index값 저장
 export const overallIdState = atom({
   key: 'overallId',

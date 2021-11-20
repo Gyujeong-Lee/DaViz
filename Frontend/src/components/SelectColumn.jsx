@@ -15,7 +15,8 @@ import {
   detailColumnState,
   detailDataState,
   filterConditionState,
-  originColumnState
+  originColumnState,
+  detailLoadingState
 } from '../recoil/detailAtom';
 
 const ITEM_HEIGHT = 48;
@@ -45,6 +46,7 @@ export default function MultipleSelect({ id }) {
     useRecoilState(selectedColumnState);
   const [columns, setColumns] = React.useState([]);
   const setDetailDatas = useSetRecoilState(detailDataState);
+  const setDetailLoading = useSetRecoilState(detailLoadingState);
   const setOriginColumnDatas = useSetRecoilState(originColumnState);
   const setFilterCondition = useSetRecoilState(filterConditionState);
 
@@ -79,6 +81,7 @@ export default function MultipleSelect({ id }) {
       }
     }
     setFilterCondition(filterCondition.split('&'));
+    setDetailLoading(false);
     await axios
       .get(`/datasets/${id}/filter/${filterCondition}`)
       .then((res) => {
@@ -105,9 +108,11 @@ export default function MultipleSelect({ id }) {
           }
           setDetailDatas(tempDetail);
           setOriginColumnDatas(tempDetail);
+          setDetailLoading(true);
         }
       })
       .catch((err) => {
+        setDetailLoading(true);
         console.log(err);
       });
   };
@@ -115,6 +120,10 @@ export default function MultipleSelect({ id }) {
   const resetSelect = () => {
     setColumns(selectedColumns);
   };
+
+  useEffect(() => {
+    setDetailLoading(true);
+  }, []);
 
   useEffect(() => {
     setColumns(selectedColumns);

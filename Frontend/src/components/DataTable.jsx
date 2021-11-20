@@ -6,7 +6,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import CircularProgress from '@mui/material/CircularProgress';
 import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import {
@@ -14,6 +13,7 @@ import {
   overallOriginDataState,
   overallIdState
 } from '../recoil/overallAtom';
+import LoadingDetail from './LoadingDetail';
 
 const Histogram = React.lazy(() => import('./charts/Histogram'));
 const DoughnutChart = React.lazy(() => import('./charts/DoughnutChart'));
@@ -74,37 +74,41 @@ export default function DataTable(props) {
           </TableHead>
           {/* Overall 그래프 */}
           <TableHead>
-            {columns.map((column) => (
-              <StickyTableCell
-                key={column.id}
-                align="right"
-                style={{ minWidth: 170, maxWidth: 170 }}
-              >
-                {column.xAxis.length > 1 ? (
-                  column.dtype === 'int64' || column.dtype === 'float64' ? (
-                    <Suspense fallback={<CircularProgress />}>
-                      <Histogram
-                        xAxis={column.xAxis}
-                        yAxis={column.yAxis}
-                        aspectRatio={columns.length < 4 ? 3.5 : 1}
-                      />
-                    </Suspense>
+            <Suspense fallback={<LoadingDetail loading />}>
+              {columns.map((column) => (
+                <StickyTableCell
+                  key={column.id}
+                  align="right"
+                  style={{ minWidth: 170, maxWidth: 170 }}
+                >
+                  {column.xAxis.length > 1 ? (
+                    column.dtype === 'int64' || column.dtype === 'float64' ? (
+                      <Suspense fallback={<LoadingDetail loading={false} />}>
+                        <Histogram
+                          xAxis={column.xAxis}
+                          yAxis={column.yAxis}
+                          aspectRatio={columns.length < 4 ? 3.5 : 1}
+                        />
+                      </Suspense>
+                    ) : (
+                      <Suspense fallback={<LoadingDetail loading={false} />}>
+                        <DoughnutChart
+                          xAxis={column.xAxis}
+                          yAxis={column.yAxis}
+                          aspectRatio={columns.length < 4 ? 3.5 : 1}
+                        />
+                      </Suspense>
+                    )
                   ) : (
-                    <Suspense fallback={<CircularProgress />}>
-                      <DoughnutChart
-                        xAxis={column.xAxis}
-                        yAxis={column.yAxis}
-                        aspectRatio={columns.length < 4 ? 3.5 : 1}
-                      />
+                    <Suspense fallback={<LoadingDetail />}>
+                      <NullData>
+                        <span>[null]</span> <span>100%</span>
+                      </NullData>
                     </Suspense>
-                  )
-                ) : (
-                  <NullData>
-                    <span>[null]</span> <span>100%</span>
-                  </NullData>
-                )}
-              </StickyTableCell>
-            ))}
+                  )}
+                </StickyTableCell>
+              ))}
+            </Suspense>
           </TableHead>
           {/* dataset 원본 row 100개 출력 */}
           <TableBody>

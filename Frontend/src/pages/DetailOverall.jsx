@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AlbumIcon from '@mui/icons-material/Album';
 import styled from 'styled-components';
 import Stack from '@mui/material/Stack';
@@ -12,11 +12,10 @@ import {
   overallDataState,
   overallInfoState,
   overallOriginDataState,
-  overallIdState,
-  overallLoadingState
+  overallIdState
 } from '../recoil/overallAtom';
 import DataTable from '../components/DataTable';
-import LoadingOverall from '../components/LoadingOverall';
+import LoadingDetail from '../components/LoadingDetail';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -86,6 +85,7 @@ const LoadingOverallPage = styled.div`
   top: 50%;
   left: 50%;
 `;
+
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -111,8 +111,7 @@ function DetailOverall({ match }) {
   const setOverallOriginDatas = useSetRecoilState(overallOriginDataState);
   const [overallInfos, setOverallInfos] = useRecoilState(overallInfoState);
   const [overallId, setOverallId] = useRecoilState(overallIdState);
-  const [overallLoading, setOverallLoading] =
-    useRecoilState(overallLoadingState);
+  const [overallLoading, setOverallLoading] = useState(false);
 
   const {
     params: { id }
@@ -164,7 +163,7 @@ function DetailOverall({ match }) {
     <>
       {!overallLoading ? (
         <LoadingOverallPage>
-          <LoadingOverall />
+          <LoadingDetail loading={overallLoading} />
         </LoadingOverallPage>
       ) : (
         <Wrapper>
