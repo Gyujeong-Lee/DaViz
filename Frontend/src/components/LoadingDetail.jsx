@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function LoadingDetail({ color, loading }) {
+export default function LoadingDetail({ size, color, loading }) {
   const timerRef = React.useRef();
 
   React.useEffect(
@@ -17,15 +17,15 @@ export default function LoadingDetail({ color, loading }) {
     <Box
       sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
     >
-      <Box sx={{ height: 60 }}>
+      <Box sx={{ height: 40 }}>
         <Fade
           in={!loading}
           style={{
-            transitionDelay: !loading ? '800ms' : '0ms'
+            transitionDelay: !loading ? '0ms' : '800ms'
           }}
           unmountOnExit
         >
-          <CircularProgress color={color} />
+          <CircularProgress size={size} disableShrink color={color} />
         </Fade>
       </Box>
     </Box>

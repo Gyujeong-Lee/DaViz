@@ -487,6 +487,7 @@ function DetailColumn({ match }) {
             <LoadingDetail
               color="primary"
               className="loading-content"
+              size={75}
               loading={detailLoading}
             />
           </div>

@@ -80,12 +80,6 @@ const SubTitle = styled.div`
   }
 `;
 
-const LoadingOverallPage = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-`;
-
 // Overall - Column 전환 버튼
 function SelectButton({ id }) {
   const history = useHistory();
@@ -161,46 +155,45 @@ function DetailOverall({ match }) {
 
   return (
     <>
-      {!overallLoading ? (
-        <LoadingOverallPage>
-          <LoadingDetail loading={overallLoading} />
-        </LoadingOverallPage>
-      ) : (
-        <Wrapper>
-          <Header>
-            <Title>
-              <AlbumIcon />
-              <p>
-                {id}. {overallInfos.title}
-              </p>
-            </Title>
-            <Buttons style={{ marginTop: '0px' }}>
-              <Button className="back" onClick={goDL}>
-                List
-              </Button>
-              <Button className="home" onClick={goHome}>
-                Home
-              </Button>
-            </Buttons>
-          </Header>
-          <Container maxWidth="xl">
-            <SelectButton id={id} />
-            <SubTitle>
-              <h2># {overallInfos.title}</h2>
-              <Button
-                className="downloadBtn"
-                color="info"
-                onClick={downloadFile}
-                startIcon={<FileDownloadIcon />}
-                variant="contained"
-              >
-                Download
-              </Button>
-            </SubTitle>
-            <DataTable key={id} />
-          </Container>
-        </Wrapper>
+      {!overallLoading && (
+        <div className="loading">
+          <LoadingDetail loading={overallLoading} size={75} />
+        </div>
       )}
+      <Wrapper>
+        <Header>
+          <Title>
+            <AlbumIcon />
+            <p>
+              {id}. {overallInfos.title}
+            </p>
+          </Title>
+          <Buttons style={{ marginTop: '0px' }}>
+            <Button className="back" onClick={goDL}>
+              List
+            </Button>
+            <Button className="home" onClick={goHome}>
+              Home
+            </Button>
+          </Buttons>
+        </Header>
+        <Container maxWidth="xl">
+          <SelectButton id={id} />
+          <SubTitle>
+            <h2># {overallInfos.title}</h2>
+            <Button
+              className="downloadBtn"
+              color="info"
+              onClick={downloadFile}
+              startIcon={<FileDownloadIcon />}
+              variant="contained"
+            >
+              Download
+            </Button>
+          </SubTitle>
+          <DataTable key={id} />
+        </Container>
+      </Wrapper>
     </>
   );
 }
