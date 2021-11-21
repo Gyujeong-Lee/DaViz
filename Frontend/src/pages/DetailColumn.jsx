@@ -450,6 +450,7 @@ function DetailColumn({ match }) {
       );
     }
   };
+
   useEffect(() => {
     getDetailData();
     getDataSets();
@@ -483,13 +484,8 @@ function DetailColumn({ match }) {
         <SelectColumn id={id} />
         <h5>* 범주형 데이터는 Null 값 처리만 가능합니다.</h5>
         {!detailLoading && (
-          <div className="loading">
-            <LoadingDetail
-              color="primary"
-              className="loading-content"
-              size={75}
-              loading={detailLoading}
-            />
+          <div className="loading-filter">
+            <LoadingDetail color="primary" size={75} loading={detailLoading} />
           </div>
         )}
         {detailDatas.length >= 5 && (
